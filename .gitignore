@@ -1,0 +1,7 @@
+s
+*.o
+*.test
+*.a
+.*
+vgcore*
+*.dSYM
