@@ -6,13 +6,18 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:36:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 18:23:05 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:43:38 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _CPU_H
 # define _CPU_H
-# include "vm.h"
+
+# define IND_SIZE				2
+# define REG_SIZE				4
+# define DIR_SIZE				REG_SIZE
+
+# define REG_NUMBER				16
 
 enum	e_instr_arg_type
 {
@@ -55,16 +60,27 @@ typedef struct		s_op
 	uint8_t			relative;
 }					t_op;
 
+typedef struct		s_bigend_buffer
+{
+	/* TODO max buffer size? asserts? */
+	uint8_t		buffer[8];
+}					t_bigend_buffer;
+
 typedef struct		s_register
 {
-	uint8_t		content[REG_SIZE];
+	t_bigend_buffer	content;
 }					t_register;
 
 typedef struct		s_direct
 {
 	uint8_t			relative;
-	uint32_t		value;
+	t_bigend_buffer	content;
 }					t_direct;
+
+typedef struct		s_index
+{
+	t_bigend_buffer	content;
+}					t_index;
 
 typedef struct		s_instr_arg
 {
@@ -72,7 +88,7 @@ typedef struct		s_instr_arg
 	union
 	{
 		uint8_t		reg_index;
-		uint16_t	index;
+		t_index		index;
 		t_direct	direct;
 	}							arg;
 }					t_instr_arg;
@@ -90,23 +106,39 @@ typedef struct		s_ocp
 }					t_ocp;
 
 
-typedef void		(*t_instr_impl)(t_vm_state *, t_process *);
-void				impl_live(t_vm_state *state, t_process *process);
-void				impl_ld(t_vm_state *state, t_process *process);
-void				impl_st(t_vm_state *state, t_process *process);
-void				impl_add(t_vm_state *state, t_process *process);
-void				impl_sub(t_vm_state *state, t_process *process);
-void				impl_and(t_vm_state *state, t_process *process);
-void				impl_or(t_vm_state *state, t_process *process);
-void				impl_xor(t_vm_state *state, t_process *process);
-void				impl_zjmp(t_vm_state *state, t_process *process);
-void				impl_ldi(t_vm_state *state, t_process *process);
-void				impl_sti(t_vm_state *state, t_process *process);
-void				impl_fork(t_vm_state *state, t_process *process);
-void				impl_lld(t_vm_state *state, t_process *process);
-void				impl_lldi(t_vm_state *state, t_process *process);
-void				impl_lfork(t_vm_state *state, t_process *process);
-void				impl_aff(t_vm_state *state, t_process *process);
+typedef void		(*t_instr_impl)(t_vm_state *, t_process *, t_instr *);
+void				impl_live(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_ld(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_st(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_add(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_sub(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_and(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_or(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_xor(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_zjmp(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_ldi(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_sti(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_fork(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lld(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lldi(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lfork(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_aff(t_vm_state *state,
+						t_process *process, t_instr *instr);
 
 t_instr				fetch_instruction(t_vm_state *state, size_t	address);
 void				parse_arguments(t_vm_state *state, t_instr *instr,

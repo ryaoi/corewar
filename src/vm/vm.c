@@ -6,12 +6,13 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/15 16:42:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:20:00 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "cpu.h"
+#include "libft.h"
 
 int		process_exec_cycle(t_vm_state *state, size_t process_index)
 {
@@ -24,10 +25,12 @@ int		process_exec_cycle(t_vm_state *state, size_t process_index)
 	if (process->busy == 0)
 	{
 		if (process->pending_operation.opcode != e_invalid)
-			(g_impl_table[process->pending_operation.opcode])(state, process);
+			(g_impl_table[process->pending_operation.opcode])
+				(state, process, &process->pending_operation);
 		new_instr = fetch_instruction(state, process->program_counter);
 		if (new_instr.opcode == e_invalid)
 		{
+			instr_init(&process->pending_operation);
 			process->pending_operation.opcode = e_invalid;
 			process->busy = 1;
 			process->program_counter

@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   byte_order.c                                       :+:      :+:    :+:   */
+/*   impl_live.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/15 17:03:24 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 19:42:48 by aamadori         ###   ########.fr       */
+/*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
+/*   Updated: 2019/03/15 19:53:12 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "cpu.h"
 
-t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size)
+void	impl_live(t_vm_state *state, t_process *process, t_instr *instr)
 {
-	t_bigend_buffer	output;
-	size_t			index;
+	size_t	parameter;
 
-	index = 0;
-	while (index < size)
-	{
-		output.buffer[index] = input.buffer[(size - 1) - index];
-		index++;
-	}
-	return (output);
+	parameter = *(uint64_t*)instr->instr_args[0].arg.direct.content.buffer;
+	ARRAY_PTR(state->processes, t_process)[parameter].live++;
 }
-

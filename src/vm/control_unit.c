@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 19:09:26 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:53:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void		arg_types_non_ocp(t_instr *instr)
 static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 					size_t argument, size_t address)
 {
-	t_load_buffer	load_arg;
+	t_bigend_buffer	load_arg;
 
 	if (instr->instr_args[argument].arg_type == e_register)
 	{
@@ -75,22 +75,20 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	}
 	else if (instr->instr_args[argument].arg_type == e_index)
 	{
-		load_arg = mem_load(state, address + instr->size, 2);
-		instr->instr_args[argument].arg.index = *(uint16_t*)load_arg.buffer;
+		load_arg = mem_load(state, address + instr->size, IND_SIZE);
+		instr->instr_args[argument].arg.index.content = byte_order_swap(load_arg, IND_SIZE);
 		return (2);
 	}
 	else if (g_opcode_table[instr->opcode].relative)
 	{
-		load_arg = mem_load(state, address + instr->size, 2);
+		load_arg = mem_load(state, address + instr->size, IND_SIZE);
 		instr->instr_args[argument].arg.direct.relative = 1;
-		instr->instr_args[argument].arg.direct.value
-			= *(uint16_t*)load_arg.buffer;
+		instr->instr_args[argument].arg.direct.content = byte_order_swap(load_arg, IND_SIZE);
 		return (2);
 	}
-	load_arg = mem_load(state, address + instr->size, 4);
+	load_arg = mem_load(state, address + instr->size, DIR_SIZE);
 	instr->instr_args[argument].arg.direct.relative = 0;
-	instr->instr_args[argument].arg.direct.value
-		= *(uint32_t*)load_arg.buffer;
+	instr->instr_args[argument].arg.direct.content = byte_order_swap(load_arg, DIR_SIZE);
 	return (4);
 }
 
@@ -99,7 +97,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 {
 	size_t			arg_index;
 	t_ocp			ocp;
-	t_load_buffer	load_buffer;
+	t_bigend_buffer	load_buffer;
 
 	if (g_opcode_table[instr->opcode].has_ocp)
 	{
@@ -119,7 +117,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 {
 	size_t			match_index;
-	t_load_buffer	opcode;
+	t_bigend_buffer	opcode;
 	t_instr			instr;
 
 	match_index = 0;

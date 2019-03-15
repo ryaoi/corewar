@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/15 17:10:43 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:43:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,11 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include "array.h"
-
-# define IND_SIZE				2
-# define REG_SIZE				4
-# define DIR_SIZE				REG_SIZE
-
+# include "cpu.h"
 
 # define REG_CODE				1
 # define DIR_CODE				2
 # define IND_CODE				3
-
 
 # define MAX_ARGS_NUMBER			4
 # define MAX_PLAYERS				4
@@ -41,8 +36,6 @@
 
 # define NAME_CMD_STRING		".name"
 # define COMMENT_CMD_STRING		".comment"
-
-# define REG_NUMBER				16
 
 # define CYCLE_TO_DIE			1536
 # define CYCLE_DELTA			50
@@ -76,8 +69,6 @@ typedef struct		s_header
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
 
-typedef				t_register;
-
 typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
@@ -96,14 +87,9 @@ typedef struct		s_vm_state
 	uint8_t		memory[MEM_SIZE];
 }					t_vm_state;
 
-typedef struct		s_load_buffer
-{
-	/* TODO max buffer size? asserts? */
-	uint8_t		buffer[8];
-}					t_load_buffer;
-
-t_load_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
+t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
 void			mem_store(t_vm_state *state, size_t address, size_t size,
-					const t_load_buffer store);
+					const t_bigend_buffer store);
+t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size);
 
 #endif
