@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/15 16:29:57 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 17:10:43 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ typedef struct		s_vm_state
 
 typedef struct		s_load_buffer
 {
-	uint8_t		buffer[REG_SIZE];
+	/* TODO max buffer size? asserts? */
+	uint8_t		buffer[8];
 }					t_load_buffer;
 
 t_load_buffer	mem_load(t_vm_state *state, size_t address, size_t size);

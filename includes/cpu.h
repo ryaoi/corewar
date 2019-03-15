@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:36:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 16:38:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 18:23:05 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ enum	e_instr_arg_type
 {
 	e_register = 0,
 	e_index,
-	e_direct
+	e_direct,
+	e_absent
 };
 
 enum	e_instr
@@ -61,8 +62,8 @@ typedef struct		s_register
 
 typedef struct		s_direct
 {
-	uint8_t		relative;
-	size_t		value;
+	uint8_t			relative;
+	uint32_t		value;
 }					t_direct;
 
 typedef struct		s_instr_arg
@@ -70,8 +71,8 @@ typedef struct		s_instr_arg
 	enum e_instr_arg_type	arg_type;
 	union
 	{
-		size_t		reg_index;
-		size_t		index;
+		uint8_t		reg_index;
+		uint16_t	index;
 		t_direct	direct;
 	}							arg;
 }					t_instr_arg;
@@ -83,23 +84,11 @@ typedef struct 		s_instr
 	size_t			size;
 }					t_instr;
 
-typedef t_instr		(*t_instr_parser)(t_vm_state *, size_t);
-t_instr				parser_live(t_vm_state *state, size_t address);
-t_instr				parser_ld(t_vm_state *state, size_t address);
-t_instr				parser_st(t_vm_state *state, size_t address);
-t_instr				parser_add(t_vm_state *state, size_t address);
-t_instr				parser_sub(t_vm_state *state, size_t address);
-t_instr				parser_and(t_vm_state *state, size_t address);
-t_instr				parser_or(t_vm_state *state, size_t address);
-t_instr				parser_xor(t_vm_state *state, size_t address);
-t_instr				parser_zjmp(t_vm_state *state, size_t address);
-t_instr				parser_ldi(t_vm_state *state, size_t address);
-t_instr				parser_sti(t_vm_state *state, size_t address);
-t_instr				parser_fork(t_vm_state *state, size_t address);
-t_instr				parser_lld(t_vm_state *state, size_t address);
-t_instr				parser_lldi(t_vm_state *state, size_t address);
-t_instr				parser_lfork(t_vm_state *state, size_t address);
-t_instr				parser_aff(t_vm_state *state, size_t address);
+typedef struct		s_ocp
+{
+	enum e_instr_arg_type	fields[3];
+}					t_ocp;
+
 
 typedef void		(*t_instr_impl)(t_vm_state *, t_process *);
 void				impl_live(t_vm_state *state, t_process *process);
@@ -120,9 +109,12 @@ void				impl_lfork(t_vm_state *state, t_process *process);
 void				impl_aff(t_vm_state *state, t_process *process);
 
 t_instr				fetch_instruction(t_vm_state *state, size_t	address);
+void				parse_arguments(t_vm_state *state, t_instr *instr,
+						size_t address);
+t_ocp				parse_ocp(uint8_t byte);
+void				instr_init(t_instr *instr);
 
 extern const t_op			g_opcode_table[17];
-extern const t_instr_parser	g_parser_table[17];
 extern const t_instr_impl	g_impl_table[17];
 
 #endif
