@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 19:53:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/15 20:07:42 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 
 	if (instr->instr_args[argument].arg_type == e_register)
 	{
+		/* TODO what to do if register index is higher than NUM_REG? */
 		load_arg = mem_load(state, address + instr->size, 1);
 		instr->instr_args[argument].arg.reg_index = load_arg.buffer[0];
 		return (1);
@@ -76,19 +77,19 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	else if (instr->instr_args[argument].arg_type == e_index)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.index.content = byte_order_swap(load_arg, IND_SIZE);
+		instr->instr_args[argument].arg.index.content = load_arg, IND_SIZE;
 		return (2);
 	}
 	else if (g_opcode_table[instr->opcode].relative)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
 		instr->instr_args[argument].arg.direct.relative = 1;
-		instr->instr_args[argument].arg.direct.content = byte_order_swap(load_arg, IND_SIZE);
+		instr->instr_args[argument].arg.direct.content = load_arg;
 		return (2);
 	}
 	load_arg = mem_load(state, address + instr->size, DIR_SIZE);
 	instr->instr_args[argument].arg.direct.relative = 0;
-	instr->instr_args[argument].arg.direct.content = byte_order_swap(load_arg, DIR_SIZE);
+	instr->instr_args[argument].arg.direct.content = load_arg;
 	return (4);
 }
 
