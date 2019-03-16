@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:36:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 19:43:38 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/16 15:40:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # define DIR_SIZE				REG_SIZE
 
 # define REG_NUMBER				16
+
+# include <sys/types.h>
+# include <stdint.h>
 
 enum	e_instr_arg_type
 {
@@ -145,6 +148,8 @@ void				parse_arguments(t_vm_state *state, t_instr *instr,
 						size_t address);
 t_ocp				parse_ocp(uint8_t byte);
 void				instr_init(t_instr *instr);
+int					buffer_is_zero(t_bigend_buffer buffer, size_t size);
+void				buffer_invert_bits(t_bigend_buffer buffer, size_t size);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];

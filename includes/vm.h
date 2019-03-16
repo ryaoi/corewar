@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/15 19:43:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/16 15:45:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct		s_header
 typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
+	t_header	header;
 	size_t		program_counter;
 	int			carry;
 	size_t		id;

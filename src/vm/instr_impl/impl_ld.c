@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 20:08:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/16 15:41:20 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,19 @@ void	impl_ld(t_vm_state *state, t_process *process, t_instr *instr)
 		address = *(size_t*)byte_order_swap(
 			instr->instr_args[0].arg.index.content, IND_SIZE).buffer;
 		load_buffer = mem_load(state, address, REG_SIZE);
+		process->carry = buffer_is_zero(load_buffer, REG_SIZE);
 		ft_memcpy(
-			&process->registers[instr->instr_args[1].arg.reg_index].content,
-			&load_buffer.buffer, REG_SIZE);
+			&process->registers[instr->instr_args[1].arg.reg_index].content.buffer,
+			&load_buffer.buffer,
+			REG_SIZE);
 	}
 	else
 	{
+		process->carry = buffer_is_zero(
+			instr->instr_args[0].arg.direct.content, DIR_SIZE);
 		ft_memcpy(
-			&process->registers[instr->instr_args[1].arg.reg_index].content,
-			&instr->instr_args[0].arg.direct.content,
-			ft_min(REG_SIZE, DIR_SIZE)
-		);
+			&process->registers[instr->instr_args[1].arg.reg_index].content.buffer,
+			&instr->instr_args[0].arg.direct.content.buffer,
+			ft_min(REG_SIZE, DIR_SIZE));
 	}
 }
