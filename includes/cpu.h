@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:36:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 16:28:46 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/16 23:40:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ t_ocp				parse_ocp(uint8_t byte);
 void				instr_init(t_instr *instr);
 int					buffer_is_zero(t_bigend_buffer buffer, size_t size);
 void				buffer_invert_bits(t_bigend_buffer buffer, size_t size);
+t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s,
+						size_t size);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];
