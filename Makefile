@@ -1,12 +1,14 @@
-ASM_SRCS =
+ASM_SRCS = asm/main.c \
+			asm/parse_lines.c \
+			asm/read_file.c \
+			asm/error.c \
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
-		includes/adjacency_list.h \
-		includes/algorithm.h \
-		includes/lem_in.h \
-		includes/parser.h \
-		includes/visualizer.h
+		includes/op.h \
+		includes/asm.h \
+#		includes/cpu.h \
+		includes vm.h
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
@@ -21,12 +23,12 @@ export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
-ASM_NAME =
-COREWAR_NAME =
+ASM_NAME = asm
+COREWAR_NAME = corewar
 
 .PHONY: clean fclean re all
 
-all: $(NAME) $(TESTS) $(VISUALIZER)
+all: $(ASM_NAME) $(TESTS) $(COREWAR_NAME)
 
 LIBFT_PREFIX = ../libft
 FTPRINTF_PREFIX = ft_printf
@@ -34,20 +36,25 @@ include ft_printf/Makefile.mk
 LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
-$(ASM_NAME): $(OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
+$(ASM_NAME): $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
 
-$(COREWAR_NAME): $(OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
+$(COREWAR_NAME): $(COREWAR_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
 
 obj:
 	mkdir -p obj
-
-obj/%.o: src/%.c $(INCLUDES) | obj
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
+	mkdir -p obj/asm
+	mkdir -p obj/corewar
 
 tests/%.test: tests/%.c $(NAME) $(LIBFT_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lft
+
+obj/asm/%.o: src/asm/%.c $(INCLUDES) | obj
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -c $< -o $@
+
+obj/%.o: src/%.c $(INCLUDES) | obj
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
 clean:
 	rm -rf $(TESTS_DBG_FOLDERS)
