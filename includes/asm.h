@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 03:53:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 04:26:37 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef enum e_token_types
 	T_COMMENT, /* # */
 	T_LABEL, /* T_STRING + ':' */
 	T_INSTR, /* instructions */
-	T_REGISTRY, /* 'r' + T_INTEGER */
+	T_REGISTR, /* 'r' + T_INTEGER */
 	T_DIRECT, /* '%' + T_INTEGER */
 	T_INDIRECT, /* ?? */
 	T_DIRLAB, /* '%:' + T_LABEL */
@@ -46,6 +46,7 @@ typedef enum e_token_types
 
 typedef struct	s_token
 {
+	t_op				*op;
 	char				*str;
 	size_t				id;
 	int					type;
@@ -54,7 +55,6 @@ typedef struct	s_token
 
 typedef struct	s_line
 {
-	t_op				*op;
 	char				*str;
 	size_t				id;
 	int					type;
