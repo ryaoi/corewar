@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 05:09:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 05:24:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		is_comment(t_line *line)
 	int	index;
 
 	index = 0;
-	while (line->str && line->str[index] && isspace(line->str[index]))
+	while (line->str && line->str[index] && ft_isspace(line->str[index]))
 		index++;
 	if (line->str[index] == COMMENT_CHAR)
 	{
@@ -108,7 +108,8 @@ int		check_parameter(t_token *token, char *str)
 
 	index = 0;
 	check = LABEL_CHARS;
-	if (token->type == T_LABEL || T_DIRLAB || T_INDIRLAB)
+	if (token->type == T_LABEL || token->type == T_DIRLAB ||
+			token->type == T_INDIRLAB)
 	{
 		while (str[index])
 		{
@@ -120,11 +121,13 @@ int		check_parameter(t_token *token, char *str)
 		}
 		return (SUCCESS);
 	}
-	else if (token->type = T_REGISTR)
+	else if (token->type == T_REGISTR)
 	{
 		if (ft_atoi(str + 1) > REG_NUMBER)
 			ERROR("register number too high.", TOKEN_FAIL);
+		return (SUCCESS);
 	}
+	return (TOKEN_FAIL);
 }
 
 int		check_instr(t_token *token, char *str)
@@ -136,7 +139,7 @@ int		check_instr(t_token *token, char *str)
 	{
 		if (!ft_strcmp(str, g_op_tab[index].name))
 		{
-			if (token->op = (t_op*)malloc(sizeof(t_op)))
+			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
 				ERROR("malloc failed", TOKEN_FAIL);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
 			return (SUCCESS);
@@ -177,17 +180,17 @@ int		tokenize_line(t_line *line)
 	int		token_id;
 
 	token_id = 0;
-	len = ft_strlen(line);
+	len = ft_strlen(line->str);
 	if (!(token = (t_token*)malloc(sizeof(t_token))))
 		ERROR("malloc failed.", LINE_FAIL);
 	while (line->pos < len)
 	{
 		if (token_id > 5)
 			ERROR("Too many tokens.", LINE_FAIL);
-		while (line->str[line->pos] && ft_isspace(line->str))
+		while (line->str[line->pos] && ft_isspace(line->str[line->pos]))
 			line->pos++;
 		start = line->pos;
-		while (line->str[line->pos] && !(ft_isspace(line->str)) &&
+		while (line->str[line->pos] && !(ft_isspace(line->str[line->pos])) &&
 			line->str[line->pos] != SEPARATOR_CHAR)
 			line->pos++;
 		end = line->pos;
@@ -219,11 +222,20 @@ int		validate_opcode_params(t_line *line)
 	while (traverse || nbr < g_op_tab[instr].nbr_params)
 	{
 		/* compare parsed params to g_op_tab[instr] */
+		traverse = traverse->next;
+		nbr++;
 	}
 	return (SUCCESS);
 }
 
-
+void	set_progname(t_file *file)
+{
+	(void)file;
+}
+void	set_how(t_file *file)
+{
+	(void)file;
+}
 
 int		parse_file(t_file *file)
 {
@@ -246,6 +258,7 @@ int		parse_file(t_file *file)
 		}
 		traverse = traverse->next;
 	}
+	return (SUCCESS);
 }
 
 

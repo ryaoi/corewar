@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 04:26:37 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 05:18:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct	s_line
 	char				*str;
 	size_t				id;
 	int					type;
-	size_t				nbr_params;
+	int					nbr_params;
 	t_list				*tokens;
 	char				*bytecode;
 	size_t				pos;
@@ -85,6 +85,7 @@ int		tokenize_line(t_line *line);
 int		add_token(t_line *line, int token_id, int start, int end);
 int		check_token_type(t_token *token, char *str);
 int		check_parameter(t_token *token, char *str);
+int		validate_opcode_params(t_line *line);
 int		is_str_digit(char *str);
 int		is_comment(t_line *line);
 int		is_whitespaces_line(const char *str);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 18:14:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/11 18:14:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 05:02:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct	s_op
 {
 	char	*name;
 	int		nbr_params;
-	int		param_types[3];
+	int		param_types[4];
 	int		opcode;
 	int		nbr_cycles;
 	char	*description;
