@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 05:24:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 16:43:51 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,6 @@ int		add_token(t_line *line, int token_id, int start, int end)
 
 int		tokenize_line(t_line *line)
 {
-	t_token	*token;
 	size_t	len;
 	int		start;
 	int		end;
@@ -181,8 +180,6 @@ int		tokenize_line(t_line *line)
 
 	token_id = 0;
 	len = ft_strlen(line->str);
-	if (!(token = (t_token*)malloc(sizeof(t_token))))
-		ERROR("malloc failed.", LINE_FAIL);
 	while (line->pos < len)
 	{
 		if (token_id > 5)
@@ -222,6 +219,7 @@ int		validate_opcode_params(t_line *line)
 	while (traverse || nbr < g_op_tab[instr].nbr_params)
 	{
 		/* compare parsed params to g_op_tab[instr] */
+		/* D2, D4 also needs to be checked */
 		traverse = traverse->next;
 		nbr++;
 	}
@@ -230,10 +228,19 @@ int		validate_opcode_params(t_line *line)
 
 void	set_progname(t_file *file)
 {
+	t_list	*traverse;
+
+	traverse = file->lines;
+	ft_memcpy(file->header.prog_name, LINE->str, ft_strlen(LINE->str));
+	LINE->type = T_NAME;
 	(void)file;
 }
 void	set_how(t_file *file)
 {
+	t_list *traverse;
+	traverse = file->lines;
+	ft_memcpy(file->header.how, LINE->str, ft_strlen(LINE->str));
+	LINE->type = T_NAME;
 	(void)file;
 }
 
@@ -248,13 +255,13 @@ int		parse_file(t_file *file)
 		{
 			if (!(file->header.prog_name[0]))
 				set_progname(file);
-			if (!(file->header.how[0]))
+			else if (!(file->header.how[0]))
 				set_how(file);
-			if (LINE->type != T_LABEL)
+			else if (LINE->type != T_LABEL)
 				LINE->type = T_ASMCODE;
 			if (LINE->type == T_ASMCODE && (!(tokenize_line(LINE)) ||
 				!(validate_opcode_params(LINE))))
-					file_error("parse failed", file);
+					file_error("parse failed.", file);
 		}
 		traverse = traverse->next;
 	}

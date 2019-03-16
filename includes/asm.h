@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 05:18:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 15:47:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "libft.h"
 # include "list.h"
 # include "op.h"
+# include "ft_printf.h"
 # define TOKEN_SYNTAX_ERROR 0
 # define SUCCESS 1
 # define ASM_FAIL 0
@@ -34,9 +35,7 @@ typedef enum e_token_types
 	T_INDIRECT, /* ?? */
 	T_DIRLAB, /* '%:' + T_LABEL */
 	T_INDIRLAB, /* ':' + T_LABEL */
-	T_INTEGER,
-	T_STRING,
-	T_ASMCODE,
+	T_ASMCODE, /* instructions + params */
 	T_UNKNOWN
 }			t_token_types;
 

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 02:24:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 15:55:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	read_file(t_file *file)
 		file_error("get_next_line failed.", file);
 	else if ((file->nbr_line = nbr_lines) == 0)
 		file_error("no instructions.", file);
-
+	/* print lines */
 	int i = 0;
 	t_list *traverse;
 	traverse = file->lines;
