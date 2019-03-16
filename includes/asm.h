@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 15:47:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 23:13:39 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ typedef enum e_token_types
 	T_CMD_COMMENT, /* .comment */
 	T_COMMENT, /* # */
 	T_LABEL, /* T_STRING + ':' */
+
 	T_INSTR, /* instructions */
-	T_REGISTR, /* 'r' + T_INTEGER */
+
+	T_REGISTER, /* 'r' + T_INTEGER */
 	T_DIRECT, /* '%' + T_INTEGER */
 	T_INDIRECT, /* ?? */
 	T_DIRLAB, /* '%:' + T_LABEL */
 	T_INDIRLAB, /* ':' + T_LABEL */
+
 	T_ASMCODE, /* instructions + params */
 	T_UNKNOWN
 }			t_token_types;

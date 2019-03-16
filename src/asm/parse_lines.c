@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 16:43:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 23:46:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		is_str_digit(char *str)
 	int	index;
 
 	index = 0;
+	if (str[index] == '+' || str[index] == '-')
+		index++;
 	while (str[index])
 	{
 		if (!ft_isdigit(str[index]))
@@ -91,29 +93,30 @@ int		check_token_type(t_token *token, char *str)
 			token->type = T_DIRECT;
 	}
 	else if (str[0] == REGISTER_CHAR && is_str_digit(str + 1))
-		token->type = T_REGISTR;
+		token->type = T_REGISTER;
 	else if (str[0] == LABEL_CHAR)
 		token->type = T_INDIRLAB;
 	else if (is_str_digit(str))
 		token->type = T_INDIRECT;
 	else
+	{
+		ft_printf("%s\n", str);
 		ERROR("no token_type found.", TOKEN_FAIL);
+	}
 	return (SUCCESS);
 }
 
 int		check_parameter(t_token *token, char *str)
 {
 	int index;
-	char *check;
 
 	index = 0;
-	check = LABEL_CHARS;
 	if (token->type == T_LABEL || token->type == T_DIRLAB ||
 			token->type == T_INDIRLAB)
 	{
 		while (str[index])
 		{
-			if (!ft_strchr(check, str[index]) &&
+			if (!ft_strchr(LABEL_CHARS, str[index]) &&
 				!(index == 0 && str[index] == DIRECT_CHAR) &&
 					!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
 				ERROR("wrong syntax of label.", TOKEN_FAIL);
@@ -121,13 +124,13 @@ int		check_parameter(t_token *token, char *str)
 		}
 		return (SUCCESS);
 	}
-	else if (token->type == T_REGISTR)
+	else if (token->type == T_REGISTER)
 	{
 		if (ft_atoi(str + 1) > REG_NUMBER)
 			ERROR("register number too high.", TOKEN_FAIL);
 		return (SUCCESS);
 	}
-	return (TOKEN_FAIL);
+	return (SUCCESS);
 }
 
 int		check_instr(t_token *token, char *str)
@@ -154,7 +157,7 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	t_token		token;
 	int			len;
 
-	len = start - end;
+	len = end - start;
 	init_token(&token);
 	if (!(token.str = ft_strsub(line->str, start, len)))
 		ERROR("ft_strsub failed.", TOKEN_FAIL);
@@ -174,25 +177,30 @@ int		add_token(t_line *line, int token_id, int start, int end)
 int		tokenize_line(t_line *line)
 {
 	size_t	len;
-	int		start;
-	int		end;
+	int		i;
+	int		j;
 	int		token_id;
 
 	token_id = 0;
+	i = 0;
+	j = 0;
 	len = ft_strlen(line->str);
-	while (line->pos < len)
+	while (token_id < 7)
 	{
 		if (token_id > 5)
 			ERROR("Too many tokens.", LINE_FAIL);
-		while (line->str[line->pos] && ft_isspace(line->str[line->pos]))
-			line->pos++;
-		start = line->pos;
-		while (line->str[line->pos] && !(ft_isspace(line->str[line->pos])) &&
-			line->str[line->pos] != SEPARATOR_CHAR)
-			line->pos++;
-		end = line->pos;
-		if (add_token(line, token_id, start, end) == LINE_FAIL)
+		while (line->str[i] && ft_isspace(line->str[i]))
+			i++;
+		j = i;
+		while (line->str[j] && !(ft_isspace(line->str[j])) &&
+			line->str[j] != SEPARATOR_CHAR)
+			j++;
+		printf("%d %d\n", i, j);
+		if (add_token(line, token_id, i, j) == LINE_FAIL)
 			ERROR("tokenize failed.", LINE_FAIL);
+		i = j + 1;
+		if (line->str[i - 1] == '\0')
+			break ;
 		token_id++;
 	}
 	line->nbr_params = token_id;
@@ -209,7 +217,9 @@ int		validate_opcode_params(t_line *line)
 		return (LINE_FAIL);
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
-	instr = TOKEN->op->opcode;
+	instr = TOKEN->op->opcode - 1;
+	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
+	printf("original : %d\nthe_code : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		ERROR("wrong number of parameters", LINE_FAIL);
 	if (traverse->next == NULL)
@@ -267,5 +277,3 @@ int		parse_file(t_file *file)
 	}
 	return (SUCCESS);
 }
-
-
