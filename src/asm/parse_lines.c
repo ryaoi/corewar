@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 04:29:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/16 05:09:53 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ different tokens
 		- T_INDIRECT = INTEGER error ?
 		- T_INDIRLAB = : + LABEL
 */
+
 t_op	g_op_tab[17];
 
 int		is_comment(t_line *line)
@@ -194,12 +195,31 @@ int		tokenize_line(t_line *line)
 			ERROR("tokenize failed.", LINE_FAIL);
 		token_id++;
 	}
+	line->nbr_params = token_id;
 	return (SUCCESS);
 }
 
-int		check_instrutions(t_line *line)
+int		validate_opcode_params(t_line *line)
 {
-	/* TODO */
+	t_list	*traverse;
+	int		instr;
+	int		nbr;
+
+	if (!(traverse = line->tokens))
+		return (LINE_FAIL);
+	if (traverse->next == NULL)
+		return (LINE_FAIL);
+	instr = TOKEN->op->opcode;
+	if (g_op_tab[instr].nbr_params != line->nbr_params)
+		ERROR("wrong number of parameters", LINE_FAIL);
+	if (traverse->next == NULL)
+		return (LINE_FAIL);
+	traverse = traverse->next;
+	nbr = 0;
+	while (traverse || nbr < g_op_tab[instr].nbr_params)
+	{
+		/* compare parsed params to g_op_tab[instr] */
+	}
 	return (SUCCESS);
 }
 
@@ -221,7 +241,7 @@ int		parse_file(t_file *file)
 			if (LINE->type != T_LABEL)
 				LINE->type = T_ASMCODE;
 			if (LINE->type == T_ASMCODE && (!(tokenize_line(LINE)) ||
-				!(validate_parameters(LINE))))
+				!(validate_opcode_params(LINE))))
 					file_error("parse failed", file);
 		}
 		traverse = traverse->next;
