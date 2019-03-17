@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 00:52:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 02:29:45 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		add_lines(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	len = ft_strlen(line);
 	if (label_pos)
 	{
-		/* parse label :*/
+		/* parse label : && treat label: instructions format */
 		line[label_pos + 1] = '\0';
 		create_line(file, line, *nbr_lines, T_LABEL);
 		line[label_pos + 1] = ' ';

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 01:49:01 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 04:12:04 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,10 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	if (token.type == T_UNKNOWN)
 		ERROR("token_type not found.", TOKEN_FAIL);
 	if (token.type == T_INSTR && check_instr(&token, token.str) == TOKEN_FAIL)
-		ERROR("no opcode match found\n", TOKEN_FAIL);
+	{
+		printf("%s\n", line->str + start);
+		ERROR("no opcode match found.", TOKEN_FAIL);
+	}
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
 	return (SUCCESS);
 }
@@ -236,22 +239,62 @@ int		validate_opcode_params(t_line *line)
 	return (SUCCESS);
 }
 
-void	set_progname(t_file *file)
+void	set_progname(t_file *file, t_line *line)
 {
-	t_list	*traverse;
+	int		index;
+	char	*tmp;
+	int		start;
+	int		end;
 
-	traverse = file->lines;
-	ft_memcpy(file->header.prog_name, LINE->str, ft_strlen(LINE->str));
-	LINE->type = T_NAME;
-	(void)file;
+	index = 0;
+	start = 0;
+	end = 0;
+	while (line->str[index] && ft_isspace(line->str[index]))
+		index++;
+	tmp = line->str + index;
+	if (!ft_strncmp(NAME_CMD_STRING, tmp, ft_strlen(NAME_CMD_STRING)))
+	{
+		start = ft_strlen(NAME_CMD_STRING);
+		while (tmp && tmp[start] && tmp[start] != '"')
+			start++;
+		end = ++start;
+		while (tmp && tmp[end] && tmp[end] != '"')
+			end++;
+		if (end > start)
+			ft_memcpy(file->header.prog_name, line->str + start, end - start);
+		line->type = T_NAME;
+		printf("%s\n", file->header.prog_name);
+	}
 }
-void	set_how(t_file *file)
+
+void	set_how(t_file *file, t_line *line)
 {
-	t_list *traverse;
-	traverse = file->lines;
-	ft_memcpy(file->header.how, LINE->str, ft_strlen(LINE->str));
-	LINE->type = T_NAME;
-	(void)file;
+	int		index;
+	char	*tmp;
+	int		start;
+	int		end;
+
+	index = 0;
+	start = 0;
+	end = 0;
+	printf("%s\n", line->str);
+	while (line->str[index] && ft_isspace(line->str[index]))
+		index++;
+	tmp = line->str + index;
+	printf("%s\n", tmp);
+	if (!ft_strncmp(COMMENT_CMD_STRING, tmp, ft_strlen(COMMENT_CMD_STRING)))
+	{
+		start = ft_strlen(NAME_CMD_STRING);
+		while (tmp && tmp[start] && tmp[start] != '"')
+			start++;
+		end = ++start;
+		while (tmp && tmp[end] && tmp[end] != '"')
+			end++;
+		if (end > start)
+			ft_memcpy(file->header.how, line->str + start, end - start);
+		line->type = T_CMD_COMMENT;
+	printf("%s\n", file->header.how);
+	}
 }
 
 int		parse_file(t_file *file)
@@ -264,10 +307,10 @@ int		parse_file(t_file *file)
 		if (!is_comment(LINE))
 		{
 			if (!(file->header.prog_name[0]))
-				set_progname(file);
-			else if (!(file->header.how[0]))
-				set_how(file);
-			else if (LINE->type != T_LABEL)
+				set_progname(file, LINE);
+			if (!(file->header.how[0]))
+				set_how(file, LINE);
+			if (LINE->type == T_UNKNOWN)
 				LINE->type = T_ASMCODE;
 			if (LINE->type == T_ASMCODE && (!(tokenize_line(LINE)) ||
 				!(validate_opcode_params(LINE))))

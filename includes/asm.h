@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 00:06:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 03:31:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct	s_file
 	size_t		nbr_line;
 	char		*name_s;
 	char		*name_cor;
+	int			header_flags;
 	header_t	header; /* TODO initialize header!! */
 	int			fd_cor;
 	int			fd_s;

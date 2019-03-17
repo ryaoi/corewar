@@ -25,7 +25,7 @@ endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
 ASM_NAME = asm
-COREWAR_NAME = corewar
+COREWAR_NAME =
 
 .PHONY: clean fclean re all
 
