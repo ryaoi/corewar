@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/16 15:45:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/17 19:19:29 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,15 @@ typedef struct		s_header
 typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
-	t_header	header;
+	/*t_header	header;*/
+	/* TODO keep somewhere else */
 	size_t		program_counter;
 	int			carry;
 	size_t		id;
 	int			live;
 	int			busy;
 	t_instr		pending_operation;
+	int			owner;
 }					t_process;
 
 typedef struct		s_vm_state
@@ -92,5 +94,6 @@ t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
 void			mem_store(t_vm_state *state, size_t address, size_t size,
 					const t_bigend_buffer store);
 t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size);
+void			vm_spawn_player(t_vm_state *state, size_t address, t_process *original);
 
 #endif

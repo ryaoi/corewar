@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cpu.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:36:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 23:40:28 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/17 19:27:42 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct		s_op
 	const char		*explanation;
 	uint8_t			has_ocp;
 	uint8_t			relative;
+	uint8_t			is_jump;
 }					t_op;
 
 typedef struct		s_bigend_buffer
@@ -101,6 +102,7 @@ typedef struct 		s_instr
 	enum e_instr	opcode;
 	t_instr_arg		instr_args[3];
 	size_t			size;
+	uint8_t			is_jump;
 }					t_instr;
 
 typedef struct		s_ocp

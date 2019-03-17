@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/16 19:49:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/17 19:31:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,10 @@ int		process_exec_cycle(t_vm_state *state, size_t process_index)
 		{
 			(g_impl_table[process->pending_operation.opcode])
 				(state, process, &process->pending_operation);
-			if (process->pending_operation.opcode != e_zjmp)
-				process->program_counter
-					= (process->program_counter + new_instr.size) % MEM_SIZE;
 		}
-		else
+		if (!process->pending_operation.is_jump)
 			process->program_counter
-				= (process->program_counter + 1) % MEM_SIZE;
+					= (process->program_counter + new_instr.size) % MEM_SIZE;
 		new_instr = fetch_instruction(state, process->program_counter);
 		process->pending_operation = new_instr;
 		process->busy = (new_instr.opcode != e_invalid)

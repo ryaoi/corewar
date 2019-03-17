@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   control_unit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 20:07:42 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/17 19:29:22 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,10 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	else if (g_opcode_table[instr->opcode].relative)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.direct.relative = 1;
 		instr->instr_args[argument].arg.direct.content = load_arg;
 		return (2);
 	}
 	load_arg = mem_load(state, address + instr->size, DIR_SIZE);
-	instr->instr_args[argument].arg.direct.relative = 0;
 	instr->instr_args[argument].arg.direct.content = load_arg;
 	return (4);
 }
@@ -113,6 +111,8 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	while (instr->opcode != e_invalid
 		&& arg_index < g_opcode_table[instr->opcode].arg_num)
 		instr->size += parse_argument(state, instr, arg_index, address);
+	if (instr->opcode != e_invalid)
+		instr->is_jump = g_opcode_table[instr->opcode].is_jump;
 }
 
 t_instr		fetch_instruction(t_vm_state *state, size_t	address)
@@ -136,5 +136,6 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 		match_index++;
 	}
 	instr.opcode = e_invalid;
+	instr.size = 1;
 	return (instr);
 }
