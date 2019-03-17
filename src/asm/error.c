@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:01:53 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 01:38:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 01:48:25 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ void	free_token_content(void *content, size_t size)
 	tmp = (t_token*)content;
 	if (tmp->str)
 		free(tmp->str);
+	if (tmp->op)
+		free(tmp->op);
 	tmp->str = NULL;
+	tmp->op = NULL;
+	free(tmp);
 }
 
 void	free_line_content(void *content, size_t size)

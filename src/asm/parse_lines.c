@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 23:46:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 01:49:01 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_token(t_token *token)
 {
 	token->id = -1;
 	token->str = NULL;
+	token->op = NULL;
 	token->type = T_UNKNOWN;
 	token->value = -1;
 }
@@ -100,7 +101,7 @@ int		check_token_type(t_token *token, char *str)
 		token->type = T_INDIRECT;
 	else
 	{
-		ft_printf("%s\n", str);
+		/*ft_printf("%s\n", str);*/
 		ERROR("no token_type found.", TOKEN_FAIL);
 	}
 	return (SUCCESS);
@@ -195,7 +196,6 @@ int		tokenize_line(t_line *line)
 		while (line->str[j] && !(ft_isspace(line->str[j])) &&
 			line->str[j] != SEPARATOR_CHAR)
 			j++;
-		printf("%d %d\n", i, j);
 		if (add_token(line, token_id, i, j) == LINE_FAIL)
 			ERROR("tokenize failed.", LINE_FAIL);
 		i = j + 1;
@@ -218,8 +218,8 @@ int		validate_opcode_params(t_line *line)
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
 	instr = TOKEN->op->opcode - 1;
-	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
-	printf("original : %d\nthe_code : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);
+/*	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
+	printf("original : %d\nthe_code : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);*/
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		ERROR("wrong number of parameters", LINE_FAIL);
 	if (traverse->next == NULL)

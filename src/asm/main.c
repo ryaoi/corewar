@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 23:18:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/17 01:47:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ int		main(int argc, char **argv)
 	read_file(&file);
 	if (parse_file(&file) == LINE_FAIL)
 		file_error("parse_file() failed.", &file);
+	file_error("parse_file() failed.", &file);
 	return (0);
 }
