@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/16 15:45:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 17:31:29 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,16 @@ typedef struct		s_header
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
 
+typedef struct		s_player
+{
+	t_header	header;
+	uint8_t		*champion_code;
+}					t_player;
+
 typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
-	t_header	header;
+	t_player	*player;
 	size_t		program_counter;
 	int			carry;
 	size_t		id;
@@ -81,9 +87,12 @@ typedef struct		s_process
 	t_instr		pending_operation;
 }					t_process;
 
+
+
 typedef struct		s_vm_state
 {
 	t_array		processes;
+	t_array		players;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
 }					t_vm_state;
