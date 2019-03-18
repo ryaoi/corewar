@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:18:10 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:25:58 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ int		vm_champion_load(t_vm_state *state, int fd)
 	t_player	player;
 	int			ret;
 
-	ret = read_whole(fd, &player.header, sizeof(t_header));
+	ret = read_whole(fd, (char*)&player.header, sizeof(t_header));
 	/* TODO good error handling */
-	if (ret < sizeof(t_header))
+	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
 	/* TODO check magic number in header */
 	if (player.header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player.champion_code = malloc(player.header.prog_size);
-	ret = read_whole(fd, &player.champion_code, player.header.prog_size);
-	if (ret < player.header.prog_size)
+	ret = read_whole(fd, (char*)&player.champion_code, player.header.prog_size);
+	if (ret < (int32_t)player.header.prog_size)
 		return (ERR_CHAMP_READ);
 	/* TODO check if the file is over? */
 	array_push_back(&state->players, &player);

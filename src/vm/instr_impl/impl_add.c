@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:10:20 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:29:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
 		old_carry = carry;
 		index++;
 	}
+	return (ret);
 }
 
 void	impl_add(t_vm_state *state, t_process *process, t_instr *instr)
 {
+	(void)state;
 	process->registers[instr->instr_args[2].arg.reg_index].content
 		= add_bigend(process->registers[instr->instr_args[0].arg.reg_index].content,
 		process->registers[instr->instr_args[1].arg.reg_index].content,

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:10:39 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:27:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 {
-	size_t	arg_index;
+	int	arg_index;
 
 	arg_index = 0;
 	while (instr->opcode != e_invalid
@@ -46,7 +46,7 @@ static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 
 static void		arg_types_non_ocp(t_instr *instr)
 {
-	size_t	arg_index;
+	int	arg_index;
 
 	arg_index = 0;
 	while (arg_index < g_opcode_table[instr->opcode].arg_num)
@@ -76,18 +76,16 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	else if (instr->instr_args[argument].arg_type == e_index)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.index.content = load_arg, IND_SIZE;
+		instr->instr_args[argument].arg.index.content = load_arg;
 		return (2);
 	}
 	else if (g_opcode_table[instr->opcode].relative)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.direct.relative = 1;
 		instr->instr_args[argument].arg.direct.content = load_arg;
 		return (2);
 	}
 	load_arg = mem_load(state, address + instr->size, DIR_SIZE);
-	instr->instr_args[argument].arg.direct.relative = 0;
 	instr->instr_args[argument].arg.direct.content = load_arg;
 	return (4);
 }
@@ -95,7 +93,7 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 static void		parse_instruction(t_vm_state *state, t_instr *instr,
 					size_t address)
 {
-	size_t			arg_index;
+	int				arg_index;
 	t_ocp			ocp;
 	t_bigend_buffer	load_buffer;
 
