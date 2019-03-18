@@ -6,12 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/18 18:33:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:10:09 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 #include "libft.h"
 
 int		process_exec_cycle(t_vm_state *state, size_t process_index)

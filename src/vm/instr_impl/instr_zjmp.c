@@ -6,12 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 19:40:48 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 19:51:42 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:09:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 void	impl_zjmp(t_vm_state *state, t_process *process, t_instr *instr)
 {

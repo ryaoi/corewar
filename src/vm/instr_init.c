@@ -6,11 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:55:25 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 18:23:06 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:10:00 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cpu.h"
+#include "vm.h"
 #include "libft.h"
 
 void	instr_init(t_instr *instr)

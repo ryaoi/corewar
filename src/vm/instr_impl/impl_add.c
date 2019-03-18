@@ -6,12 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 23:39:06 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:10:20 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
 {

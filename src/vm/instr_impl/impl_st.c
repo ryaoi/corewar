@@ -6,12 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 19:53:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:10:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
+#include "vm.h"
 
 void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 {

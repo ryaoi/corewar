@@ -6,12 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/17 00:00:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:09:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 void	impl_ldi(t_vm_state *state, t_process *process, t_instr *instr)
 {
