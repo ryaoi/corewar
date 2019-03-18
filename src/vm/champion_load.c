@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 18:49:05 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:18:10 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int		vm_champion_load(t_vm_state *state, int fd)
 	/* TODO good error handling */
 	if (ret < sizeof(t_header))
 		return (ERR_HEADER_READ);
+	/* TODO check magic number in header */
 	if (player.header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player.champion_code = malloc(player.header.prog_size);

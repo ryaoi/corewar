@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:04:58 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:10:17 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:21:35 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,6 @@ const t_op	g_opcode_table[17] =
 	{"lfork", 1, {T_DIR}, 15, 1000, "long fork", 0, 1},
 	{"aff", 1, {T_REG}, 16, 2, "aff", 1, 0},
 	{0, 0, {0}, 0, 0, 0, 0, 0}
-};
-
-const t_instr_parser	g_parser_table[17] =
-{
-	parser_live,
-	parser_ld,
-	parser_st,
-	parser_add,
-	parser_sub,
-	parser_and,
-	parser_or,
-	parser_xor,
-	parser_zjmp,
-	parser_ldi,
-	parser_sti,
-	parser_fork,
-	parser_lld,
-	parser_lldi,
-	parser_lfork,
-	parser_aff
 };
 
 const t_instr_impl		g_impl_table[17] =

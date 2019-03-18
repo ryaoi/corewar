@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/18 19:16:00 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:21:23 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ typedef struct		s_op
 {
 	const char		*name;
 	int				arg_num;
-	const int		*arg_types;
+	const int		arg_types[3];
 	enum e_instr	opcode;
 	int				cycles;
 	const char		*explanation;
