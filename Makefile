@@ -63,6 +63,7 @@ $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
+	mkdir -p obj/vm/instr_impl
 
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
