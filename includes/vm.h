@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/18 19:21:23 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 21:02:11 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef struct		s_player
 typedef struct		s_bigend_buffer
 {
 	/* TODO max buffer size? asserts? */
-	uint8_t		buffer[8];
+	size_t		buffer;
 }					t_bigend_buffer;
 
 typedef struct		s_register

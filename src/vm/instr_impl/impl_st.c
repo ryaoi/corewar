@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:10:17 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 21:17:24 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 			instr->instr_args[1].arg.index.content, IND_SIZE).buffer;
 		address = process->program_counter + (address % IDX_MOD);
 		ft_memcpy(
-			load_buffer.buffer,
+			&load_buffer.buffer,
 			&process->registers[instr->instr_args[0].arg.reg_index].content.buffer,
 			REG_SIZE);
 		process->carry = buffer_is_zero(load_buffer, REG_SIZE);

@@ -26,7 +26,7 @@ CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
-TESTS_SRCS =
+TESTS_SRCS = champload.c
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 
@@ -39,7 +39,7 @@ INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
 ASM_NAME =
 COREWAR_NAME =
-CORELIB_NAME = corelib.ld
+CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
 
@@ -52,13 +52,13 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	libtool -dynamic -o $@ $^
+	gcc -shared -o $@ $^
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcorelib
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcorelib
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcore
 
 obj:
 	mkdir -p obj
@@ -66,17 +66,17 @@ obj:
 	mkdir -p obj/vm/instr_impl
 
 obj/%.o: src/%.c $(INCLUDES) | obj
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
+	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
 tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcorelib
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
 
 clean:
 	rm -rf $(TESTS_DBG_FOLDERS)
 	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
-	rm -f  $(CORELIB_OBJS)
+	rm -f  $(core_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:18:37 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 19:27:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 21:14:36 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		buffer_is_zero(t_bigend_buffer buffer, size_t size)
 	index = 0;
 	while (index < size)
 	{
-		if (buffer.buffer[index])
+		if (((uint8_t*)&buffer.buffer)[index])
 			return (0);
 		index++;
 	}
