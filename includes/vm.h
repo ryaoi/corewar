@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/18 17:31:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 18:29:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ typedef char	t_arg_type;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
+# define ERR_FILE -1
+# define ERR_HEADER_READ -2
+# define ERR_CHAMP_TOO_LARGE -3
+# define ERR_CHAMP_READ -4
+
 typedef struct		s_header
 {
 	uint32_t		magic;
@@ -101,5 +106,9 @@ t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
 void			mem_store(t_vm_state *state, size_t address, size_t size,
 					const t_bigend_buffer store);
 t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size);
+void			vm_state_init(t_vm_state *state);
+int				vm_champion_load_file(t_vm_state *state, const char *filename);
+int				vm_champion_load(t_vm_state *state, int fd);
+void			vm_memory_prepare(t_vm_state *state);
 
 #endif
