@@ -1,3 +1,4 @@
+CORELIB_SRCS =
 ASM_SRCS =
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
@@ -7,6 +8,7 @@ INCLUDES = libft/includes/libft.h \
 		includes/lem_in.h \
 		includes/parser.h \
 		includes/visualizer.h
+CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
@@ -23,10 +25,11 @@ INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
 ASM_NAME =
 COREWAR_NAME =
+CORELIB_NAME =
 
 .PHONY: clean fclean re all
 
-all: $(NAME) $(TESTS) $(VISUALIZER)
+all: $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
 
 LIBFT_PREFIX = ../libft
 FTPRINTF_PREFIX = ft_printf
@@ -34,11 +37,14 @@ include ft_printf/Makefile.mk
 LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
-$(ASM_NAME): $(OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
+$(CORELIB_NAME): $(CORELIB_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	libtool -dynamic -o $@ $^
 
-$(COREWAR_NAME): $(OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
+$(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcorelib
+
+$(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcorelib
 
 obj:
 	mkdir -p obj
@@ -46,7 +52,7 @@ obj:
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
-tests/%.test: tests/%.c $(NAME) $(LIBFT_NAME)
+tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lft
 
 clean:
@@ -54,6 +60,7 @@ clean:
 	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
+	rm -f  $(CORELIB_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj
@@ -65,6 +72,7 @@ fclean: clean
 	rm -f $(FTPRINTF_NAME)
 	rm -rf $(COREWAR_NAME).dSYM/
 	rm -f $(COREWAR_NAME)
+	rm -f $(CORELIB_NAME)
 	rm -rf $(ASM_NAME).dSYM/
 	rm -f $(ASM_NAME)
 
