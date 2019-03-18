@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/18 19:07:20 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:16:00 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,43 +71,6 @@ typedef char	t_arg_type;
 # define ERR_CHAMP_TOO_LARGE -3
 # define ERR_CHAMP_READ -4
 
-typedef	t_register;
-typedef	t_instr;
-
-typedef struct		s_header
-{
-	uint32_t		magic;
-  	char			prog_name[PROG_NAME_LENGTH + 1];
-	uint32_t		prog_size;
-	char			comment[COMMENT_LENGTH + 1];
-}					t_header;
-
-typedef struct		s_player
-{
-	t_header	header;
-	uint8_t		*champion_code;
-}					t_player;
-
-typedef struct		s_process
-{
-	t_register	registers[REG_NUMBER];
-	t_player	*player;
-	size_t		program_counter;
-	int			carry;
-	size_t		id;
-	int			live;
-	int			busy;
-	t_instr		pending_operation;
-}					t_process;
-
-typedef struct		s_vm_state
-{
-	t_array		processes;
-	t_array		players;
-	size_t		cycle_count;
-	uint8_t		memory[MEM_SIZE];
-}					t_vm_state;
-
 enum	e_instr_arg_type
 {
 	e_register = 0,
@@ -137,17 +100,19 @@ enum	e_instr
 	e_invalid
 };
 
-typedef struct		s_op
+typedef struct		s_header
 {
-	const char		*name;
-	int				arg_num;
-	const int		*arg_types;
-	enum e_instr	opcode;
-	int				cycles;
-	const char		*explanation;
-	uint8_t			has_ocp;
-	uint8_t			relative;
-}					t_op;
+	uint32_t		magic;
+  	char			prog_name[PROG_NAME_LENGTH + 1];
+	uint32_t		prog_size;
+	char			comment[COMMENT_LENGTH + 1];
+}					t_header;
+
+typedef struct		s_player
+{
+	t_header	header;
+	uint8_t		*champion_code;
+}					t_player;
 
 typedef struct		s_bigend_buffer
 {
@@ -188,6 +153,38 @@ typedef struct 		s_instr
 	t_instr_arg		instr_args[3];
 	size_t			size;
 }					t_instr;
+
+typedef struct		s_process
+{
+	t_register	registers[REG_NUMBER];
+	t_player	*player;
+	size_t		program_counter;
+	int			carry;
+	size_t		id;
+	int			live;
+	int			busy;
+	t_instr		pending_operation;
+}					t_process;
+
+typedef struct		s_vm_state
+{
+	t_array		processes;
+	t_array		players;
+	size_t		cycle_count;
+	uint8_t		memory[MEM_SIZE];
+}					t_vm_state;
+
+typedef struct		s_op
+{
+	const char		*name;
+	int				arg_num;
+	const int		*arg_types;
+	enum e_instr	opcode;
+	int				cycles;
+	const char		*explanation;
+	uint8_t			has_ocp;
+	uint8_t			relative;
+}					t_op;
 
 typedef struct		s_ocp
 {
