@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   spawn_process.c                                    :+:      :+:    :+:   */
+/*   clone_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/19 17:35:39 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 17:47:05 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void    vm_spawn_process(t_vm_state *state, size_t address, t_process *original)
+void	vm_init_process(t_vm_state *state, size_t player_id)
+{
+	t_process	new_process;
+
+	ft_bzero(&new_process, sizeof(t_process));
+	/* TODO initial value of first register? */
+	new_process.registers[0].content = byte_order_swap(
+		(t_bigend_buffer){state->processes.length}, REG_SIZE);
+	new_process.player = &ARRAY_PTR(state->players, t_player)[player_id];
+	new_process.program_counter = (MEM_SIZE / state->players.length) * player_id;
+	new_process.carry = 0;
+	new_process.id = state->processes.length;
+	new_process.live = 0;
+	new_process.busy = 1;
+	instr_init(&new_process.pending_operation);
+	new_process.pending_operation.opcode = e_invalid;
+	new_process.pending_operation.is_jump = 1;
+	array_push_back(&state->processes, &new_process);
+}
+
+void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 {
 	t_process	new_process;
 
@@ -24,9 +44,9 @@ void    vm_spawn_process(t_vm_state *state, size_t address, t_process *original)
 	new_process.id = state->processes.length;
 	new_process.live = 0;
 	new_process.busy = 1;
+	new_process.player = original->player;
 	instr_init(&new_process.pending_operation);
 	new_process.pending_operation.opcode = e_invalid;
 	new_process.pending_operation.is_jump = 1;
-	new_process.player = original->player;
 	array_push_back(&state->processes, &new_process);
 }

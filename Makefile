@@ -6,7 +6,7 @@ CORELIB_SRCS = vm/vm.c \
 	vm/control_unit.c \
 	vm/champion_load.c \
 	vm/byte_order.c \
-	vm/spawn_process.c \
+	vm/clone_process.c \
 	vm/instr_impl/buffer_invert_bits.c \
 	vm/instr_impl/buffer_is_zero.c \
 	vm/instr_impl/impl_add.c \
