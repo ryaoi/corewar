@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   spawn_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/17 19:30:33 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/19 17:35:39 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void    vm_spawn_player(t_vm_state *state, size_t address, t_process *original)
+void    vm_spawn_process(t_vm_state *state, size_t address, t_process *original)
 {
 	t_process	new_process;
 
@@ -27,6 +27,6 @@ void    vm_spawn_player(t_vm_state *state, size_t address, t_process *original)
 	instr_init(&new_process.pending_operation);
 	new_process.pending_operation.opcode = e_invalid;
 	new_process.pending_operation.is_jump = 1;
-	new_process.owner = original->owner;
+	new_process.player = original->player;
 	array_push_back(&state->processes, &new_process);
 }

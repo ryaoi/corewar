@@ -6,6 +6,7 @@ CORELIB_SRCS = vm/vm.c \
 	vm/control_unit.c \
 	vm/champion_load.c \
 	vm/byte_order.c \
+	vm/spawn_process.c \
 	vm/instr_impl/buffer_invert_bits.c \
 	vm/instr_impl/buffer_is_zero.c \
 	vm/instr_impl/impl_add.c \
@@ -15,7 +16,8 @@ CORELIB_SRCS = vm/vm.c \
 	vm/instr_impl/impl_live.c \
 	vm/instr_impl/impl_st.c \
 	vm/instr_impl/impl_sub.c \
-	vm/instr_impl/impl_zjmp.c
+	vm/instr_impl/impl_zjmp.c \
+	vm/instr_impl/impl_fork.c
 ASM_SRCS =
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
