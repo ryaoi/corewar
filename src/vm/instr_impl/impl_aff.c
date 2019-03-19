@@ -6,20 +6,21 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 17:24:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 21:16:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 void	impl_aff(t_vm_state *state, t_process *process, t_instr *instr)
 {
-	t_bigend_buffer	load_buffer;
-	size_t			address;
+	t_bigend_buffer	character_buffer;
 
+	(void)state;
+	character_buffer
+		= process->registers[instr->instr_args[0].arg.reg_index].content;
 	ft_putchar(
-		process->registers[instr->instr_args[0].arg.reg_index].content.buffer[REG_SIZE - 1] % 256);
+		((uint8_t*)&character_buffer)[REG_SIZE - 1] % 256);
 	process->carry = buffer_is_zero(
 		process->registers[instr->instr_args[0].arg.reg_index].content,
 		REG_SIZE);

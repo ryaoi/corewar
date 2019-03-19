@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   impl_ldi.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/17 19:05:28 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/19 15:52:30 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 void	impl_ldi(t_vm_state *state, t_process *process, t_instr *instr)
 {

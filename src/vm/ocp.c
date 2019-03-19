@@ -6,11 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:15:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 17:21:42 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:19:31 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cpu.h"
+#include "vm.h"
 
 t_ocp	parse_ocp(uint8_t byte)
 {
@@ -33,4 +33,5 @@ t_ocp	parse_ocp(uint8_t byte)
 			ocp.fields[(3 - 1) - index] = e_index;
 		index++;
 	}
+	return (ocp);
 }

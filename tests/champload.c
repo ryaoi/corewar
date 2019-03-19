@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   instr_zjmp.c                                       :+:      :+:    :+:   */
+/*   champload.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/16 19:40:48 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/16 19:51:42 by aamadori         ###   ########.fr       */
+/*   Created: 2019/03/18 18:22:41 by aamadori          #+#    #+#             */
+/*   Updated: 2019/03/18 19:10:30 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
+#include <unistd.h>
 
-void	impl_zjmp(t_vm_state *state, t_process *process, t_instr *instr)
+int		main(void)
 {
-	size_t	address;
+	t_vm_state	*state;
 
-	address = *(size_t*)byte_order_swap(
-		instr->instr_args[0].arg.direct.content, IND_SIZE).buffer;
-	process->program_counter = process->program_counter + (address % IDX_MOD);
+	if (!(state = malloc(sizeof(t_vm_state))))
+		return (0);
+	vm_state_init(state);
+	if (vm_champion_load_file(state, "resources/test_champ1.cor") < 0
+		|| vm_champion_load_file(state, "resources/test_champ2.cor") < 0)
+		return (0);
+	vm_memory_prepare(state);
+	write(1, state->memory, MEM_SIZE);
 }

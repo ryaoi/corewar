@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/17 19:19:29 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/19 15:56:00 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,12 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include "array.h"
-# include "cpu.h"
+
+# define IND_SIZE				2
+# define REG_SIZE				4
+# define DIR_SIZE				REG_SIZE
+
+# define REG_NUMBER				16
 
 # define REG_CODE				1
 # define DIR_CODE				2
@@ -61,6 +66,40 @@ typedef char	t_arg_type;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
+# define ERR_FILE -1
+# define ERR_HEADER_READ -2
+# define ERR_CHAMP_TOO_LARGE -3
+# define ERR_CHAMP_READ -4
+
+enum	e_instr_arg_type
+{
+	e_register = 0,
+	e_index,
+	e_direct,
+	e_absent
+};
+
+enum	e_instr
+{
+	e_live = 0,
+	e_ld,
+	e_st,
+	e_add,
+	e_sub,
+	e_and,
+	e_or,
+	e_xor,
+	e_zjmp,
+	e_ldi,
+	e_sti,
+	e_fork,
+	e_lld,
+	e_lldi,
+	e_lfork,
+	e_aff,
+	e_invalid
+};
+
 typedef struct		s_header
 {
 	uint32_t		magic;
@@ -69,11 +108,57 @@ typedef struct		s_header
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
 
+typedef struct		s_player
+{
+	t_header	header;
+	uint8_t		*champion_code;
+}					t_player;
+
+typedef struct		s_bigend_buffer
+{
+	/* TODO max buffer size? asserts? */
+	size_t		buffer;
+}					t_bigend_buffer;
+
+typedef struct		s_register
+{
+	t_bigend_buffer	content;
+}					t_register;
+
+typedef struct		s_direct
+{
+	/* uint8_t			relative; */
+	t_bigend_buffer	content;
+}					t_direct;
+
+typedef struct		s_index
+{
+	t_bigend_buffer	content;
+}					t_index;
+
+typedef struct		s_instr_arg
+{
+	enum e_instr_arg_type	arg_type;
+	union
+	{
+		uint8_t		reg_index;
+		t_index		index;
+		t_direct	direct;
+	}							arg;
+}					t_instr_arg;
+
+typedef struct 		s_instr
+{
+	enum e_instr	opcode;
+	t_instr_arg		instr_args[3];
+	size_t			size;
+	uint8_t			is_jump;
+}					t_instr;
+
 typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
-	/*t_header	header;*/
-	/* TODO keep somewhere else */
+	t_player	*player;
 	size_t		program_counter;
 	int			carry;
 	size_t		id;
@@ -86,14 +171,83 @@ typedef struct		s_process
 typedef struct		s_vm_state
 {
 	t_array		processes;
+	t_array		players;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
 }					t_vm_state;
 
+typedef struct		s_op
+{
+	const char		*name;
+	int				arg_num;
+	const int		arg_types[3];
+	enum e_instr	opcode;
+	int				cycles;
+	const char		*explanation;
+	uint8_t			has_ocp;
+	uint8_t			relative;
+	uint8_t			is_jump;
+}					t_op;
+
+typedef struct		s_ocp
+{
+	enum e_instr_arg_type	fields[3];
+}					t_ocp;
+
+typedef void		(*t_instr_impl)(t_vm_state *, t_process *, t_instr *);
+void				impl_live(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_ld(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_st(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_add(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_sub(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_and(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_or(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_xor(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_zjmp(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_ldi(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_sti(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_fork(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lld(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lldi(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_lfork(t_vm_state *state,
+						t_process *process, t_instr *instr);
+void				impl_aff(t_vm_state *state,
+						t_process *process, t_instr *instr);
+
+t_instr				fetch_instruction(t_vm_state *state, size_t	address);
+void				parse_arguments(t_vm_state *state, t_instr *instr,
+						size_t address);
+t_ocp				parse_ocp(uint8_t byte);
+void				instr_init(t_instr *instr);
+int					buffer_is_zero(t_bigend_buffer buffer, size_t size);
+void				buffer_invert_bits(t_bigend_buffer buffer, size_t size);
+t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s,
+						size_t size);
 t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
 void			mem_store(t_vm_state *state, size_t address, size_t size,
 					const t_bigend_buffer store);
 t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size);
 void			vm_spawn_player(t_vm_state *state, size_t address, t_process *original);
+void			vm_state_init(t_vm_state *state);
+int				vm_champion_load_file(t_vm_state *state, const char *filename);
+int				vm_champion_load(t_vm_state *state, int fd);
+void			vm_memory_prepare(t_vm_state *state);
+
+extern const t_op			g_opcode_table[17];
+extern const t_instr_impl	g_impl_table[17];
 
 #endif

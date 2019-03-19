@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   optable.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:04:58 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/17 19:28:50 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/19 15:56:26 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cpu.h"
 #include "vm.h"
 
 const t_op	g_opcode_table[17] =
@@ -37,7 +36,7 @@ const t_op	g_opcode_table[17] =
 		"long load index", 1, 1, 0},
 	{"lfork", 1, {T_DIR}, 15, 1000, "long fork", 0, 1, 1},
 	{"aff", 1, {T_REG}, 16, 2, "aff", 1, 0, 0},
-	{0, 0, {0}, 0, 0, 0, 0, 0}
+	{0, 0, {0}, 0, 0, 0, 0, 0, 0}
 };
 
 const t_instr_impl		g_impl_table[17] =
@@ -46,7 +45,7 @@ const t_instr_impl		g_impl_table[17] =
 	impl_ld,
 	impl_st,
 	impl_add,
-	impl_sub,
+	impl_sub/*,
 	impl_and,
 	impl_or,
 	impl_xor,
@@ -57,5 +56,5 @@ const t_instr_impl		g_impl_table[17] =
 	impl_lld,
 	impl_lldi,
 	impl_lfork,
-	impl_aff
+	impl_aff */
 };

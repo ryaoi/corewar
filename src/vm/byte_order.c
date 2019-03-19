@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:24 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/15 19:42:48 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/18 21:13:32 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size)
 	index = 0;
 	while (index < size)
 	{
-		output.buffer[index] = input.buffer[(size - 1) - index];
+		((uint8_t*)&output.buffer)[index] = ((uint8_t*)&input.buffer)[(size - 1) - index];
 		index++;
 	}
 	return (output);

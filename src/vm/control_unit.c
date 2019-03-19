@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   control_unit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/17 19:29:22 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/19 15:51:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "cpu.h"
 
 static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 {
-	size_t	arg_index;
+	int	arg_index;
 
 	arg_index = 0;
 	while (instr->opcode != e_invalid
@@ -47,7 +46,7 @@ static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 
 static void		arg_types_non_ocp(t_instr *instr)
 {
-	size_t	arg_index;
+	int	arg_index;
 
 	arg_index = 0;
 	while (arg_index < g_opcode_table[instr->opcode].arg_num)
@@ -71,13 +70,13 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	{
 		/* TODO what to do if register index is higher than NUM_REG? */
 		load_arg = mem_load(state, address + instr->size, 1);
-		instr->instr_args[argument].arg.reg_index = load_arg.buffer[0];
+		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[0];
 		return (1);
 	}
 	else if (instr->instr_args[argument].arg_type == e_index)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.index.content = load_arg, IND_SIZE;
+		instr->instr_args[argument].arg.index.content = load_arg;
 		return (2);
 	}
 	else if (g_opcode_table[instr->opcode].relative)
@@ -94,14 +93,14 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 static void		parse_instruction(t_vm_state *state, t_instr *instr,
 					size_t address)
 {
-	size_t			arg_index;
+	int				arg_index;
 	t_ocp			ocp;
 	t_bigend_buffer	load_buffer;
 
 	if (g_opcode_table[instr->opcode].has_ocp)
 	{
 		load_buffer = mem_load(state, address + instr->size, 1);
-		ocp = parse_ocp(load_buffer.buffer[0]);
+		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[0]);
 		arg_types_ocp(instr, ocp);
 		instr->size++;
 	}
@@ -126,9 +125,9 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 	opcode = mem_load(state, address, 1);
 	while (match_index < sizeof(g_opcode_table)/sizeof(g_opcode_table[0]))
 	{
-		if (opcode.buffer[0] == g_opcode_table[match_index].opcode)
+		if (((uint8_t*)&opcode.buffer)[0] == g_opcode_table[match_index].opcode)
 		{
-			instr.opcode = opcode.buffer[0];
+			instr.opcode = ((uint8_t*)&opcode.buffer)[0];
 			instr.size = 1;
 			parse_instruction(state, &instr, address);
 			return (instr);
