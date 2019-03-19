@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 21:16:40 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:21:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	impl_aff(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	character_buffer;
 
+	character_buffer.buffer = 0;
 	(void)state;
 	character_buffer
 		= process->registers[instr->instr_args[0].arg.reg_index].content;

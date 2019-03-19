@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/19 20:05:02 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 21:04:25 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,25 @@
 
 void	process_exec_cycle(t_vm_state *state, size_t process_index)
 {
-	t_process	*process;
+	t_process	**processes;
 	t_instr		new_instr;
 
-	process = &ARRAY_PTR(state->processes, t_process)[process_index];
-	if (process->busy > 1)
-		process->busy--;
-	if (process->busy == 1)
+	processes = (t_process**)&state->processes.ptr;
+	if ((*processes)[process_index].busy > 1)
+		(*processes)[process_index].busy--;
+	if ((*processes)[process_index].busy == 1)
 	{
-		if (process->pending_operation.opcode != e_invalid)
+		if ((*processes)[process_index].pending_operation.opcode != e_invalid)
 		{
-			(g_impl_table[process->pending_operation.opcode])
-				(state, process, &process->pending_operation);
+			(g_impl_table[(*processes)[process_index].pending_operation.opcode])
+				(state, &(*processes)[process_index], &(*processes)[process_index].pending_operation);
 		}
-		if (!process->pending_operation.is_jump)
-			process->program_counter
-					= (process->program_counter + new_instr.size) % MEM_SIZE;
-		new_instr = fetch_instruction(state, process->program_counter);
-		process->pending_operation = new_instr;
-		process->busy = (new_instr.opcode != e_invalid)
+		if (!(*processes)[process_index].pending_operation.is_jump)
+			(*processes)[process_index].program_counter
+					= ((*processes)[process_index].program_counter + new_instr.size) % MEM_SIZE;
+		new_instr = fetch_instruction(state, (*processes)[process_index].program_counter);
+		(*processes)[process_index].pending_operation = new_instr;
+		(*processes)[process_index].busy = (new_instr.opcode != e_invalid)
 			? g_opcode_table[new_instr.opcode].cycles : 1;
 	}
 }

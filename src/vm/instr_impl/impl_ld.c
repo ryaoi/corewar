@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:30:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:21:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	impl_ld(t_vm_state *state, t_process *process, t_instr *instr)
 	t_bigend_buffer	load_buffer;
 	size_t			address;
 
+	load_buffer.buffer = 0;
 	if (instr->instr_args[0].arg_type == e_index)
 	{
 		address = byte_order_swap(

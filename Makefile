@@ -60,7 +60,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc -shared -o $@ $^
+	gcc $(LDFLAGS) -shared -o $@ $^
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore

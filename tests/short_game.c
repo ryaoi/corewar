@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 20:11:44 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 21:28:30 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int		main(void)
 		|| vm_champion_load_file(state, "resources/test_champ2.cor", 2) < 0)
 		return (0);
 	vm_memory_prepare(state);
-	vm_init_process(state, 1, 0);
+	vm_init_process(state, 0, 0);
 	vm_init_process(state, 1, MEM_SIZE / state->players.length);
 	index = 0;
-	while (index < 10000)
+	while (index < 4000)
 	{
 		/* TODO kill some processes or it multiplies too much, I guess? */
 		vm_exec_cycle(state);

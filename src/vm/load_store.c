@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 21:03:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:52:26 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size)
 
 	/* TODO assert size is not larger than REG_SIZE */
 	index = 0;
+	ret.buffer = 0;
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;
