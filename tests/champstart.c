@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   impl_live.c                                        :+:      :+:    :+:   */
+/*   champstart.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:44:45 by aamadori         ###   ########.fr       */
+/*   Created: 2019/03/18 18:22:41 by aamadori          #+#    #+#             */
+/*   Updated: 2019/03/19 19:42:48 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "ft_printf.h"
 
-void	impl_live(t_vm_state *state, t_process *process, t_instr *instr)
+int		main(void)
 {
-	int		parameter;
-	size_t	index;
+	t_vm_state	*state;
+	size_t		index;
 
-	(void)process;
-	parameter = byte_order_swap(
-		instr->instr_args[0].arg.direct.content, DIR_SIZE).buffer;
+	if (!(state = malloc(sizeof(t_vm_state))))
+		return (0);
+	vm_state_init(state);
+	if (vm_champion_load_file(state, "resources/test_champ2.cor", 1) < 0)
+		return (0);
+	vm_memory_prepare(state);
+	vm_init_process(state, 1);
 	index = 0;
-	while (index < state->players.length)
+	while (index < 10)
 	{
-		if (ARRAY_PTR(state->players, t_player)[index].id == parameter)
-			ARRAY_PTR(state->players, t_player)[index].live++;
+		vm_exec_cycle(state);
 		index++;
 	}
+	ft_printf("%d\n", ARRAY_PTR(state->players, t_player)[0].live);
 }

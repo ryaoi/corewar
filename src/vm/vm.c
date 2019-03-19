@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/19 17:29:06 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 19:20:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	process_exec_cycle(t_vm_state *state, size_t process_index)
 	t_instr		new_instr;
 
 	process = &ARRAY_PTR(state->processes, t_process)[process_index];
-	if (process->busy > 0)
+	if (process->busy > 1)
 		process->busy--;
-	if (process->busy == 0)
+	if (process->busy == 1)
 	{
 		if (process->pending_operation.opcode != e_invalid)
 		{
@@ -44,7 +44,10 @@ int		vm_exec_cycle(t_vm_state *state)
 
 	process_index = 0;
 	while (process_index < state->processes.length)
+	{
 		process_exec_cycle(state, process_index);
+		process_index++;
+	}
 	return (0);
 }
 

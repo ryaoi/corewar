@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 18:22:41 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 17:32:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 19:43:42 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int		main(void)
 	if (!(state = malloc(sizeof(t_vm_state))))
 		return (0);
 	vm_state_init(state);
-	if (vm_champion_load_file(state, "resources/test_champ1.cor") < 0
-		|| vm_champion_load_file(state, "resources/test_champ2.cor") < 0)
+	if (vm_champion_load_file(state, "resources/test_champ1.cor", 1) < 0
+		|| vm_champion_load_file(state, "resources/test_champ2.cor", 2) < 0)
 		return (0);
 	vm_memory_prepare(state);
 	index = 0;

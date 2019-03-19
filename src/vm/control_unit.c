@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 15:51:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 19:17:59 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void		arg_types_non_ocp(t_instr *instr)
 	{
 		if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG)
 			instr->instr_args[arg_index].arg_type = e_register;
-		else if (g_opcode_table[instr->opcode].arg_types[arg_index & T_IND])
+		else if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND)
 			instr->instr_args[arg_index].arg_type = e_index;
 		else
 			instr->instr_args[arg_index].arg_type = e_direct;
@@ -109,7 +109,10 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	arg_index = 0;
 	while (instr->opcode != e_invalid
 		&& arg_index < g_opcode_table[instr->opcode].arg_num)
+	{
 		instr->size += parse_argument(state, instr, arg_index, address);
+		arg_index++;
+	}
 	if (instr->opcode != e_invalid)
 		instr->is_jump = g_opcode_table[instr->opcode].is_jump;
 }
@@ -127,7 +130,7 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 	{
 		if (((uint8_t*)&opcode.buffer)[0] == g_opcode_table[match_index].opcode)
 		{
-			instr.opcode = ((uint8_t*)&opcode.buffer)[0];
+			instr.opcode = ((uint8_t*)&opcode.buffer)[0] - 1;
 			instr.size = 1;
 			parse_instruction(state, &instr, address);
 			return (instr);

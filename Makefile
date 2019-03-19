@@ -28,7 +28,8 @@ CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
-TESTS_SRCS = champload.c
+TESTS_SRCS = champload.c \
+	champstart.c
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 

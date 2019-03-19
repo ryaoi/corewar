@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 21:02:00 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 19:30:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	impl_ld(t_vm_state *state, t_process *process, t_instr *instr)
 
 	if (instr->instr_args[0].arg_type == e_index)
 	{
-		address = *(size_t*)byte_order_swap(
+		address = byte_order_swap(
 			instr->instr_args[0].arg.index.content, IND_SIZE).buffer;
 		address = process->program_counter + (address % IDX_MOD);
 		load_buffer = mem_load(state, address, REG_SIZE);
