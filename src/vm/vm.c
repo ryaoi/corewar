@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/19 19:20:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:05:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,9 @@ int		vm_exec_cycle(t_vm_state *state)
 {
 	size_t	process_index;
 
-	process_index = 0;
-	while (process_index < state->processes.length)
-	{
+	process_index = state->processes.length;
+	while (process_index-- > 0)
 		process_exec_cycle(state, process_index);
-		process_index++;
-	}
 	return (0);
 }
 

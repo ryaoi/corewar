@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/18 21:15:12 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:07:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
 			carry = 0;
 		((uint8_t*)&ret.buffer)[index] = ((uint8_t*)&f.buffer)[index] + ((uint8_t*)&s.buffer)[index] + old_carry;
 		old_carry = carry;
-		index++;
 	}
 	return (ret);
 }

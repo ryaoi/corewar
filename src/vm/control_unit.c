@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:17:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:02:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,11 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 	match_index = 0;
 	instr_init(&instr);
 	opcode = mem_load(state, address, 1);
+	instr.opcode = ((uint8_t*)&opcode.buffer)[0] - 1;
 	while (match_index < sizeof(g_opcode_table)/sizeof(g_opcode_table[0]))
 	{
-		if (((uint8_t*)&opcode.buffer)[0] == g_opcode_table[match_index].opcode)
+		if (instr.opcode == g_opcode_table[match_index].opcode)
 		{
-			instr.opcode = ((uint8_t*)&opcode.buffer)[0] - 1;
 			instr.size = 1;
 			parse_instruction(state, &instr, address);
 			return (instr);

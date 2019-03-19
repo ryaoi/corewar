@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:04:58 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:50:26 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:08:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ const t_instr_impl		g_impl_table[17] =
 	/*impl_and,
 	impl_or,
 	impl_xor,*/
+	NULL,
+	NULL,
+	NULL,
 	impl_zjmp,
 	impl_ldi,
 	impl_sti,

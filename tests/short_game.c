@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   champstart.c                                       :+:      :+:    :+:   */
+/*   short_game.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/18 18:22:41 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:57:42 by aamadori         ###   ########.fr       */
+/*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
+/*   Updated: 2019/03/19 20:11:44 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,22 @@ int		main(void)
 	if (!(state = malloc(sizeof(t_vm_state))))
 		return (0);
 	vm_state_init(state);
-	if (vm_champion_load_file(state, "resources/test_champ2.cor", 1) < 0)
+	if (vm_champion_load_file(state, "resources/test_champ1.cor", 1) < 0
+		|| vm_champion_load_file(state, "resources/test_champ2.cor", 2) < 0)
 		return (0);
 	vm_memory_prepare(state);
 	vm_init_process(state, 1, 0);
+	vm_init_process(state, 1, MEM_SIZE / state->players.length);
 	index = 0;
-	while (index < 10)
+	while (index < 10000)
 	{
+		/* TODO kill some processes or it multiplies too much, I guess? */
 		vm_exec_cycle(state);
 		index++;
 	}
-	ft_printf("%d\n", ARRAY_PTR(state->players, t_player)[0].live);
+	index = 0;
+	while (index < MEM_SIZE)
+		ft_printf("%2.2hhx ", state->memory[index++]);
+	ft_printf("\n");
+	ft_printf("%d %d\n", ARRAY_PTR(state->players, t_player)[0].live, ARRAY_PTR(state->players, t_player)[1].live);
 }
