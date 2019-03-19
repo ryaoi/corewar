@@ -15,9 +15,13 @@ CORELIB_SRCS = vm/vm.c \
 	vm/instr_impl/impl_ldi.c \
 	vm/instr_impl/impl_live.c \
 	vm/instr_impl/impl_st.c \
+	vm/instr_impl/impl_sti.c \
 	vm/instr_impl/impl_sub.c \
 	vm/instr_impl/impl_zjmp.c \
-	vm/instr_impl/impl_fork.c
+	vm/instr_impl/impl_fork.c \
+	vm/instr_impl/impl_lld.c \
+	vm/instr_impl/impl_lldi.c \
+	vm/instr_impl/impl_lfork.c
 ASM_SRCS =
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
