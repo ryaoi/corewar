@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/20 17:16:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 19:47:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	process_exec_cycle(t_vm_state *state, size_t process_index)
 	t_instr		instr;
 
 	processes = (t_process**)&state->processes.ptr;
-	if ((*processes)[process_index].busy > 1)
+	if ((*processes)[process_index].busy >= 1)
 		(*processes)[process_index].busy--;
-	if ((*processes)[process_index].busy == 1)
+	if ((*processes)[process_index].busy == 0)
 	{
 		instr = (*processes)[process_index].pending_operation;
 		(*processes)[process_index].has_jumped = 0;
