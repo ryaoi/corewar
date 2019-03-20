@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/20 15:22:52 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 17:10:25 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 		instr->size += parse_argument(state, instr, arg_index, address);
 		arg_index++;
 	}
-	if (instr->opcode != e_invalid)
-		instr->is_jump = g_opcode_table[instr->opcode].is_jump;
 }
 
 t_instr		fetch_instruction(t_vm_state *state, size_t	address)

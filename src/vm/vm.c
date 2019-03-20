@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/20 15:23:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 17:16:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ void	process_exec_cycle(t_vm_state *state, size_t process_index)
 	if ((*processes)[process_index].busy == 1)
 	{
 		instr = (*processes)[process_index].pending_operation;
+		(*processes)[process_index].has_jumped = 0;
 		if (instr.opcode != e_invalid)
 		{
 			(g_impl_table[instr.opcode])
 				(state, &(*processes)[process_index], &instr);
 		}
-		if (!instr.is_jump)
+		if (!(*processes)[process_index].has_jumped)
 			(*processes)[process_index].program_counter
 					= ((*processes)[process_index].program_counter + instr.size) % MEM_SIZE;
 		instr = fetch_instruction(state, (*processes)[process_index].program_counter);

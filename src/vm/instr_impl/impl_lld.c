@@ -6,13 +6,13 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/20 15:22:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 17:13:12 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_lld(t_vm_state *state, t_process *process, const t_instr *instr)
+void	impl_lld(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	load_buffer;
 	int64_t			offset;
