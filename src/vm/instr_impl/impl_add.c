@@ -6,13 +6,13 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 20:21:00 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 15:22:29 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
+t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s)
 {
 	uint8_t	old_carry;
 	uint8_t	carry;
@@ -20,7 +20,7 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
 	t_bigend_buffer	ret;
 
 	ret.buffer = 0;
-	index = size - 1;
+	index = 8;
 	carry = 0;
 	while (index-- > 0)
 	{
@@ -35,14 +35,12 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, size_t size)
 	return (ret);
 }
 
-void	impl_add(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_add(t_vm_state *state, t_process *process, const t_instr *instr)
 {
 	(void)state;
 	process->registers[instr->instr_args[2].arg.reg_index].content
 		= add_bigend(process->registers[instr->instr_args[0].arg.reg_index].content,
-		process->registers[instr->instr_args[1].arg.reg_index].content,
-		REG_SIZE);
+		process->registers[instr->instr_args[1].arg.reg_index].content);
 	process->carry = buffer_is_zero(
-		process->registers[instr->instr_args[2].arg.reg_index].content,
-		REG_SIZE);
+		process->registers[instr->instr_args[2].arg.reg_index].content);
 }

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 19:43:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 14:50:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		vm_champion_load(t_vm_state *state, int fd, int id)
 		return (ERR_HEADER_READ);
 	/* TODO check magic number in header */
 	player.header.prog_size = byte_order_swap(
-		(t_bigend_buffer){player.header.prog_size}, 4).buffer;
+		(t_bigend_buffer){(size_t)player.header.prog_size << 32}).buffer;
 	if (player.header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player.champion_code = malloc(player.header.prog_size);

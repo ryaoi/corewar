@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 20:52:26 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 14:45:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,23 @@ t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size)
 {
 	t_bigend_buffer	ret;
 	size_t			byte_address;
+	size_t			msb;
 	size_t			index;
 
 	/* TODO assert size is not larger than REG_SIZE */
 	index = 0;
 	ret.buffer = 0;
+	msb = 8 - size;
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;
-		((uint8_t*)&ret.buffer)[index] = state->memory[byte_address];
+		((uint8_t*)&ret.buffer)[index + msb] = state->memory[byte_address];
+		index++;
+	}
+	index = 0;
+	while ((((uint8_t*)&ret.buffer)[msb] & 0x80) && index < msb)
+	{
+		((uint8_t*)&ret.buffer)[index] = 0xff;
 		index++;
 	}
 	return	ret;
@@ -37,13 +45,15 @@ void	mem_store(t_vm_state *state, size_t address, size_t size,
 {
 	size_t			byte_address;
 	size_t			index;
+	size_t			msb;
 
 	/* TODO assert size is not larger than REG_SIZE */
 	index = 0;
+	msb = 8 - size;
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;
-		state->memory[byte_address] = ((const uint8_t*)&store.buffer)[index];
+		state->memory[byte_address] = ((const uint8_t*)&store.buffer)[index + msb];
 		index++;
 	}
 }

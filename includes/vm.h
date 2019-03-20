@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/19 19:57:40 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 15:22:05 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,53 +194,52 @@ typedef struct		s_ocp
 	enum e_instr_arg_type	fields[3];
 }					t_ocp;
 
-typedef void		(*t_instr_impl)(t_vm_state *, t_process *, t_instr *);
+typedef void		(*t_instr_impl)(t_vm_state *, t_process *, const t_instr *);
 void				impl_live(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_ld(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_st(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_add(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_sub(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_and(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_or(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_xor(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_zjmp(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_ldi(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_sti(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_fork(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_lld(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_lldi(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_lfork(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 void				impl_aff(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						t_process *process, const t_instr *instr);
 
 t_instr				fetch_instruction(t_vm_state *state, size_t	address);
 void				parse_arguments(t_vm_state *state, t_instr *instr,
 						size_t address);
 t_ocp				parse_ocp(uint8_t byte);
 void				instr_init(t_instr *instr);
-int					buffer_is_zero(t_bigend_buffer buffer, size_t size);
-void				buffer_invert_bits(t_bigend_buffer buffer, size_t size);
-t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s,
-						size_t size);
+int					buffer_is_zero(t_bigend_buffer buffer);
+void				buffer_invert_bits(t_bigend_buffer buffer);
+t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s);
 t_bigend_buffer	mem_load(t_vm_state *state, size_t address, size_t size);
 void			mem_store(t_vm_state *state, size_t address, size_t size,
 					const t_bigend_buffer store);
-t_bigend_buffer	byte_order_swap(t_bigend_buffer input, size_t size);
+t_bigend_buffer	byte_order_swap(t_bigend_buffer input);
 void			vm_clone_process(t_vm_state *state, size_t address, t_process *original);
 void			vm_init_process(t_vm_state *state, size_t player_id, size_t address);
 void			vm_state_init(t_vm_state *state);

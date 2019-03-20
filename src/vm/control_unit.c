@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/19 21:19:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 15:22:52 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	{
 		/* TODO what to do if register index is higher than NUM_REG? */
 		load_arg = mem_load(state, address + instr->size, 1);
-		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[0];
+		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[7];
 		return (1);
 	}
 	else if (instr->instr_args[argument].arg_type == e_index)
@@ -101,7 +101,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	if (g_opcode_table[instr->opcode].has_ocp)
 	{
 		load_buffer = mem_load(state, address + instr->size, 1);
-		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[0]);
+		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[7]);
 		arg_types_ocp(instr, ocp);
 		instr->size++;
 	}
@@ -127,7 +127,7 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 	match_index = 0;
 	instr_init(&instr);
 	opcode = mem_load(state, address, 1);
-	instr.opcode = ((uint8_t*)&opcode.buffer)[0] - 1;
+	instr.opcode = ((uint8_t*)&opcode.buffer)[7] - 1;
 	while (match_index < sizeof(g_opcode_table)/sizeof(g_opcode_table[0]))
 	{
 		if (instr.opcode == g_opcode_table[match_index].opcode)

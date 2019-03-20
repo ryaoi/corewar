@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/19 19:57:20 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 14:43:45 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	vm_init_process(t_vm_state *state, size_t player_id, size_t address)
 
 	ft_bzero(&new_process, sizeof(t_process));
 	new_process.registers[0].content = byte_order_swap(
-		(t_bigend_buffer){player_id}, REG_SIZE);
+		(t_bigend_buffer){player_id});
 	new_process.player = &ARRAY_PTR(state->players, t_player)[player_id];
 	new_process.program_counter = address;
 	new_process.carry = 0;

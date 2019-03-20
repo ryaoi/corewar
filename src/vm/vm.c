@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/19 21:04:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/20 15:23:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,26 @@
 void	process_exec_cycle(t_vm_state *state, size_t process_index)
 {
 	t_process	**processes;
-	t_instr		new_instr;
+	t_instr		instr;
 
 	processes = (t_process**)&state->processes.ptr;
 	if ((*processes)[process_index].busy > 1)
 		(*processes)[process_index].busy--;
 	if ((*processes)[process_index].busy == 1)
 	{
-		if ((*processes)[process_index].pending_operation.opcode != e_invalid)
+		instr = (*processes)[process_index].pending_operation;
+		if (instr.opcode != e_invalid)
 		{
-			(g_impl_table[(*processes)[process_index].pending_operation.opcode])
-				(state, &(*processes)[process_index], &(*processes)[process_index].pending_operation);
+			(g_impl_table[instr.opcode])
+				(state, &(*processes)[process_index], &instr);
 		}
-		if (!(*processes)[process_index].pending_operation.is_jump)
+		if (!instr.is_jump)
 			(*processes)[process_index].program_counter
-					= ((*processes)[process_index].program_counter + new_instr.size) % MEM_SIZE;
-		new_instr = fetch_instruction(state, (*processes)[process_index].program_counter);
-		(*processes)[process_index].pending_operation = new_instr;
-		(*processes)[process_index].busy = (new_instr.opcode != e_invalid)
-			? g_opcode_table[new_instr.opcode].cycles : 1;
+					= ((*processes)[process_index].program_counter + instr.size) % MEM_SIZE;
+		instr = fetch_instruction(state, (*processes)[process_index].program_counter);
+		(*processes)[process_index].pending_operation = instr;
+		(*processes)[process_index].busy = (instr.opcode != e_invalid)
+			? g_opcode_table[instr.opcode].cycles : 1;
 	}
 }
 
