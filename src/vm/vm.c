@@ -6,47 +6,48 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/20 19:47:17 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 14:12:45 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "libft.h"
 
-void	process_exec_cycle(t_vm_state *state, size_t process_index)
+void	process_exec_cycle(t_vm_state *state, t_process *process)
 {
-	t_process	**processes;
 	t_instr		instr;
 
-	processes = (t_process**)&state->processes.ptr;
-	if ((*processes)[process_index].busy >= 1)
-		(*processes)[process_index].busy--;
-	if ((*processes)[process_index].busy == 0)
+	if (process->busy >= 1)
+		process->busy--;
+	if (process->busy == 0)
 	{
-		instr = (*processes)[process_index].pending_operation;
-		(*processes)[process_index].has_jumped = 0;
+		instr = process->pending_operation;
+		process->has_jumped = 0;
 		if (instr.opcode != e_invalid)
 		{
-			(g_impl_table[instr.opcode])
-				(state, &(*processes)[process_index], &instr);
+			(g_impl_table[instr.opcode])(state, process, &instr);
 		}
-		if (!(*processes)[process_index].has_jumped)
-			(*processes)[process_index].program_counter
-					= ((*processes)[process_index].program_counter + instr.size) % MEM_SIZE;
-		instr = fetch_instruction(state, (*processes)[process_index].program_counter);
-		(*processes)[process_index].pending_operation = instr;
-		(*processes)[process_index].busy = (instr.opcode != e_invalid)
+		if (!process->has_jumped)
+			process->program_counter
+					= (process->program_counter + instr.size) % MEM_SIZE;
+		instr = fetch_instruction(state, process->program_counter);
+		process->pending_operation = instr;
+		process->busy = (instr.opcode != e_invalid)
 			? g_opcode_table[instr.opcode].cycles : 1;
 	}
 }
 
 int		vm_exec_cycle(t_vm_state *state)
 {
-	size_t	process_index;
+	t_list	*traverse;
 
-	process_index = state->processes.length;
-	while (process_index-- > 0)
-		process_exec_cycle(state, process_index);
+	traverse = state->processes;
+	while (traverse)
+	{
+		process_exec_cycle(state, &LST_CONT(traverse, t_process));
+		traverse = traverse->next;
+	}
+	state->cycle_count++;
 	return (0);
 }
 
@@ -71,5 +72,5 @@ void	vm_state_init(t_vm_state *state)
 {
 	ft_bzero(state, sizeof(t_vm_state));
 	array_init(&state->players, sizeof(t_player));
-	array_init(&state->processes, sizeof(t_process));
+	state->processes = NULL;
 }

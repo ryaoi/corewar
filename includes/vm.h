@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/20 18:46:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 14:53:47 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include "array.h"
+# include "list.h"
 
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -165,12 +166,13 @@ typedef struct		s_process
 	size_t		id;
 	int			busy;
 	uint8_t		has_jumped;
+	int			live_executed;
 	t_instr		pending_operation;
 }					t_process;
 
 typedef struct		s_vm_state
 {
-	t_array		processes;
+	t_list		*processes;
 	t_array		players;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
@@ -241,12 +243,13 @@ void			mem_store(t_vm_state *state, int64_t address, size_t size,
 					const t_bigend_buffer store);
 t_bigend_buffer	byte_order_swap(t_bigend_buffer input);
 void			vm_clone_process(t_vm_state *state, size_t address, t_process *original);
-void			vm_init_process(t_vm_state *state, size_t player_id, size_t address);
+void			vm_init_process(t_vm_state *state, int player_id, size_t address);
 void			vm_state_init(t_vm_state *state);
-int				vm_champion_load_file(t_vm_state *state, const char *filename, int id);
-int				vm_champion_load(t_vm_state *state, int fd, int id);
+int				vm_champion_load_file(t_player *player, const char *filename, int id);
+int				vm_champion_load(t_player *player, int fd, int id);
 void			vm_memory_prepare(t_vm_state *state);
 int				vm_exec_cycle(t_vm_state *state);
+int				play_game(t_array *players, t_vm_state **final, size_t max_cycles);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];

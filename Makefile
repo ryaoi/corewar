@@ -7,6 +7,7 @@ CORELIB_SRCS = vm/vm.c \
 	vm/champion_load.c \
 	vm/byte_order.c \
 	vm/clone_process.c \
+	vm/game.c \
 	vm/instr_impl/buffer_invert_bits.c \
 	vm/instr_impl/buffer_is_zero.c \
 	vm/instr_impl/impl_add.c \
@@ -32,9 +33,7 @@ CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
-TESTS_SRCS = champload.c \
-	champstart.c \
-	short_game.c
+TESTS_SRCS = short_game.c
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 

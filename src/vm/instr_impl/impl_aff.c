@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/20 17:13:12 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 15:51:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	impl_aff(t_vm_state *state, t_process *process, t_instr *instr)
 	character_buffer.buffer = 0;
 	(void)state;
 	character_buffer
-		= process->registers[instr->instr_args[0].arg.reg_index].content;
+		= process->registers[instr->instr_args[0].arg.reg_index - 1].content;
 	ft_putchar(
 		((uint8_t*)&character_buffer)[REG_SIZE - 1] % 256);
 	process->carry = buffer_is_zero(
-		process->registers[instr->instr_args[0].arg.reg_index].content);
+		process->registers[instr->instr_args[0].arg.reg_index - 1].content);
 }

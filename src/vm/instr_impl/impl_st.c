@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/20 17:13:12 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 15:51:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 	if (instr->instr_args[1].arg_type == e_register)
 	{
 		process->carry = buffer_is_zero(
-			process->registers[instr->instr_args[0].arg.reg_index].content);
-		process->registers[instr->instr_args[1].arg.reg_index].content
-			= process->registers[instr->instr_args[0].arg.reg_index].content;
+			process->registers[instr->instr_args[0].arg.reg_index - 1].content);
+		process->registers[instr->instr_args[1].arg.reg_index - 1].content
+			= process->registers[instr->instr_args[0].arg.reg_index - 1].content;
 	}
 	else
 	{
@@ -32,7 +32,7 @@ void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 			instr->instr_args[1].arg.index.content).buffer;
 		offset = process->program_counter + (offset % IDX_MOD);
 		load_buffer
-			= process->registers[instr->instr_args[0].arg.reg_index].content;
+			= process->registers[instr->instr_args[0].arg.reg_index - 1].content;
 		process->carry = buffer_is_zero(load_buffer);
 		mem_store(state, offset, REG_SIZE, load_buffer);
 	}
