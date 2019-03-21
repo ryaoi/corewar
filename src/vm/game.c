@@ -6,11 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/21 15:45:28 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 17:46:04 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "game.h"
 
 static void	prepare_player(t_player *player, int id)
 {
@@ -26,7 +27,7 @@ static void	prepare_game(t_vm_state *state, t_array *players)
 	index = 0;
 	while (index < (int)players->length)
 	{
-		prepare_player(&ARRAY_PTR(*players, t_player)[index], -index);
+		prepare_player(&ARRAY_PTR(*players, t_player)[index], -1 - index);
 		array_push_back(&state->players, &ARRAY_PTR(*players, t_player)[index]);
 		index++;
 	}
@@ -46,13 +47,11 @@ static void	prepare_game(t_vm_state *state, t_array *players)
 	free(state);
 } */
 
-static void	kill_lazy_processes(t_vm_state *state, int *cycles_to_die, int *checks)
+static void	kill_lazy_processes(t_vm_state *state, t_game_data *game)
 {
 	t_list	**traverse;
 	t_list	*pop;
-	int		lived_count;
 
-	lived_count = 0;
 	traverse = &state->processes;
 	while (*traverse)
 	{
@@ -64,42 +63,41 @@ static void	kill_lazy_processes(t_vm_state *state, int *cycles_to_die, int *chec
 		}
 		else
 		{
-			lived_count += LST_CONT(*traverse, t_process).live_executed;
+			game->live_since_dec += LST_CONT(*traverse, t_process).live_executed;
 			LST_CONT(*traverse, t_process).live_executed = 0;
 			traverse = &((*traverse)->next);
 		}
 	}
-	if (*checks >= MAX_CHECKS || lived_count >= NBR_LIVE)
+	if (game->checks_since_dec >= MAX_CHECKS || game->live_since_dec >= NBR_LIVE)
 	{
-		*cycles_to_die = ft_max(*cycles_to_die - CYCLE_DELTA, 0);
-		*checks = 0;
+		game->cycles_to_die = ft_max(game->cycles_to_die - CYCLE_DELTA, 0);
+		game->checks_since_dec = 0;
+		game->live_since_dec = 0;
 	}
 	else
-		(*checks)++;
+		game->checks_since_dec++;
 }
 
 int		play_game(t_array *players, t_vm_state **final, size_t max_cycles)
 {
 	t_vm_state	*state;
-	int			cycles_to_die;
-	int			last_die;
-	int			checks_since_dec;
+	t_game_data	game;
+	int			last_check;
 	char		game_over;
 
 	if (!(state = malloc(sizeof(t_vm_state))))
 		return (-1);
 	prepare_game(state, players);
 	game_over = 0;
-	cycles_to_die = CYCLE_TO_DIE;
-	last_die = 0;
-	checks_since_dec = 0;
-	while (cycles_to_die > 0 && state->cycle_count < max_cycles && !game_over)
+	last_check = 0;
+	game = (t_game_data){CYCLE_TO_DIE, 0, 0};
+	while (game.cycles_to_die > 0 && state->cycle_count < max_cycles && !game_over)
 	{
-		vm_exec_cycle(state);
-		if ((int)state->cycle_count - last_die >= cycles_to_die)
+  		vm_exec_cycle(state);
+		if ((int)state->cycle_count - last_check >= game.cycles_to_die)
 		{
-			kill_lazy_processes(state, &cycles_to_die, &checks_since_dec);
-			last_die = state->cycle_count;
+			kill_lazy_processes(state, &game);
+			last_check = state->cycle_count;
 		}
 		if (!state->processes)
 			game_over = 1;

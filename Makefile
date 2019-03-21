@@ -8,6 +8,7 @@ CORELIB_SRCS = vm/vm.c \
 	vm/byte_order.c \
 	vm/clone_process.c \
 	vm/game.c \
+	vm/util.c \
 	vm/instr_impl/buffer_invert_bits.c \
 	vm/instr_impl/buffer_is_zero.c \
 	vm/instr_impl/impl_add.c \
@@ -41,6 +42,7 @@ CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
 export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
+export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf

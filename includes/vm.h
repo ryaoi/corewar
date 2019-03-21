@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/21 14:53:47 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/21 19:08:05 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ typedef struct		s_process
 	t_player	*player;
 	size_t		program_counter;
 	int			carry;
-	size_t		id;
 	int			busy;
 	uint8_t		has_jumped;
 	int			live_executed;
@@ -250,6 +249,7 @@ int				vm_champion_load(t_player *player, int fd, int id);
 void			vm_memory_prepare(t_vm_state *state);
 int				vm_exec_cycle(t_vm_state *state);
 int				play_game(t_array *players, t_vm_state **final, size_t max_cycles);
+void			dump_memory(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];
