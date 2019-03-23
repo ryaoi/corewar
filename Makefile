@@ -2,6 +2,7 @@ ASM_SRCS = asm/main.c \
 			asm/parse_lines.c \
 			asm/read_file.c \
 			asm/error.c \
+			asm/file_conversion.c \
 			asm/op.c
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 11:46:33 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 19:35:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,23 +210,23 @@ int		tokenize_line(t_line *line)
 	return (SUCCESS);
 }
 
-int		validate_parameters(t_list *tokens, t_op opcode, int param_id)
+int		validate_parameters(t_token *token, t_op opcode, int param_id)
 {
 	int converted_type;
 
 	converted_type = -1;
-	if (((t_token*)tokens->content)->type == T_DIRLAB)
+	if (token->type == T_DIRLAB)
 		converted_type = T_DIR;
 	else
-		converted_type = ((t_token*)tokens->content)->type - 10;
+		converted_type = token->type - 10;
 	/* filter indirect_label token_type */
 	if (converted_type == T_INDIRLAB - 10)
 		converted_type = T_IND;
-	printf("t_token->type = %d\nconverted_type = %d\n", ((t_token*)tokens->content)->type, converted_type);
+	printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
 	printf("param_types[%d] = %d\n", param_id, opcode.param_types[param_id]);
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
-		ERROR("not valid parameter_type for particular opcode.", 0);
-	return (1);
+		ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
+	return (SUCCESS);
 }
 
 int		validate_opcode_params(t_line *line)
@@ -246,12 +246,12 @@ int		validate_opcode_params(t_line *line)
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		ERROR("wrong number of parameters", LINE_FAIL);
 	if (traverse->next == NULL)
-		return (LINE_FAIL);
+		ERROR ("where are the params!!.", LINE_FAIL);
 	traverse = traverse->next;
 	param_id = 0;
 	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
-		if (validate_parameters(traverse, g_op_tab[instr], param_id))
+		if (validate_parameters(TOKEN, g_op_tab[instr], param_id))
 		{
 			traverse = traverse->next;
 			param_id++;
@@ -285,8 +285,9 @@ void	set_progname(t_file *file, t_line *line)
 			end++;
 		if (end > start)
 			ft_memcpy(file->header.prog_name, line->str + start, end - start);
-		line->type = T_NAME;
+		line->type = T_NAME_CMD;
 	}
+	file->header_flags = ON;
 }
 
 void	set_how(t_file *file, t_line *line)
@@ -312,11 +313,55 @@ void	set_how(t_file *file, t_line *line)
 			end++;
 		if (end > start)
 			ft_memcpy(file->header.how, line->str + start, end - start);
-		line->type = T_CMD_COMMENT;
+		line->type = T_COMMENT_CMD;
+	}
+}
+void	bytecode_len(t_line *line)
+{
+	t_list	*traverse;
+	t_op	*operation;
+
+	traverse = line->tokens;
+	operation = TOKEN->op;
+	if (!line->tokens || !operation)
+		return ;
+	if (TOKEN->type == T_NAME_CMD || TOKEN->type == T_COMMENT_CMD ||
+		TOKEN->type == T_COMMENT)
+		return ;
+	line->bytecode_len = 1;
+	if (TOKEN->op->ocp == 1)
+		line->bytecode_len += 1;
+	while (traverse)
+	{
+		if (TOKEN->type == T_REGISTER)
+			line->bytecode_len += REGISTER_INDEX_SIZE;
+		else if (TOKEN->type == T_DIRECT && !(TOKEN->op->relative))
+			line->bytecode_len += DIRECT_D4_SIZE;
+		else if (TOKEN->type == T_DIRLAB ||
+					(TOKEN->type == T_DIRECT && TOKEN->op->relative))
+			line->bytecode_len += DIRECT_D2_SIZE;
+		else if (TOKEN->type == T_INDIRECT || TOKEN->type == T_INDIRLAB)
+			line->bytecode_len += INDIRECT_SIZE;
+		traverse = traverse->next;
 	}
 }
 
-int		parse_file(t_file *file)
+void	remove_label_char(char *str)
+{
+	int index;
+	char	*tmp;
+
+	tmp = NULL;
+	index = 0;
+	while (str && str[index])
+	{
+		if (str[index] == LABEL_CHAR)
+			str[index] = '\0';
+		index++;
+	}
+}
+
+int		file_parse(t_file *file)
 {
 	t_list	*traverse;
 
@@ -334,6 +379,10 @@ int		parse_file(t_file *file)
 			if (LINE->type == T_ASMCODE && (!(tokenize_line(LINE)) ||
 				!(validate_opcode_params(LINE))))
 					file_error("parse failed.", file);
+			if (LINE->type == T_ASMCODE)
+				bytecode_len(LINE);
+			else if (LINE->type == T_LABEL)
+				remove_label_char(LINE->str); /*TODO needs to code it */
 		}
 		traverse = traverse->next;
 	}

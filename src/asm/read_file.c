@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 02:29:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 16:16:53 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		create_line(t_file *file, char *line, size_t nbr_lines, int line_type)
 	new_line.type = line_type;
 	new_line.pos = 0;
 	new_line.bytecode = NULL;
+	new_line.bytecode_len = 0;
 	if (new_line.str && *(new_line.str))
 		list_append(&(file->lines), list_new(&new_line, sizeof(new_line)));
 	return (SUCCESS);
@@ -74,7 +75,6 @@ int		add_lines(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 		/*parse asm code */
 		if (len > label_pos + 1 && !is_whitespaces_line((&line[label_pos + 2])))
 			create_line(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN);
-
 	}
 	else
 		create_line(file, line, *nbr_lines, T_UNKNOWN);
@@ -82,7 +82,7 @@ int		add_lines(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	return (1);
 }
 
-void	read_file(t_file *file)
+void	file_read(t_file *file)
 {
 	char	*line;
 	size_t	nbr_lines;

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 11:27:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 19:29:58 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,19 @@
 # define ASM_FAIL 0
 # define LINE_FAIL 0
 # define TOKEN_FAIL 0
+# define PARAM_FAIL 0
+# define ON 1
+# define OFF 0
 # define REGISTER_CHAR 'r'
+# define REGISTER_INDEX_SIZE 1
+# define DIRECT_D2_SIZE 2
+# define DIRECT_D4_SIZE 4
+# define INDIRECT_SIZE 2
 
 typedef enum e_token_types
 {
-	T_UNKNOWN,
-	T_NAME, /* .name WHITE_SPACES "strings"*/
-	T_CMD_COMMENT, /* .comment WHITE_SPACES "strings"*/
+	T_NAME_CMD, /* .name WHITE_SPACES "strings"*/
+	T_COMMENT_CMD, /* .comment WHITE_SPACES "strings"*/
 	T_COMMENT, /* # + string */
 	T_LABEL, /* string + ':' */
 	T_ASMCODE, /* instructions + params must relates to a T_LABEL */
@@ -37,6 +43,7 @@ typedef enum e_token_types
 	T_INDIRECT = 14, /* T_INTEGER */
 	T_DIRLAB = 15, /* '%:' + T_LABEL */
 	T_INDIRLAB = 16, /* ':' + T_LABEL */
+	T_UNKNOWN /* added to handle other than labels later */
 }			t_token_types;
 
 # define TOKEN ((t_token*)(traverse->content))
@@ -61,6 +68,7 @@ typedef struct	s_line
 	t_list				*tokens;
 	char				*bytecode;
 	size_t				pos;
+	size_t				bytecode_len;
 
 }				t_line;
 
@@ -78,9 +86,10 @@ typedef struct	s_file
 }				t_file;
 
 void	file_error(const char *str, t_file *file);
-void	read_file(t_file *file);
+void	file_read(t_file *file);
+int		file_parse(t_file *file);
+int		file_conversion(t_file *file);
 int		add_token(t_line *line, int token_id, int start, int end);
-int		parse_file(t_file *file);
 int		tokenize_line(t_line *line);
 int		add_token(t_line *line, int token_id, int start, int end);
 int		check_token_type(t_token *token, char *str);

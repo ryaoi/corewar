@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 18:14:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/16 23:46:33 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 16:46:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef struct	s_op
 	int		opcode;
 	int		nbr_cycles;
 	char	*description;
-	int		nbr1; /* unknown */
-	int		idx;
+	int		ocp; /* unknown */
+	int		relative;
 }				t_op;
 
 typedef struct	header_s

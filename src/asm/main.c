@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 01:47:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 12:35:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static void	check_file_name(const char *filename, t_file *file)
+static void	file_name_check(const char *filename, t_file *file)
 {
 	size_t	len;
 	char	*tmp;
@@ -34,7 +34,7 @@ static void	check_file_name(const char *filename, t_file *file)
 	free(tmp);
 }
 
-static void	check_file(int argc, t_file *file)
+static void	file_check(int argc, t_file *file)
 {
 		if (argc == 1)
 			file_error("no file identified", file);
@@ -42,7 +42,7 @@ static void	check_file(int argc, t_file *file)
 			file_error("too many files", file);
 }
 
-static void	init_file(t_file *file)
+static void	file_init(t_file *file)
 {
 	file->lines = NULL;
 	file->nbr_line = 0;
@@ -50,20 +50,33 @@ static void	init_file(t_file *file)
 	file->name_cor = NULL;
 	file->fd_s = -1;
 	file->fd_cor = -1;
+	file->header_flags = OFF;
 	ft_bzero(&(file->header.prog_name[0]), PROG_NAME_LENGTH + 1);
 	ft_bzero(&(file->header.how[0]), COMMENT_LENGTH + 1);
+}
+
+void	write_cor_file(t_file *file)
+{
+	(void)file;
+	return ;
 }
 
 int		main(int argc, char **argv)
 {
 	t_file	file;
 
-	init_file(&file);
-	check_file(argc, &file);
-	check_file_name(argv[1], &file);
-	read_file(&file);
-	if (parse_file(&file) == LINE_FAIL)
+	file_init(&file);
+	file_check(argc, &file);
+	file_name_check(argv[1], &file);
+	file_read(&file);
+	if (file_parse(&file) == LINE_FAIL)
 		file_error("parse_file() failed.", &file);
+	if (file.header_flags == ON)
+	{
+		if (file_conversion(&file))
+			write_cor_file(&file);
+		file_error("file_conversion() failed.", &file);
+	}
 	file_error("parse_file() failed.", &file);
 	return (0);
 }
