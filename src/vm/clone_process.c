@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/21 19:32:36 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 15:04:23 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	new_process.has_jumped = 1;
 	new_process.live_executed = 0;
 	instr_init(&new_process.pending_operation);
-	new_process.pending_operation.opcode = e_invalid;
+	new_process.pending_operation.invalid = 1;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }
 
@@ -55,6 +55,6 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 	new_process.has_jumped = 1;
 	new_process.live_executed = 0;
 	instr_init(&new_process.pending_operation);
-	new_process.pending_operation.opcode = e_invalid;
+	new_process.pending_operation.invalid = 1;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }

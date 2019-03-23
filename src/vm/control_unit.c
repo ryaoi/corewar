@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/20 17:10:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 15:39:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,31 @@ static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 	int	arg_index;
 
 	arg_index = 0;
-	while (instr->opcode != e_invalid
-		&& arg_index < g_opcode_table[instr->opcode].arg_num)
+	while (arg_index < g_opcode_table[instr->opcode].arg_num)
 	{
 		if (ocp.fields[arg_index] == e_register)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG))
-				instr->opcode = e_invalid;
+				instr->invalid = 1;
 			instr->instr_args[arg_index].arg_type = e_register;
 		}
 		else if (ocp.fields[arg_index] == e_index)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND))
-				instr->opcode = e_invalid;
+				instr->invalid = 1;
 			instr->instr_args[arg_index].arg_type = e_index;
 		}
 		else if (ocp.fields[arg_index] == e_direct)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_DIR))
-				instr->opcode = e_invalid;
+				instr->invalid = 1;
 			instr->instr_args[arg_index].arg_type = e_direct;
 		}
 		else
-			instr->opcode = e_invalid;
+		{
+			instr->instr_args[arg_index].arg_type = e_absent;
+			instr->invalid = 1;
+		}
 		arg_index++;
 	}
 }
@@ -72,6 +74,9 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 		/* TODO what to do if register index is higher than NUM_REG? */
 		load_arg = mem_load(state, address + instr->size, 1);
 		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[7];
+		if (!instr->instr_args[argument].arg.reg_index
+			|| instr->instr_args[argument].arg.reg_index > REG_NUMBER)
+			instr->invalid = 1;
 		return (1);
 	}
 	else if (instr->instr_args[argument].arg_type == e_index)
@@ -80,15 +85,23 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 		instr->instr_args[argument].arg.index.content = load_arg;
 		return (2);
 	}
-	else if (g_opcode_table[instr->opcode].relative)
+	else if (instr->instr_args[argument].arg_type == e_direct)
 	{
-		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.direct.content = load_arg;
-		return (2);
+		if (g_opcode_table[instr->opcode].relative)
+		{
+			load_arg = mem_load(state, address + instr->size, IND_SIZE);
+			instr->instr_args[argument].arg.direct.content = load_arg;
+			return (2);
+		}
+		else
+		{
+			load_arg = mem_load(state, address + instr->size, DIR_SIZE);
+			instr->instr_args[argument].arg.direct.content = load_arg;
+			return (4);
+		}
 	}
-	load_arg = mem_load(state, address + instr->size, DIR_SIZE);
-	instr->instr_args[argument].arg.direct.content = load_arg;
-	return (4);
+	else
+		return (0);
 }
 
 static void		parse_instruction(t_vm_state *state, t_instr *instr,
@@ -108,12 +121,12 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	else
 		arg_types_non_ocp(instr);
 	arg_index = 0;
-	while (instr->opcode != e_invalid
-		&& arg_index < g_opcode_table[instr->opcode].arg_num)
+	while (arg_index < g_opcode_table[instr->opcode].arg_num)
 	{
 		instr->size += parse_argument(state, instr, arg_index, address);
 		arg_index++;
 	}
+	instr->cost = g_opcode_table[instr->opcode].cycles;
 }
 
 t_instr		fetch_instruction(t_vm_state *state, size_t	address)
@@ -137,6 +150,9 @@ t_instr		fetch_instruction(t_vm_state *state, size_t	address)
 		match_index++;
 	}
 	instr.opcode = e_invalid;
+	instr.invalid = 1;
 	instr.size = 1;
+	instr.cost = 1;
+	/* TODO invalid instruction still wastes cycles based on the opcode */
 	return (instr);
 }

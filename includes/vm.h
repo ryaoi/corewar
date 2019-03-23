@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/21 19:08:05 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 15:03:29 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <sys/types.h>
 # include "array.h"
 # include "list.h"
+#include "ft_printf.h" /* TODO remove */
 
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -154,6 +155,8 @@ typedef struct 		s_instr
 {
 	enum e_instr	opcode;
 	t_instr_arg		instr_args[3];
+	uint8_t			invalid;
+	size_t			cost;
 	size_t			size;
 }					t_instr;
 

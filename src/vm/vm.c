@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/21 17:32:57 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 17:22:21 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	process_exec_cycle(t_vm_state *state, t_process *process)
 	{
 		instr = process->pending_operation;
 		process->has_jumped = 0;
-		if (instr.opcode != e_invalid)
+		if (!instr.invalid)
 		{
 			(g_impl_table[instr.opcode])(state, process, &instr);
+			ft_printf("cycle %d, player %d executing %s\n", state->cycle_count, process->player->id, g_opcode_table[instr.opcode].name);
 		}
 		if (!process->has_jumped)
 			process->program_counter
 					= (process->program_counter + instr.size) % MEM_SIZE;
 		instr = fetch_instruction(state, process->program_counter);
 		process->pending_operation = instr;
-		process->busy = (instr.opcode != e_invalid)
-			? g_opcode_table[instr.opcode].cycles : 1;
+		process->busy = instr.cost;
 	}
 }
 
