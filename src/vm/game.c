@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/21 17:46:04 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 19:15:24 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	kill_lazy_processes(t_vm_state *state, t_game_data *game)
 		if (!LST_CONT(*traverse, t_process).live_executed)
 		{
 			/* TODO list pop? */
+			ft_printf("Process %d smothered!!!!!!!!!!!!\n", LST_CONT(*traverse, t_process).id);
 			pop = list_pop(traverse);
 			list_delone(&pop, free_stub);
 		}

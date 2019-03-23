@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/23 15:03:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 18:23:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ typedef struct		s_process
 	int			busy;
 	uint8_t		has_jumped;
 	int			live_executed;
+	size_t		id;
 	t_instr		pending_operation;
 }					t_process;
 
@@ -176,6 +177,7 @@ typedef struct		s_vm_state
 {
 	t_list		*processes;
 	t_array		players;
+	size_t		process_count;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
 }					t_vm_state;

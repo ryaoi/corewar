@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/23 17:22:21 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 19:07:41 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	process_exec_cycle(t_vm_state *state, t_process *process)
 		process->has_jumped = 0;
 		if (!instr.invalid)
 		{
+			ft_printf("Process %d executing %s\n", process->id, g_opcode_table[instr.opcode].name);
 			(g_impl_table[instr.opcode])(state, process, &instr);
-			ft_printf("cycle %d, player %d executing %s\n", state->cycle_count, process->player->id, g_opcode_table[instr.opcode].name);
 		}
 		if (!process->has_jumped)
 			process->program_counter
@@ -41,6 +41,7 @@ int		vm_exec_cycle(t_vm_state *state)
 {
 	t_list	*traverse;
 
+	ft_printf("Cycle %d\n", state->cycle_count + 1);
 	traverse = state->processes;
 	while (traverse)
 	{
@@ -57,6 +58,7 @@ void	vm_memory_prepare(t_vm_state *state)
 	size_t	champion;
 
 	ft_bzero(&state->memory, MEM_SIZE);
+	state->process_count = 1;
 	champion = 0;
 	while (champion < (size_t)ft_min(state->players.length, MAX_PLAYERS))
 	{

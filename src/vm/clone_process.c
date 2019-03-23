@@ -6,11 +6,16 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/23 15:04:23 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/23 18:42:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+
+size_t	vm_new_id(t_vm_state *state)
+{
+	return (state->process_count++);
+}
 
 void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 {
@@ -32,12 +37,10 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 		search++;
 	}
 	new_process.program_counter = address;
-	new_process.carry = 0;
-	new_process.busy = 1;
 	new_process.has_jumped = 1;
-	new_process.live_executed = 0;
-	instr_init(&new_process.pending_operation);
-	new_process.pending_operation.invalid = 1;
+	new_process.id = vm_new_id(state);
+	new_process.pending_operation = fetch_instruction(state, new_process.program_counter);
+	new_process.busy = new_process.pending_operation.cost;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }
 
@@ -50,11 +53,10 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 		sizeof(original->registers));
 	new_process.program_counter = address;
 	new_process.carry = original->carry;
-	new_process.busy = 1;
 	new_process.player = original->player;
 	new_process.has_jumped = 1;
-	new_process.live_executed = 0;
-	instr_init(&new_process.pending_operation);
-	new_process.pending_operation.invalid = 1;
+	new_process.id = vm_new_id(state);
+	new_process.pending_operation = fetch_instruction(state, new_process.program_counter);
+	new_process.busy = new_process.pending_operation.cost;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }
