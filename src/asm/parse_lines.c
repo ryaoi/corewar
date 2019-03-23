@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 04:12:04 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/23 11:46:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,31 +210,54 @@ int		tokenize_line(t_line *line)
 	return (SUCCESS);
 }
 
+int		validate_parameters(t_list *tokens, t_op opcode, int param_id)
+{
+	int converted_type;
+
+	converted_type = -1;
+	if (((t_token*)tokens->content)->type == T_DIRLAB)
+		converted_type = T_DIR;
+	else
+		converted_type = ((t_token*)tokens->content)->type - 10;
+	/* filter indirect_label token_type */
+	if (converted_type == T_INDIRLAB - 10)
+		converted_type = T_IND;
+	printf("t_token->type = %d\nconverted_type = %d\n", ((t_token*)tokens->content)->type, converted_type);
+	printf("param_types[%d] = %d\n", param_id, opcode.param_types[param_id]);
+	if ((converted_type & ~opcode.param_types[param_id]) > 0)
+		ERROR("not valid parameter_type for particular opcode.", 0);
+	return (1);
+}
+
 int		validate_opcode_params(t_line *line)
 {
 	t_list	*traverse;
 	int		instr;
-	int		nbr;
+	int		param_id;
 
+	traverse = line->tokens;
 	if (!(traverse = line->tokens))
 		return (LINE_FAIL);
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
 	instr = TOKEN->op->opcode - 1;
-/*	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
-	printf("original : %d\nthe_code : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);*/
+	/*printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
+	printf("original nbr : %d\nthe_code nbr : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);*/
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		ERROR("wrong number of parameters", LINE_FAIL);
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
 	traverse = traverse->next;
-	nbr = 0;
-	while (traverse || nbr < g_op_tab[instr].nbr_params)
+	param_id = 0;
+	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
-		/* compare parsed params to g_op_tab[instr] */
-		/* D2, D4 also needs to be checked */
-		traverse = traverse->next;
-		nbr++;
+		if (validate_parameters(traverse, g_op_tab[instr], param_id))
+		{
+			traverse = traverse->next;
+			param_id++;
+		}
+		else
+			ERROR("not valid parameters.", LINE_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -263,7 +286,6 @@ void	set_progname(t_file *file, t_line *line)
 		if (end > start)
 			ft_memcpy(file->header.prog_name, line->str + start, end - start);
 		line->type = T_NAME;
-		printf("%s\n", file->header.prog_name);
 	}
 }
 
@@ -277,14 +299,12 @@ void	set_how(t_file *file, t_line *line)
 	index = 0;
 	start = 0;
 	end = 0;
-	printf("%s\n", line->str);
 	while (line->str[index] && ft_isspace(line->str[index]))
 		index++;
 	tmp = line->str + index;
-	printf("%s\n", tmp);
 	if (!ft_strncmp(COMMENT_CMD_STRING, tmp, ft_strlen(COMMENT_CMD_STRING)))
 	{
-		start = ft_strlen(NAME_CMD_STRING);
+		start = ft_strlen(COMMENT_CMD_STRING);
 		while (tmp && tmp[start] && tmp[start] != '"')
 			start++;
 		end = ++start;
@@ -293,7 +313,6 @@ void	set_how(t_file *file, t_line *line)
 		if (end > start)
 			ft_memcpy(file->header.how, line->str + start, end - start);
 		line->type = T_CMD_COMMENT;
-	printf("%s\n", file->header.how);
 	}
 }
 
