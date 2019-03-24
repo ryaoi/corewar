@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 16:14:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 16:55:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,34 @@ t_op	*operation_set(t_line *line)
 	return (NULL);
 }
 
+int		param_getvalue(t_list *lines, t_line *line, t_token *token)
+{
+	char	*label;
+	(void)lines;
+	(void)line;
+	label = NULL;
+	if (token->type == T_DIRECT || token->type == T_REGISTER)
+		token->value = ft_atoi(token->str + 1);
+	else if (token->type == T_INDIRECT)
+		token->value = ft_atoi(token->str);
+	else if (token->type == T_DIRLAB || token->type == T_INDIRLAB)
+		label = token->type == T_DIRLAB ? token->str + 2 : token->str + 1;
+	return (1);
+}
+
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
-	(void)file;
-	(void)line;
+	t_list	*traverse;
 	(void)op;
-	return (1);
+	traverse = line->tokens->next;
+	while (traverse)
+	{
+		if (!(param_getvalue(file->lines, line, ((t_token*)traverse->content))))
+			ERROR("param_getvalue failed.", 0);
+		printf("param value : %d\n", ((t_token*)traverse->content)->value);
+		traverse = traverse->next;
+	}
+	return 1;
 }
 
 int		file_conversion(t_file *file)
