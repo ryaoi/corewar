@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 16:55:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 17:14:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,39 @@ t_op	*operation_set(t_line *line)
 	return (NULL);
 }
 
+void	get_label_value(void)
+{
+	return ;
+}
+
 int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 {
 	char	*label;
-	(void)lines;
+	t_list	*traverse;
 	(void)line;
+
 	label = NULL;
 	if (token->type == T_DIRECT || token->type == T_REGISTER)
 		token->value = ft_atoi(token->str + 1);
 	else if (token->type == T_INDIRECT)
 		token->value = ft_atoi(token->str);
 	else if (token->type == T_DIRLAB || token->type == T_INDIRLAB)
+	{
 		label = token->type == T_DIRLAB ? token->str + 2 : token->str + 1;
-	return (1);
+		traverse = lines;
+		while (traverse)
+		{
+			if (((t_line*)traverse->content)->type == T_LABEL &&
+				!ft_strcmp(label, ((t_line*)traverse->content)->str))
+			{
+				get_label_value(); /*TODO fuck.... */
+				return (SUCCESS);
+			}
+			traverse = traverse->next;
+		}
+		ERROR("noooooooo label doesn't exist.", 0);
+	}
+	return (SUCCESS);
 }
 
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
