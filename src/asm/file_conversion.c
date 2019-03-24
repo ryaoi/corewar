@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 17:14:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 18:56:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			if (((t_line*)traverse->content)->type == T_LABEL &&
 				!ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
-				get_label_value(); /*TODO fuck.... */
+				get_label_value(); /*TODO fuck.... dunno how direct and indirect labels  are different..*/
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
@@ -102,15 +102,36 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 	return (SUCCESS);
 }
 
+void	param_translate(size_t size) /*TODO */
+{
+	(void)size;
+	return ;
+}
+
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
 	t_list	*traverse;
-	(void)op;
+
+	int		bc_index;
+
+	bc_index = 0;
 	traverse = line->tokens->next;
 	while (traverse)
 	{
 		if (!(param_getvalue(file->lines, line, ((t_token*)traverse->content))))
 			ERROR("param_getvalue failed.", 0);
+		if (((t_token*)traverse->content)->type == T_INDIRECT ||
+				((t_token*)traverse->content)->type == T_INDIRLAB)
+			param_translate(INDIRECT_SIZE); /* TODO */
+		else if (((t_token*)traverse->content)->type == T_DIRLAB ||
+					(((t_token*)traverse->content)->type == T_DIRECT &&
+						op->relative))
+			param_translate(DIRECT_D2_SIZE);
+		else if (((t_token*)traverse->content)->type == T_DIRECT &&
+					!(op->relative))
+			param_translate(DIRECT_D4_SIZE);
+		else if (((t_token*)traverse->content)->type == T_REGISTER)
+			param_translate(REGISTER_INDEX_SIZE);
 		printf("param value : %d\n", ((t_token*)traverse->content)->value);
 		traverse = traverse->next;
 	}
