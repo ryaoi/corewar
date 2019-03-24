@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 18:56:56 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 19:16:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 	return (SUCCESS);
 }
 
-void	param_translate(size_t size) /*TODO */
+void	param_translate(unsigned char *bytecode, size_t size, int *index, int value) /*TODO */
 {
 	(void)size;
 	return ;
@@ -112,26 +112,37 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
 	t_list	*traverse;
 
-	int		bc_index;
+	int				bc_index;
+	unsigned char	*bytecode;
 
 	bc_index = 0;
 	traverse = line->tokens->next;
+	bytecode = line->bytecode;
 	while (traverse)
 	{
 		if (!(param_getvalue(file->lines, line, ((t_token*)traverse->content))))
 			ERROR("param_getvalue failed.", 0);
+
 		if (((t_token*)traverse->content)->type == T_INDIRECT ||
 				((t_token*)traverse->content)->type == T_INDIRLAB)
-			param_translate(INDIRECT_SIZE); /* TODO */
+			param_translate(bytecode, INDIRECT_SIZE, &bc_index,
+				((t_token*)traverse->content)->value); /* TODO */
+
 		else if (((t_token*)traverse->content)->type == T_DIRLAB ||
 					(((t_token*)traverse->content)->type == T_DIRECT &&
 						op->relative))
-			param_translate(DIRECT_D2_SIZE);
+			param_translate(bytecode, DIRECT_D2_SIZE, &bc_index,
+				((t_token*)traverse->content)->value);
+
 		else if (((t_token*)traverse->content)->type == T_DIRECT &&
 					!(op->relative))
-			param_translate(DIRECT_D4_SIZE);
+			param_translate(bytecode, DIRECT_D4_SIZE, &bc_index,
+				((t_token*)traverse->content)->value);
+
 		else if (((t_token*)traverse->content)->type == T_REGISTER)
-			param_translate(REGISTER_INDEX_SIZE);
+			param_translate(bytecode, REGISTER_INDEX_SIZE, &bc_index,
+				((t_token*)traverse->content)->value);
+
 		printf("param value : %d\n", ((t_token*)traverse->content)->value);
 		traverse = traverse->next;
 	}
