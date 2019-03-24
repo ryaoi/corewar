@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 19:49:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 15:58:51 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int		add_token(t_line *line, int token_id, int start, int end)
 		ERROR("token_type not found.", TOKEN_FAIL);
 	if (token.type == T_INSTR && check_instr(&token, token.str) == TOKEN_FAIL)
 	{
-		printf("%s\n", line->str + start);
+//		printf("%s\n", line->str + start);
 		ERROR("no opcode match found.", TOKEN_FAIL);
 	}
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
@@ -222,8 +222,8 @@ int		validate_parameters(t_token *token, t_op opcode, int param_id)
 	/* filter indirect_label token_type */
 	if (converted_type == T_INDIRLAB - 10)
 		converted_type = T_IND;
-	printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
-	printf("param_types[%d] = %d\n", param_id, opcode.param_types[param_id]);
+	//printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
+	//printf("param_types[%d] = %d\n-------------------\n", param_id, opcode.param_types[param_id]);
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
 		ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
 	return (SUCCESS);
@@ -241,8 +241,9 @@ int		validate_opcode_params(t_line *line)
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
 	instr = TOKEN->op->opcode - 1;
-	/*printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
-	printf("original nbr : %d\nthe_code nbr : %d\n", g_op_tab[instr].nbr_params, line->nbr_params);*/
+//	printf("line type : %d\n", line->type);
+//	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
+//	printf("original nbr : %d\nthe_code nbr : %d\n---------------\n", g_op_tab[instr].nbr_params, line->nbr_params);
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		ERROR("wrong number of parameters", LINE_FAIL);
 	if (traverse->next == NULL)
@@ -331,16 +332,14 @@ void	bytecode_len(t_line *line)
 	line->bytecode_len = 1;
 	if (TOKEN->op->ocp == 1)
 		line->bytecode_len += 1;
-	printf("%s\n", line->str);
-	printf("token ; %s\n", TOKEN->str);
 	while (traverse)
 	{
 		if (TOKEN->type == T_REGISTER)
 			line->bytecode_len += REGISTER_INDEX_SIZE;
-		else if (TOKEN->type == T_DIRECT && !(TOKEN->op->relative))
+		else if (TOKEN->type == T_DIRECT && !(operation->relative))
 			line->bytecode_len += DIRECT_D4_SIZE;
 		else if (TOKEN->type == T_DIRLAB ||
-					(TOKEN->type == T_DIRECT && TOKEN->op->relative))
+					(TOKEN->type == T_DIRECT && operation->relative))
 			line->bytecode_len += DIRECT_D2_SIZE;
 		else if (TOKEN->type == T_INDIRECT || TOKEN->type == T_INDIRLAB)
 			line->bytecode_len += INDIRECT_SIZE;

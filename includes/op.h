@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 18:14:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 16:46:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 12:03:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct	s_op
 	int		opcode;
 	int		nbr_cycles;
 	char	*description;
-	int		ocp; /* unknown */
+	int		ocp; /* description of input parameters */
 	int		relative;
 }				t_op;
 

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 19:29:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/24 15:44:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define LINE_FAIL 0
 # define TOKEN_FAIL 0
 # define PARAM_FAIL 0
+# define CONVERSION_FAIL 0
 # define ON 1
 # define OFF 0
 # define REGISTER_CHAR 'r'
@@ -66,7 +67,7 @@ typedef struct	s_line
 	int					type;
 	int					nbr_params;
 	t_list				*tokens;
-	char				*bytecode;
+	unsigned char		*bytecode;
 	size_t				pos;
 	size_t				bytecode_len;
 
