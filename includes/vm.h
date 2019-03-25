@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/25 13:31:46 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/25 18:04:01 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ typedef struct		s_process
 	uint8_t		has_jumped;
 	int			live_executed;
 	size_t		id;
-	t_instr		pending_operation;
+	enum e_instr	pending_operation;
 }					t_process;
 
 typedef struct		s_vm_state
@@ -234,7 +234,8 @@ void				impl_lfork(t_vm_state *state,
 void				impl_aff(t_vm_state *state,
 						t_process *process, t_instr *instr);
 
-t_instr				fetch_instruction(t_vm_state *state, size_t	address);
+t_instr		fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address);
+enum e_instr	fetch_opcode(t_vm_state *state, size_t address);
 void				parse_arguments(t_vm_state *state, t_instr *instr,
 						size_t address);
 t_ocp				parse_ocp(uint8_t byte);

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/23 15:39:08 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/25 18:17:26 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,33 +126,39 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 		instr->size += parse_argument(state, instr, arg_index, address);
 		arg_index++;
 	}
-	instr->cost = g_opcode_table[instr->opcode].cycles;
 }
 
-t_instr		fetch_instruction(t_vm_state *state, size_t	address)
+t_instr			fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address)
 {
-	size_t			match_index;
-	t_bigend_buffer	opcode;
 	t_instr			instr;
 
-	match_index = 0;
 	instr_init(&instr);
-	opcode = mem_load(state, address, 1);
-	instr.opcode = ((uint8_t*)&opcode.buffer)[7] - 1;
-	while (match_index < sizeof(g_opcode_table)/sizeof(g_opcode_table[0]))
+	if (opcode < e_invalid)
 	{
-		if (instr.opcode == g_opcode_table[match_index].opcode)
-		{
-			instr.size = 1;
-			parse_instruction(state, &instr, address);
-			return (instr);
-		}
-		match_index++;
+		instr.opcode = opcode;
+		instr.cost = g_opcode_table[instr.opcode].cycles;
+		instr.size = 1;
+		parse_instruction(state, &instr, address);
 	}
-	instr.opcode = e_invalid;
-	instr.invalid = 1;
-	instr.size = 1;
-	instr.cost = 1;
-	/* TODO invalid instruction still wastes cycles based on the opcode */
+	else
+	{
+		instr.opcode = e_invalid;
+		instr.cost = 1;
+		instr.size = 1;
+		instr.invalid = 1;
+	}
 	return (instr);
+}
+
+enum e_instr	fetch_opcode(t_vm_state *state, size_t address)
+{
+
+	t_bigend_buffer	load_buffer;
+	enum e_instr	opcode;
+
+	load_buffer = mem_load(state, address, 1);
+	opcode = ((uint8_t*)&load_buffer.buffer)[7] - 1;
+	if (opcode > e_invalid)
+		opcode = e_invalid;
+	return (opcode);
 }

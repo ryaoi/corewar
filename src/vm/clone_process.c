@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/23 18:42:40 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/25 18:09:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	new_process.program_counter = address;
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
-	new_process.pending_operation = fetch_instruction(state, new_process.program_counter);
-	new_process.busy = new_process.pending_operation.cost;
+	new_process.pending_operation = fetch_opcode(state, new_process.program_counter);
+	if (new_process.pending_operation < e_invalid)
+		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
+	else
+		new_process.busy = 1;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }
 
@@ -56,7 +59,10 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 	new_process.player = original->player;
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
-	new_process.pending_operation = fetch_instruction(state, new_process.program_counter);
-	new_process.busy = new_process.pending_operation.cost;
+	new_process.pending_operation = fetch_opcode(state, new_process.program_counter);
+	if (new_process.pending_operation < e_invalid)
+		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
+	else
+		new_process.busy = 1;
 	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
 }

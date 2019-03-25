@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/23 19:15:24 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/25 18:45:25 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int		play_game(t_array *players, t_vm_state **final, size_t max_cycles)
 	game_over = 0;
 	last_check = 0;
 	game = (t_game_data){CYCLE_TO_DIE, 0, 0};
+	/* TODO game has to end if no processes are left */
 	while (game.cycles_to_die > 0 && state->cycle_count < max_cycles && !game_over)
 	{
   		vm_exec_cycle(state);
