@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/23 18:23:08 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/25 13:31:46 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ void				parse_arguments(t_vm_state *state, t_instr *instr,
 t_ocp				parse_ocp(uint8_t byte);
 void				instr_init(t_instr *instr);
 int					buffer_is_zero(t_bigend_buffer buffer);
-void				buffer_invert_bits(t_bigend_buffer buffer);
+t_bigend_buffer		buffer_invert_bits(t_bigend_buffer input);
 t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry);
 t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size);
 void			mem_store(t_vm_state *state, int64_t address, size_t size,
