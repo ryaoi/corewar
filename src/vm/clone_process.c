@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/25 18:09:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 11:43:50 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
 	new_process.pending_operation = fetch_opcode(state, new_process.program_counter);
+	new_process.birth_cycle = state->cycle_count;
 	if (new_process.pending_operation < e_invalid)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else
@@ -60,6 +61,7 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
 	new_process.pending_operation = fetch_opcode(state, new_process.program_counter);
+	new_process.birth_cycle = state->cycle_count;
 	if (new_process.pending_operation < e_invalid)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else

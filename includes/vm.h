@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/25 18:04:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 12:37:01 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,9 @@ typedef struct		s_process
 	int			carry;
 	int			busy;
 	uint8_t		has_jumped;
-	int			live_executed;
+	size_t		live_executed;
 	size_t		id;
+	size_t		birth_cycle;
 	enum e_instr	pending_operation;
 }					t_process;
 

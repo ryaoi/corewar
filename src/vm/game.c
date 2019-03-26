@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/25 18:45:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 11:44:58 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ static void	kill_lazy_processes(t_vm_state *state, t_game_data *game)
 	traverse = &state->processes;
 	while (*traverse)
 	{
-		if (!LST_CONT(*traverse, t_process).live_executed)
+		if (!LST_CONT(*traverse, t_process).live_executed
+			&& LST_CONT(*traverse, t_process).birth_cycle
+				< (state->cycle_count - game->cycles_to_die))
 		{
 			/* TODO list pop? */
 			ft_printf("Process %d smothered!!!!!!!!!!!!\n", LST_CONT(*traverse, t_process).id);
