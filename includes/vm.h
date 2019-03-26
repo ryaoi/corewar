@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/26 12:37:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 14:52:13 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,6 @@ typedef struct		s_op
 	const char		*explanation;
 	uint8_t			has_ocp;
 	uint8_t			relative;
-	uint8_t			is_jump;
 }					t_op;
 
 typedef struct		s_ocp
@@ -235,8 +234,10 @@ void				impl_lfork(t_vm_state *state,
 void				impl_aff(t_vm_state *state,
 						t_process *process, t_instr *instr);
 
-t_instr		fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address);
-enum e_instr	fetch_opcode(t_vm_state *state, size_t address);
+void				arg_types_ocp(t_instr *instr, t_ocp ocp);
+void				arg_types_non_ocp(t_instr *instr);
+t_instr				fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address);
+enum e_instr		fetch_opcode(t_vm_state *state, size_t address);
 void				parse_arguments(t_vm_state *state, t_instr *instr,
 						size_t address);
 t_ocp				parse_ocp(uint8_t byte);
@@ -244,19 +245,20 @@ void				instr_init(t_instr *instr);
 int					buffer_is_zero(t_bigend_buffer buffer);
 t_bigend_buffer		buffer_invert_bits(t_bigend_buffer input);
 t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry);
-t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size);
-void			mem_store(t_vm_state *state, int64_t address, size_t size,
-					const t_bigend_buffer store);
-t_bigend_buffer	byte_order_swap(t_bigend_buffer input);
-void			vm_clone_process(t_vm_state *state, size_t address, t_process *original);
-void			vm_init_process(t_vm_state *state, int player_id, size_t address);
-void			vm_state_init(t_vm_state *state);
-int				vm_champion_load_file(t_player *player, const char *filename, int id);
-int				vm_champion_load(t_player *player, int fd, int id);
-void			vm_memory_prepare(t_vm_state *state);
-int				vm_exec_cycle(t_vm_state *state);
-int				play_game(t_array *players, t_vm_state **final, size_t max_cycles);
-void			dump_memory(t_vm_state *state);
+t_bigend_buffer		mem_load(t_vm_state *state, int64_t address, size_t size);
+void				mem_store(t_vm_state *state, int64_t address, size_t size,
+						const t_bigend_buffer store);
+t_bigend_buffer		byte_order_swap(t_bigend_buffer input);
+void				vm_clone_process(t_vm_state *state, size_t address, t_process *original);
+void				vm_init_process(t_vm_state *state, int player_id, size_t address);
+void				vm_state_init(t_vm_state *state);
+int					vm_champion_load_file(t_player *player, const char *filename, int id);
+int					vm_champion_load(t_player *player, int fd, int id);
+void				vm_memory_prepare(t_vm_state *state);
+int					vm_exec_cycle(t_vm_state *state);
+int					play_game(t_array *players, t_vm_state **final, size_t max_cycles);
+void				process_exec_cycle(t_vm_state *state, t_process *process);
+void				dump_memory(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];

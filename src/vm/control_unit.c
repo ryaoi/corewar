@@ -6,62 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/25 18:17:26 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 14:48:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-
-static void		arg_types_ocp(t_instr *instr, t_ocp ocp)
-{
-	int	arg_index;
-
-	arg_index = 0;
-	while (arg_index < g_opcode_table[instr->opcode].arg_num)
-	{
-		if (ocp.fields[arg_index] == e_register)
-		{
-			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG))
-				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_register;
-		}
-		else if (ocp.fields[arg_index] == e_index)
-		{
-			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND))
-				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_index;
-		}
-		else if (ocp.fields[arg_index] == e_direct)
-		{
-			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_DIR))
-				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_direct;
-		}
-		else
-		{
-			instr->instr_args[arg_index].arg_type = e_absent;
-			instr->invalid = 1;
-		}
-		arg_index++;
-	}
-}
-
-static void		arg_types_non_ocp(t_instr *instr)
-{
-	int	arg_index;
-
-	arg_index = 0;
-	while (arg_index < g_opcode_table[instr->opcode].arg_num)
-	{
-		if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG)
-			instr->instr_args[arg_index].arg_type = e_register;
-		else if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND)
-			instr->instr_args[arg_index].arg_type = e_index;
-		else
-			instr->instr_args[arg_index].arg_type = e_direct;
-		arg_index++;
-	}
-}
 
 static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 					size_t argument, size_t address)

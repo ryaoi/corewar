@@ -6,43 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/26 12:37:40 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 14:50:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "libft.h"
-
-void	process_exec_cycle(t_vm_state *state, t_process *process)
-{
-	t_instr		instr;
-
-	if (process->busy == 0)
-	{
-		process->pending_operation = fetch_opcode(state, process->program_counter);
-		if (process->pending_operation < e_invalid)
-			process->busy = g_opcode_table[process->pending_operation].cycles;
-		else
-			process->busy = 1;
-	}
-	if (process->busy >= 1)
-		process->busy--;
-	if (process->busy == 0)
-	{
-		process->has_jumped = 0;
-		instr = fetch_arguments(state, process->pending_operation,
-			process->program_counter);
-		if (!instr.invalid)
-		{
-			ft_printf("Process %d executing %s\n", process->id, g_opcode_table[instr.opcode].name);
-			(g_impl_table[process->pending_operation])
-				(state, process, &instr);
-		}
-		if (!process->has_jumped)
-			process->program_counter
-					= (process->program_counter + instr.size) % MEM_SIZE;
-	}
-}
 
 int		vm_exec_cycle(t_vm_state *state)
 {

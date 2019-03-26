@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/21 19:32:19 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 13:05:39 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		main(void)
 	array_init(&players, sizeof(t_player));
 	array_push_back(&players, &sha1);
 	array_push_back(&players, &sha2);
-	play_game(&players, &state, 8000);
+	play_game(&players, &state, 10000000);
 	dump_memory(state);
 	ft_printf("%d %d\n", ARRAY_PTR(state->players, t_player)[0].live, ARRAY_PTR(state->players, t_player)[1].live);
 }
