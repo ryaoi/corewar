@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 18:11:58 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 18:35:57 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ int		main(void)
 	array_init(&players, sizeof(t_player));
 	array_push_back(&players, &sha1);
 	array_push_back(&players, &sha2);
-	ft_bzero(&info, sizeof(info));
+	logs_init(&info);
 	info.log_levels = LOG_CYCLES | LOG_DEATHS | LOG_INSTR | LOG_LIVES;
+	info.log_mode = LOG_PYTHON;
 	play_game(&players, &state, 10000, &info);
 	dump_memory(state);
 	ft_printf("%d %d\n", ARRAY_PTR(state->players, t_player)[0].live, ARRAY_PTR(state->players, t_player)[1].live);
