@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/03/26 18:12:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 18:51:06 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	impl_sti(t_vm_state *state, t_process *process, t_instr *instr)
 	offset = (int64_t)byte_order_swap(
 		 add_bigend(first_param, second_param, 0)).buffer;
 	offset = process->program_counter + (offset % IDX_MOD);
-	log_level(&state->log_info, LOG_INSTR,
+	log_level(&state->log_info, LOG_STORE,
 		"Storing r%d into %#.8zx, val %#.8zx",
 		instr->instr_args[0].arg.reg_index - 1,
 		offset,
