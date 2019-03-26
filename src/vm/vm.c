@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/26 14:50:02 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 18:12:34 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 int		vm_exec_cycle(t_vm_state *state)
 {
 	t_list	*traverse;
-
-	ft_printf("Cycle %d\n", state->cycle_count + 1);
+	log_level(&state->log_info, LOG_CYCLES,
+		"Cycle %d", state->cycle_count + 1);
 	traverse = state->processes;
 	while (traverse)
 	{

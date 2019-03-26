@@ -6,12 +6,11 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 11:36:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 16:54:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-#include "ft_printf.h" /* TODO remove this */
 
 void	impl_live(t_vm_state *state, t_process *process, t_instr *instr)
 {
@@ -21,9 +20,10 @@ void	impl_live(t_vm_state *state, t_process *process, t_instr *instr)
 	process->live_executed++;
 	parameter = byte_order_swap(
 		instr->instr_args[0].arg.direct.content).buffer;
-	/* TODO fix this shit */
 	index = 0;
-	ft_printf("live param: %d, %dnth live on process\n", parameter, process->live_executed);
+	log_level(&state->log_info, LOG_INSTR,
+		"live param: %d, %dnth live on process",
+		parameter, process->live_executed);
 	while (index < state->players.length)
 	{
 		if (ARRAY_PTR(state->players, t_player)[index].id == parameter)

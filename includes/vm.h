@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/26 14:52:13 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 18:07:29 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <sys/types.h>
 # include "array.h"
 # include "list.h"
-#include "ft_printf.h" /* TODO remove */
+# include "logging.h"
 
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -49,20 +49,10 @@
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 
-/*
-**
-*/
-
-typedef char	t_arg_type;
-
 #define T_REG					1
 #define T_DIR					2
 #define T_IND					4
 #define T_LAB					8
-
-/*
-**
-*/
 
 # define PROG_NAME_LENGTH		(128)
 # define COMMENT_LENGTH			(2048)
@@ -181,6 +171,7 @@ typedef struct		s_vm_state
 	size_t		process_count;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
+	t_log_info	log_info;
 }					t_vm_state;
 
 typedef struct		s_op
@@ -256,7 +247,8 @@ int					vm_champion_load_file(t_player *player, const char *filename, int id);
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
-int					play_game(t_array *players, t_vm_state **final, size_t max_cycles);
+int					play_game(t_array *players, t_vm_state **final, size_t max_cycles,
+						const t_log_info *log_opts);
 void				process_exec_cycle(t_vm_state *state, t_process *process);
 void				dump_memory(t_vm_state *state);
 

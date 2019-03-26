@@ -1,4 +1,6 @@
-CORELIB_SRCS = vm/vm.c \
+CORELIB_SRCS = assert.c \
+	logging.c \
+	vm/vm.c \
 	vm/ocp.c \
 	vm/optable.c \
 	vm/load_store.c \

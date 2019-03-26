@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 14:47:41 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/26 18:11:45 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ static void	prepare_player(t_player *player, int id)
 	player->live = 0;
 }
 
-static void	prepare_game(t_vm_state *state, t_array *players)
+static void	prepare_game(t_vm_state *state, t_array *players,
+				const t_log_info *log_opts)
 {
 	int	index;
 
 	vm_state_init(state);
+	if (log_opts)
+		ft_memcpy(&state->log_info, log_opts, sizeof(t_log_info));
 	index = 0;
 	while (index < (int)players->length)
 	{
@@ -59,7 +62,9 @@ static void	kill_lazy_processes(t_vm_state *state, t_game_data *game)
 			&& LST_CONT(*traverse, t_process).birth_cycle
 				< (state->cycle_count - game->cycles_to_die))
 		{
-			ft_printf("Process %d smothered!!\n", LST_CONT(*traverse, t_process).id);
+			log_level(&state->log_info, LOG_DEATHS,
+				"Process %d smothered!",
+				LST_CONT(*traverse, t_process).id);
 			pop = list_pop(traverse);
 			list_delone(&pop, free_stub);
 		}
@@ -80,7 +85,8 @@ static void	kill_lazy_processes(t_vm_state *state, t_game_data *game)
 		game->checks_since_dec++;
 }
 
-int		play_game(t_array *players, t_vm_state **final, size_t max_cycles)
+int		play_game(t_array *players, t_vm_state **final, size_t max_cycles,
+			const t_log_info *log_opts)
 {
 	t_vm_state	*state;
 	t_game_data	game;
@@ -89,11 +95,10 @@ int		play_game(t_array *players, t_vm_state **final, size_t max_cycles)
 
 	if (!(state = malloc(sizeof(t_vm_state))))
 		return (-1);
-	prepare_game(state, players);
+	prepare_game(state, players, log_opts);
 	game_over = 0;
 	last_check = 0;
 	game = (t_game_data){CYCLE_TO_DIE, 0, 0};
-	/* TODO game has to end if no processes are left */
 	while (game.cycles_to_die > 0 && state->cycle_count < max_cycles && !game_over)
 	{
   		vm_exec_cycle(state);

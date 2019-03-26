@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   assert.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/21 16:32:14 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 16:55:34 by aamadori         ###   ########.fr       */
+/*   Created: 2019/03/26 15:20:56 by aamadori          #+#    #+#             */
+/*   Updated: 2019/03/26 16:59:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
+#include "assert.h"
 #include "ft_printf.h"
 
-void	dump_memory(t_vm_state *state)
+void	ft_assert(char cond, const char *message)
 {
-	size_t	line;
-	size_t	index;
-	size_t	line_size;
-
-	line_size = ft_sqrt(MEM_SIZE);
-	line = 0;
-	while (line < (MEM_SIZE / line_size))
+	if (!cond)
 	{
-		index = 0;
-		ft_printf("%6.4p : ", (void*)(line * (MEM_SIZE / line_size)));
-		while(index < line_size)
-		{
-			ft_printf("%.2hhx ", state->memory[(line * (MEM_SIZE / line_size)) + index]);
-			index++;
-		}
-		ft_printf("\n");
-		line++;
+		ft_dprintf(2, "Assert failed: %s\n", message);
+		exit(0);
 	}
 }
