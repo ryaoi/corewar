@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 12:18:03 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 20:02:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,6 @@ static void	file_init(t_file *file)
 	file->header_flags = OFF;
 	ft_bzero(&(file->header.prog_name[0]), PROG_NAME_LENGTH + 1);
 	ft_bzero(&(file->header.how[0]), COMMENT_LENGTH + 1);
-}
-
-void	write_cor_file(t_file *file)
-{
-	(void)file;
-	return ;
 }
 
 int		main(int argc, char **argv)

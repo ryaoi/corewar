@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:44:20 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 20:02:39 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int		validate_opcode_params(t_line *line);
 int		is_str_digit(char *str);
 int		is_comment(t_line *line);
 int		is_whitespaces_line(const char *str);
+int		write_cor_file(t_file *file);
 
 
 /*TODO duplicate labels handling!!!! */

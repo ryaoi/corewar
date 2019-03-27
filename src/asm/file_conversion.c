@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 19:33:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 21:07:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_op	*operation_set(t_line *line)
 {
 	t_token	*token;
 
-	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len + 1))))
+	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len))))
 		ERROR("malloc failed.", 0);
 	token = (t_token*)line->tokens->content;
 	if (token->op)
