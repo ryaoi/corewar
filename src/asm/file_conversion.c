@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 12:18:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 18:18:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_op	*operation_set(t_line *line)
 int		get_label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
 {
 	int	value;
-
+	/*TODO offset reference is from beginning of instr->label_line OR param->label_line */
 	value = 0;
 	if (curr_line->id > label_line->id)
 	{
@@ -111,7 +111,7 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			if (((t_line*)traverse->content)->type == T_LABEL &&
 				!ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
-				token->value = get_label_value(line, ((t_line*)traverse->content), traverse); /*TODO fuck.... dunno how direct and indirect labels  are different..*/
+				token->value = get_label_value(line, ((t_line*)traverse->content), traverse);
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
@@ -121,21 +121,22 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 	return (SUCCESS);
 }
 
-void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int value) /*TODO */
+void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int value)
 {
+	/*TODO check if 'unsigned int' casting is OK */
 	if (size == 1)
-		bytecode[0] = (unsigned int)value % 0x100;
+		bytecode[0] = ((unsigned int)value) % 0x100;
 	else if (size == 2)
 	{
-		bytecode[0] = (unsigned int)value / 0x100;
-		bytecode[1] = (unsigned int)value % 0x100;
+		bytecode[0] = ((unsigned int)value) / 0x100;
+		bytecode[1] = ((unsigned int)value) % 0x100;
 	}
 	else if (size == 4)
 	{
-		bytecode[0] = (unsigned int)value / (0x100 * 0x100 * 0x100);
-		bytecode[1] = (unsigned int)value /*- 2 biggest digits*/ / (0x100 * 0x100);
-		bytecode[2] = (unsigned int)value /*- 2 biggest digits*/ / (0x100);
-		bytecode[3] = (unsigned int)value /*- 2 biggest digits*/ % 0x100;
+		bytecode[0] = ((unsigned int)value) / (0x100 * 0x100 * 0x100);
+		bytecode[1] = ((((unsigned int)value) << 2) >> 2) / (0x100 * 0x100);
+		bytecode[2] = ((((unsigned int)value) << 4) >> 4) / 0x100;
+		bytecode[3] = ((((unsigned int)value) << 6) >> 6) % 0x100;
 	}
 	bc_index = bc_index + size;
 }
@@ -157,7 +158,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 		if (((t_token*)traverse->content)->type == T_INDIRECT ||
 				((t_token*)traverse->content)->type == T_INDIRLAB)
 			param_translate(&bytecode[1 + op->ocp + bc_index], INDIRECT_SIZE, &bc_index,
-				((t_token*)traverse->content)->value); /* TODO */
+				((t_token*)traverse->content)->value);
 
 		else if (((t_token*)traverse->content)->type == T_DIRLAB ||
 					(((t_token*)traverse->content)->type == T_DIRECT &&
@@ -174,7 +175,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 			param_translate(&bytecode[1 + op->ocp + bc_index], REGISTER_INDEX_SIZE, &bc_index,
 				((t_token*)traverse->content)->value);
 
-		printf("param value : %d\n", ((t_token*)traverse->content)->value);
+		// printf("param value : %d\n", ((t_token*)traverse->content)->value);
 		traverse = traverse->next;
 	}
 	return (SUCCESS);
@@ -197,8 +198,12 @@ int		file_conversion(t_file *file)
 			if (!bytecode_conversion(file, LINE, operation))
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
+		/*TODO print translated code */
+		printf("%s\n", LINE->str);
+		for (int i=0; i < (int)LINE->bytecode_len; i++)
+			printf("0x%02x ", LINE->bytecode[i]);
+		printf("\n-------------------------------------\n");
 		traverse = traverse->next;
 	}
 	return (SUCCESS);
 }
-

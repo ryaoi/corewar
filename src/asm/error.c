@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:01:53 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/17 01:48:25 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 18:20:01 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ void	free_line_content(void *content, size_t size)
 	if (tmp->str)
 		free(tmp->str);
 	tmp->str = NULL;
+	if (tmp->bytecode)
+		free(tmp->bytecode);
+	tmp->bytecode = NULL;
 	if (tmp->tokens)
 		list_del(&tmp->tokens, free_token_content);
 	free(tmp);

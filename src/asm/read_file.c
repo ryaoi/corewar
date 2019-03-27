@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 16:16:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 18:22:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static size_t	label_check(char *line)
 	return (0);
 }
 
-int		create_line(t_file *file, char *line, size_t nbr_lines, int line_type)
+int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
 {
 	t_line new_line;
 
@@ -61,7 +61,7 @@ int		create_line(t_file *file, char *line, size_t nbr_lines, int line_type)
 	return (SUCCESS);
 }
 
-int		add_lines(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
+int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 {
 	size_t	len;
 
@@ -70,14 +70,14 @@ int		add_lines(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	{
 		/* parse label : && treat label: instructions format */
 		line[label_pos + 1] = '\0';
-		create_line(file, line, *nbr_lines, T_LABEL);
+		line_create(file, line, *nbr_lines, T_LABEL);
 		line[label_pos + 1] = ' ';
 		/*parse asm code */
 		if (len > label_pos + 1 && !is_whitespaces_line((&line[label_pos + 2])))
-			create_line(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN);
+			line_create(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN);
 	}
 	else
-		create_line(file, line, *nbr_lines, T_UNKNOWN);
+		line_create(file, line, *nbr_lines, T_UNKNOWN);
 	free(line);
 	return (1);
 }
@@ -96,7 +96,7 @@ void	file_read(t_file *file)
 			free(line);
 			continue ;
 		}
-		if (add_lines(file, line, &nbr_lines, label_check(line)) == ASM_FAIL)
+		if (line_add(file, line, &nbr_lines, label_check(line)) == ASM_FAIL)
 		{
 			free(line);
 			file_error("syntax error in line.", file);

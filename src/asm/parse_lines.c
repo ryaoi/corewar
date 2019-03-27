@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 10:30:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 18:23:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	return (SUCCESS);
 }
 
-int		tokenize_line(t_line *line)
+int		line_tokenize(t_line *line)
 {
 	size_t	len;
 	int		i;
@@ -377,7 +377,7 @@ int		file_parse(t_file *file)
 				set_how(file, LINE);
 			if (LINE->type == T_UNKNOWN)
 				LINE->type = T_ASMCODE;
-			if (LINE->type == T_ASMCODE && (!(tokenize_line(LINE)) ||
+			if (LINE->type == T_ASMCODE && (!(line_tokenize(LINE)) ||
 				!(validate_opcode_params(LINE))))
 					file_error("parse failed.", file);
 			if (LINE->type == T_ASMCODE)
