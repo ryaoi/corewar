@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:18:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 19:33:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,19 @@ int		get_label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
 	{
 		while (traverse && (((t_line*)traverse->content) != curr_line))
 		{
+			traverse = traverse->next;
+			if ((((t_line*)traverse->content) == curr_line))
+				break ;
 			value -= ((t_line*)traverse->content)->bytecode_len;
-			traverse = traverse->prev;
 		}
 	}
 	else if (curr_line->id < label_line->id)
 	{
+		value += curr_line->bytecode_len;
 		while (traverse && (((t_line*)traverse->content) != curr_line))
 		{
 			value += ((t_line*)traverse->content)->bytecode_len;
-			traverse = traverse->next;
+			traverse = traverse->prev;
 		}
 	}
 	return (value);
@@ -138,7 +141,7 @@ void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int va
 		bytecode[2] = ((((unsigned int)value) << 4) >> 4) / 0x100;
 		bytecode[3] = ((((unsigned int)value) << 6) >> 6) % 0x100;
 	}
-	bc_index = bc_index + size;
+	*bc_index = *bc_index + size;
 }
 
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
@@ -198,7 +201,7 @@ int		file_conversion(t_file *file)
 			if (!bytecode_conversion(file, LINE, operation))
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
-		/*TODO print translated code */
+		/*TODO print translated code*/
 		printf("%s\n", LINE->str);
 		for (int i=0; i < (int)LINE->bytecode_len; i++)
 			printf("0x%02x ", LINE->bytecode[i]);

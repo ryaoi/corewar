@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:23:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 18:29:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,7 +383,7 @@ int		file_parse(t_file *file)
 			if (LINE->type == T_ASMCODE)
 				bytecode_len(LINE);
 			else if (LINE->type == T_LABEL)
-				remove_label_char(LINE->str); /*TODO needs to code it */
+				remove_label_char(LINE->str);
 		}
 		traverse = traverse->next;
 	}
