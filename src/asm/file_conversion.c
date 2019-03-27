@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 19:16:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 12:18:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,41 @@ t_op	*operation_set(t_line *line)
 	t_token	*token;
 
 	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len + 1))))
-		return (0);
+		ERROR("malloc failed.", 0);
 	token = (t_token*)line->tokens->content;
 	if (token->op)
 	{
 		line->bytecode[0] = token->op->opcode;
 		if (token->op->ocp)
 			ocp_set(line->tokens->next, line->bytecode);
-		//printf("%#4x | %#4x\n-------------\n", line->bytecode[0], line->bytecode[1]);
+		//printf("0x%2x | 0x%2x\n-------------\n", line->bytecode[0], line->bytecode[1]);
 		return (((t_token*)line->tokens->content)->op);
 	}
 	return (NULL);
 }
 
-void	get_label_value(void)
+int		get_label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
 {
-	return ;
+	int	value;
+
+	value = 0;
+	if (curr_line->id > label_line->id)
+	{
+		while (traverse && (((t_line*)traverse->content) != curr_line))
+		{
+			value -= ((t_line*)traverse->content)->bytecode_len;
+			traverse = traverse->prev;
+		}
+	}
+	else if (curr_line->id < label_line->id)
+	{
+		while (traverse && (((t_line*)traverse->content) != curr_line))
+		{
+			value += ((t_line*)traverse->content)->bytecode_len;
+			traverse = traverse->next;
+		}
+	}
+	return (value);
 }
 
 int		param_getvalue(t_list *lines, t_line *line, t_token *token)
@@ -92,7 +111,7 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			if (((t_line*)traverse->content)->type == T_LABEL &&
 				!ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
-				get_label_value(); /*TODO fuck.... dunno how direct and indirect labels  are different..*/
+				token->value = get_label_value(line, ((t_line*)traverse->content), traverse); /*TODO fuck.... dunno how direct and indirect labels  are different..*/
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
@@ -102,16 +121,28 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 	return (SUCCESS);
 }
 
-void	param_translate(unsigned char *bytecode, size_t size, int *index, int value) /*TODO */
+void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int value) /*TODO */
 {
-	(void)size;
-	return ;
+	if (size == 1)
+		bytecode[0] = (unsigned int)value % 0x100;
+	else if (size == 2)
+	{
+		bytecode[0] = (unsigned int)value / 0x100;
+		bytecode[1] = (unsigned int)value % 0x100;
+	}
+	else if (size == 4)
+	{
+		bytecode[0] = (unsigned int)value / (0x100 * 0x100 * 0x100);
+		bytecode[1] = (unsigned int)value /*- 2 biggest digits*/ / (0x100 * 0x100);
+		bytecode[2] = (unsigned int)value /*- 2 biggest digits*/ / (0x100);
+		bytecode[3] = (unsigned int)value /*- 2 biggest digits*/ % 0x100;
+	}
+	bc_index = bc_index + size;
 }
 
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
-	t_list	*traverse;
-
+	t_list			*traverse;
 	int				bc_index;
 	unsigned char	*bytecode;
 
@@ -125,28 +156,28 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 
 		if (((t_token*)traverse->content)->type == T_INDIRECT ||
 				((t_token*)traverse->content)->type == T_INDIRLAB)
-			param_translate(bytecode, INDIRECT_SIZE, &bc_index,
+			param_translate(&bytecode[1 + op->ocp + bc_index], INDIRECT_SIZE, &bc_index,
 				((t_token*)traverse->content)->value); /* TODO */
 
 		else if (((t_token*)traverse->content)->type == T_DIRLAB ||
 					(((t_token*)traverse->content)->type == T_DIRECT &&
 						op->relative))
-			param_translate(bytecode, DIRECT_D2_SIZE, &bc_index,
+			param_translate(&bytecode[1 + op->ocp + bc_index], DIRECT_D2_SIZE, &bc_index,
 				((t_token*)traverse->content)->value);
 
 		else if (((t_token*)traverse->content)->type == T_DIRECT &&
 					!(op->relative))
-			param_translate(bytecode, DIRECT_D4_SIZE, &bc_index,
+			param_translate(&bytecode[1 + op->ocp + bc_index], DIRECT_D4_SIZE, &bc_index,
 				((t_token*)traverse->content)->value);
 
 		else if (((t_token*)traverse->content)->type == T_REGISTER)
-			param_translate(bytecode, REGISTER_INDEX_SIZE, &bc_index,
+			param_translate(&bytecode[1 + op->ocp + bc_index], REGISTER_INDEX_SIZE, &bc_index,
 				((t_token*)traverse->content)->value);
 
 		printf("param value : %d\n", ((t_token*)traverse->content)->value);
 		traverse = traverse->next;
 	}
-	return 1;
+	return (SUCCESS);
 }
 
 int		file_conversion(t_file *file)

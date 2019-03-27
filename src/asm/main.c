@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/23 12:35:33 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 12:18:03 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int		main(int argc, char **argv)
 	{
 		if (file_conversion(&file))
 			write_cor_file(&file);
-		file_error("file_conversion() failed.", &file);
+		else
+			file_error("file_conversion() failed.", &file);
 	}
 	file_error("parse_file() failed.", &file);
 	return (0);

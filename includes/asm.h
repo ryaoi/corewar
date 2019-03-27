@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/24 15:44:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 10:30:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,6 @@ int		is_str_digit(char *str);
 int		is_comment(t_line *line);
 int		is_whitespaces_line(const char *str);
 
+
+/*TODO duplicate labels handling!!!! */
 #endif
