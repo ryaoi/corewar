@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 21:17:17 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 21:39:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void write_header_comment(int fd, t_file *file)
 {
 	write(fd, file->header.prog_name, PROG_NAME_LENGTH);
 	write(fd, file->header.how, COMMENT_LENGTH);
+	/*TODO magic, prog_size ???? wtf*/
 }
 
 int write_cor_file(t_file *file)

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 20:02:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 21:41:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int		main(int argc, char **argv)
 		else
 			file_error("file_conversion() failed.", &file);
 	}
-	file_error("parse_file() failed.", &file);
+	ft_printf("%s successfully created.\n", file.name_cor);
+	file_error(NULL, &file);
 	return (0);
+	/*TODO handle multiple .s files, print .cor in hexadecimal with option*/
 }
