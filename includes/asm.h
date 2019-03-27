@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 20:02:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/27 22:06:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define DIRECT_D2_SIZE 2
 # define DIRECT_D4_SIZE 4
 # define INDIRECT_SIZE 2
+# define MULTIPLE_FILES 1
+# define PRINT_BYTECODE 10
 
 typedef enum e_token_types
 {
@@ -83,6 +85,7 @@ typedef struct	s_file
 	header_t	header; /* TODO initialize header!! */
 	int			fd_cor;
 	int			fd_s;
+	int			options;
 	int			ret;
 }				t_file;
 
