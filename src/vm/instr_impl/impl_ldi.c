@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 18:58:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/28 14:01:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	impl_ldi(t_vm_state *state, t_process *process, t_instr *instr)
 	offset = process->program_counter + (offset % IDX_MOD);
 	process->registers[instr->instr_args[2].arg.reg_index - 1].content
 		= mem_load(state, offset, REG_SIZE);
-	log_level(&state->log_info, LOG_LOAD,
+	log_level(&state->log_info, e_log_load,
 		"Storing [%#.8zx] into r%d, val %#.8zx",
 		offset,
 		instr->instr_args[0].arg.reg_index - 1,

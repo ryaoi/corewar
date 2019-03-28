@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/26 18:07:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/28 14:38:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@
 # define ERR_HEADER_READ -2
 # define ERR_CHAMP_TOO_LARGE -3
 # define ERR_CHAMP_READ -4
+# define ERR_HEADER_MAGIC -5
 
 enum	e_instr_arg_type
 {
@@ -247,8 +248,6 @@ int					vm_champion_load_file(t_player *player, const char *filename, int id);
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
-int					play_game(t_array *players, t_vm_state **final, size_t max_cycles,
-						const t_log_info *log_opts);
 void				process_exec_cycle(t_vm_state *state, t_process *process);
 void				dump_memory(t_vm_state *state);
 

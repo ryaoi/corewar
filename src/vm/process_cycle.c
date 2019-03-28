@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:48:39 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 16:52:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/28 14:02:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	process_exec_cycle(t_vm_state *state, t_process *process)
 			process->program_counter);
 		if (!instr.invalid)
 		{
-			log_level(&state->log_info, LOG_INSTR,
+			log_level(&state->log_info, e_log_instr,
 				"Process %d executing %s",
 				process->id, g_opcode_table[instr.opcode].name);
 			(g_impl_table[process->pending_operation])

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 13:13:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/28 15:08:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int		vm_champion_load_file(t_player *player, const char *filename, int id)
 	}
 	ret = vm_champion_load(player, fd, id);
 	close(fd);
+	/* TODO logging system? */
 	if (ret == ERR_HEADER_READ)
 		ft_dprintf(2,
 			"Error reading file %s: unexpected eof before end of header\n",
@@ -45,6 +46,10 @@ int		vm_champion_load_file(t_player *player, const char *filename, int id)
 		ft_dprintf(2,
 			"Error reading file %s: unexpected eof before end of bytecode\n",
 			filename);
+	else if (ret == ERR_HEADER_MAGIC)
+		ft_dprintf(2,
+			"Error reading file %s: magic number not matching\n",
+			filename);
 	return (ret);
 }
 
@@ -56,7 +61,10 @@ int		vm_champion_load(t_player *player, int fd, int id)
 	/* TODO good error handling */
 	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
-	/* TODO check magic number in header */
+	player->header.magic = byte_order_swap(
+		(t_bigend_buffer){(size_t)player->header.magic << 32}).buffer;
+	if (player->header.magic != COREWAR_EXEC_MAGIC)
+		return (ERR_HEADER_MAGIC);
 	player->header.prog_size = byte_order_swap(
 		(t_bigend_buffer){(size_t)player->header.prog_size << 32}).buffer;
 	if (player->header.prog_size > CHAMP_MAX_SIZE)

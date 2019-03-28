@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 18:59:23 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/28 14:03:11 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,24 @@
 # include "ft_printf.h"
 # include "array.h"
 
-# define LOG_LIVES (1 << 0)
-# define LOG_CYCLES (1 << 1)
-# define LOG_INSTR (1 << 2)
-# define LOG_STORE (1 << 3)
-# define LOG_LOAD (1 << 4)
-# define LOG_DEATHS (1 << 5)
-# define LOG_MEMDUMP (1 << 6)
+enum	e_log_level
+{
+	e_log_lives = 0,
+	e_log_cycles,
+	e_log_instr,
+	e_log_store,
+	e_log_load,
+	e_log_deaths,
+	e_log_memdump,
+	e_log_level_max
+};
 
-# define LOG_STDOUT 0
-# define LOG_PYTHON 1
+enum	e_log_mode
+{
+	e_mode_stdout = 0,
+	e_mode_stderr,
+	e_mode_save
+};
 
 typedef struct		s_log_string
 {
@@ -36,10 +44,10 @@ typedef struct		s_log_string
 
 typedef struct		s_log_info
 {
-	uint64_t	log_levels;
-	uint8_t		log_mode;
-	size_t		logs_num;
-	t_array		logs[64];
+	enum e_log_level	log_levels;
+	enum e_log_mode		log_mode;
+	size_t				logs_num;
+	t_array				logs[e_log_level_max];
 }					t_log_info;
 
 /* TODO actually log everything */
