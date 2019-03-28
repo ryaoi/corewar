@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 16:51:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 19:17:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 	while (traverse)
 	{
 		if (param_getvalue(file->lines, line, ((t_token*)traverse->content)) == GETVALUE_FAIL)
-			ERROR("param_getvalue failed.", GETVALUE_FAIL);
+			ERROR("param_getvalue() failed.", GETVALUE_FAIL);
 
 		if (((t_token*)traverse->content)->type == T_INDIRECT ||
 				((t_token*)traverse->content)->type == T_INDIRLAB)
@@ -177,7 +177,6 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 			param_translate(&bytecode[1 + op->ocp + bc_index], REGISTER_INDEX_SIZE, &bc_index,
 				((t_token*)traverse->content)->value);
 
-		// printf("param value : %d\n", ((t_token*)traverse->content)->value);
 		traverse = traverse->next;
 	}
 	return (SUCCESS);
@@ -191,13 +190,15 @@ int		file_conversion(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (LINE->type == T_ASMCODE && LINE->tokens)
+		if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
+				LST_CONT(traverse, t_line).tokens)
 		{
-			if (!(operation = operation_set(LINE)))
+			if (!(operation = operation_set(&LST_CONT(traverse, t_line))))
 				ERROR("operation doesn't exist.", CONVERSION_FAIL);
-			if (!(LINE->tokens->next))
+			if (!(LST_CONT(traverse, t_line).tokens->next))
 				ERROR("no parameters found.", CONVERSION_FAIL);
-			if (bytecode_conversion(file, LINE, operation) == GETVALUE_FAIL)
+			if (bytecode_conversion(file, &LST_CONT(traverse, t_line),
+					operation) == GETVALUE_FAIL)
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/

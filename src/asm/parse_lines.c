@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 17:06:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 19:18:53 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ int		validate_parameters(t_token *token, t_op opcode, int param_id)
 	return (SUCCESS);
 }
 
-int		validate_opcode_params(t_line *line)
+int		opcode_cmp(t_line *line)
 {
 	t_list	*traverse;
 	int		instr;
@@ -237,25 +237,26 @@ int		validate_opcode_params(t_line *line)
 		return (LINE_FAIL);
 	if (traverse->next == NULL)
 		return (LINE_FAIL);
-	instr = TOKEN->op->opcode - 1;
+	instr = LST_CONT(traverse, t_token).op->opcode - 1;
 //	printf("line type : %d\n", line->type);
 //	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
 //	printf("original nbr : %d\nthe_code nbr : %d\n---------------\n", g_op_tab[instr].nbr_params, line->nbr_params);
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
-		ERROR("wrong number of parameters", LINE_FAIL);
+		ERROR("wrong number of parameters", OPCODE_CMP_FAIL);
 	if (traverse->next == NULL)
-		ERROR ("where are the params!!.", LINE_FAIL);
+		ERROR ("where are the params!!.", OPCODE_CMP_FAIL);
 	traverse = traverse->next;
 	param_id = 0;
 	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
-		if (validate_parameters(TOKEN, g_op_tab[instr], param_id))
+		if (validate_parameters(&LST_CONT(traverse, t_token),
+				g_op_tab[instr], param_id))
 		{
 			traverse = traverse->next;
 			param_id++;
 		}
 		else
-			ERROR("not valid parameters.", LINE_FAIL);
+			ERROR("not valid parameters.", OPCODE_CMP_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -320,25 +321,29 @@ void	bytecode_len(t_line *line)
 	t_op	*operation;
 
 	traverse = line->tokens;
-	operation = TOKEN->op;
+	operation = LST_CONT(traverse, t_token).op;
 	if (!line->tokens || !operation)
 		return ;
-	if (TOKEN->type == T_NAME_CMD || TOKEN->type == T_COMMENT_CMD ||
-		TOKEN->type == T_COMMENT)
+	if (LST_CONT(traverse, t_token).type == T_NAME_CMD ||
+			LST_CONT(traverse, t_token).type == T_COMMENT_CMD ||
+		LST_CONT(traverse, t_token).type == T_COMMENT)
 		return ;
 	line->bytecode_len = 1;
-	if (TOKEN->op->ocp == 1)
+	if (LST_CONT(traverse, t_token).op->ocp == 1)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
-		if (TOKEN->type == T_REGISTER)
+		if (LST_CONT(traverse, t_token).type == T_REGISTER)
 			line->bytecode_len += REGISTER_INDEX_SIZE;
-		else if (TOKEN->type == T_DIRECT && !(operation->relative))
+		else if (LST_CONT(traverse, t_token).type == T_DIRECT &&
+					!(operation->relative))
 			line->bytecode_len += DIRECT_D4_SIZE;
-		else if (TOKEN->type == T_DIRLAB ||
-					(TOKEN->type == T_DIRECT && operation->relative))
+		else if (LST_CONT(traverse, t_token).type == T_DIRLAB ||
+					(LST_CONT(traverse, t_token).type == T_DIRECT &&
+							operation->relative))
 			line->bytecode_len += DIRECT_D2_SIZE;
-		else if (TOKEN->type == T_INDIRECT || TOKEN->type == T_INDIRLAB)
+		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
+					LST_CONT(traverse, t_token).type == T_INDIRLAB)
 			line->bytecode_len += INDIRECT_SIZE;
 		traverse = traverse->next;
 	}
@@ -364,24 +369,25 @@ int		file_parse(t_file *file)
 	traverse = file->lines;
 	while(traverse)
 	{
-		if (!is_comment(LINE))
+		if (!is_comment(&LST_CONT(traverse, t_line)))
 		{
 			if (!(file->header.prog_name[0]))
-				set_progname(file, LINE);
+				set_progname(file, &LST_CONT(traverse, t_line));
 			if (!(file->header.how[0]))
-				set_how(file, LINE);
-			if (LINE->type == T_UNKNOWN)
-				LINE->type = T_ASMCODE;
-			if (LINE->type == T_ASMCODE && (line_tokenize(LINE) == LINE_FAIL ||
-				validate_opcode_params(LINE) == VAL_OP_PARAM_FAIL))
+				set_how(file, &LST_CONT(traverse, t_line));
+			if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
+				LST_CONT(traverse, t_line).type = T_ASMCODE;
+			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
+				(line_tokenize(&LST_CONT(traverse, t_line)) == LINE_FAIL ||
+				opcode_cmp(&LST_CONT(traverse, t_line)) == OPCODE_CMP_FAIL))
 			{
 				ft_putendl("parse failed.");
 				return (ASM_FAIL);
 			}
-			if (LINE->type == T_ASMCODE)
-				bytecode_len(LINE);
-			else if (LINE->type == T_LABEL)
-				remove_label_char(LINE->str);
+			if (LST_CONT(traverse, t_line).type == T_ASMCODE)
+				bytecode_len(&LST_CONT(traverse, t_line));
+			else if (LST_CONT(traverse, t_line).type == T_LABEL)
+				remove_label_char(LST_CONT(traverse, t_line).str);
 		}
 		traverse = traverse->next;
 	}

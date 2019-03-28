@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 18:47:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 19:16:09 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ static int	argv_check(int argc, char **argv, int *option)
 			*option = ON;
 	}
 	return (SUCCESS);
-	//else if(argc != 2)
-	//	file_error("Too many files. Usage: ./asm [filename.s] [-p]", file);
-			/* TODO remove after implementing multiple file handler */
 }
 
 static void	file_init(t_file *file)
@@ -95,40 +92,39 @@ int		main(int argc, char **argv)
 	while (index < argc)
 		file_add(&inputs, argv[index++]);
 	traverse = inputs;
-	printf("%p\n", traverse);
 	while (traverse)
 	{
 		if (file_read((t_file*)traverse->content) == FILE_ERROR)
 		{
-			ft_printf("file_read() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			ft_printf("file_read() on %s failed.\n", LST_CONT(traverse, t_file).name_s);
 			close(((t_file*)traverse->content)->fd_s);
 			traverse = traverse->next;
 			continue ;
 		}
 		if (file_parse((t_file*)traverse->content) == LINE_FAIL)
 		{
-			ft_printf("file_parse() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			ft_printf("file_parse() on %s failed.\n", LST_CONT(traverse, t_file).name_s);
 			close(((t_file*)traverse->content)->fd_s);
 			traverse = traverse->next;
 			continue ;
 		}
 		if (((t_file*)traverse->content)->header_flags == OFF)
 		{
-			ft_printf("header not found in %s.\n", ((t_file*)traverse->content)->name_s);
+			ft_printf("header not found in %s.\n", LST_CONT(traverse, t_file).name_s);
 			close(((t_file*)traverse->content)->fd_s);
 			traverse = traverse->next;
 			continue ;
 		}
 		if (file_conversion(((t_file*)traverse->content)) == CONVERSION_FAIL)
 		{
-			ft_printf("file_conversion() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			ft_printf("file_conversion() on %s failed.\n", LST_CONT(traverse, t_file).name_s);
 			close(((t_file*)traverse->content)->fd_s);
 			traverse = traverse->next;
 			continue ;
 		}
 		close(((t_file*)traverse->content)->fd_s);
 		write_cor_file(((t_file*)traverse->content));
-		ft_printf("%s successfully created.\n", ((t_file*)traverse->content)->name_cor);
+		ft_printf("%s successfully created.\n", LST_CONT(traverse, t_file).name_cor);
 		traverse = traverse->next;
 	}
 	ft_exit(inputs);
