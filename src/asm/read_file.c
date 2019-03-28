@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:44:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 16:39:17 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
 
 	new_line.tokens = NULL;
 	if (!(new_line.str = ft_strtrim(line)))
-		file_error("ft_strtrim failed", file);
+		ERROR("ft_strtrim() failed", LINE_FAIL);
 	new_line.nbr_params = 0;
 	new_line.id = nbr_lines;
 	new_line.type = line_type;
@@ -70,19 +70,26 @@ int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	{
 		/* parse label : && treat label: instructions format */
 		line[label_pos + 1] = '\0';
-		line_create(file, line, *nbr_lines, T_LABEL);
+		if (line_create(file, line, *nbr_lines, T_LABEL) == LINE_FAIL)
+			ERROR("line_create() failed.", ASM_FAIL);
 		line[label_pos + 1] = ' ';
 		/*parse asm code */
 		if (len > label_pos + 1 && !is_whitespaces_line((&line[label_pos + 2])))
-			line_create(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN);
+		{
+			if (line_create(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN) == LINE_FAIL)
+				ERROR("line_create() failed.", ASM_FAIL);
+		}
 	}
 	else
-		line_create(file, line, *nbr_lines, T_UNKNOWN);
+	{
+		if (line_create(file, line, *nbr_lines, T_UNKNOWN) == LINE_FAIL)
+			ERROR("line_create() failed.", ASM_FAIL);
+	}
 	free(line);
-	return (1);
+	return (SUCCESS);
 }
 
-void	file_read(t_file *file)
+int		file_read(t_file *file)
 {
 	char	*line;
 	size_t	nbr_lines;
@@ -99,15 +106,16 @@ void	file_read(t_file *file)
 		if (line_add(file, line, &nbr_lines, label_check(line)) == ASM_FAIL)
 		{
 			free(line);
-			file_error("syntax error in line.", file);
+			ERROR("syntax error in line.", FILE_ERROR);
 		}
 		nbr_lines++;
 	}
 	free(line);
 	if (file->ret == -1)
-		file_error("get_next_line failed.", file);
-	else if ((file->nbr_line = nbr_lines) == 0)
-		file_error("no instructions.", file);
+		ERROR("get_next_line failed.", FILE_ERROR);
+	if ((file->nbr_line = nbr_lines) == 0)
+		ERROR("no instructions.", FILE_ERROR);
+	return (SUCCESS);
 	/* print lines
 	int i = 0;
 	t_list *traverse;

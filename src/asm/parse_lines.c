@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:29:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 17:06:09 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		check_token_type(t_token *token, char *str)
 	else
 	{
 		/*ft_printf("%s\n", str);*/
-		ERROR("no token_type found.", TOKEN_FAIL);
+		ERROR("no token_type found.", TOKEN_TYPE_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -120,7 +120,7 @@ int		check_parameter(t_token *token, char *str)
 			if (!ft_strchr(LABEL_CHARS, str[index]) &&
 				!(index == 0 && str[index] == DIRECT_CHAR) &&
 					!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
-				ERROR("wrong syntax of label.", TOKEN_FAIL);
+				ERROR("wrong syntax of label.", PARAM_CHECK_FAIL);
 			index++;
 		}
 		return (SUCCESS);
@@ -128,7 +128,7 @@ int		check_parameter(t_token *token, char *str)
 	else if (token->type == T_REGISTER)
 	{
 		if (ft_atoi(str + 1) > REG_NUMBER)
-			ERROR("register number too high.", TOKEN_FAIL);
+			ERROR("register number too high.", PARAM_CHECK_FAIL);
 		return (SUCCESS);
 	}
 	return (SUCCESS);
@@ -144,13 +144,13 @@ int		check_instr(t_token *token, char *str)
 		if (!ft_strcmp(str, g_op_tab[index].name))
 		{
 			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
-				ERROR("malloc failed", TOKEN_FAIL);
+				ERROR("malloc failed", INSTR_FAIL);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
 			return (SUCCESS);
 		}
 		index++;
 	}
-	return (TOKEN_FAIL);
+	return (INSTR_FAIL);
 }
 
 int		add_token(t_line *line, int token_id, int start, int end)
@@ -163,17 +163,14 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	if (!(token.str = ft_strsub(line->str, start, len)))
 		ERROR("ft_strsub failed.", TOKEN_FAIL);
 	token.id = token_id;
-	if (check_token_type(&token, token.str) == TOKEN_FAIL)
+	if (check_token_type(&token, token.str) == TOKEN_TYPE_FAIL)
 		ERROR("token_type error.", TOKEN_FAIL);
-	if (check_parameter(&token, token.str) == TOKEN_FAIL)
+	if (check_parameter(&token, token.str) == PARAM_CHECK_FAIL)
 		ERROR("wrong parameter.", TOKEN_FAIL);
 	if (token.type == T_UNKNOWN)
 		ERROR("token_type not found.", TOKEN_FAIL);
-	if (token.type == T_INSTR && check_instr(&token, token.str) == TOKEN_FAIL)
-	{
-//		printf("%s\n", line->str + start);
+	if (token.type == T_INSTR && check_instr(&token, token.str) == INSTR_FAIL)
 		ERROR("no opcode match found.", TOKEN_FAIL);
-	}
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
 	return (SUCCESS);
 }
@@ -199,7 +196,7 @@ int		line_tokenize(t_line *line)
 		while (line->str[j] && !(ft_isspace(line->str[j])) &&
 			line->str[j] != SEPARATOR_CHAR)
 			j++;
-		if (add_token(line, token_id, i, j) == LINE_FAIL)
+		if (add_token(line, token_id, i, j) == TOKEN_FAIL)
 			ERROR("tokenize failed.", LINE_FAIL);
 		i = j + 1;
 		if (line->str[i - 1] == '\0')
@@ -263,7 +260,7 @@ int		validate_opcode_params(t_line *line)
 	return (SUCCESS);
 }
 
-void	set_progname(t_file *file, t_line *line)
+static void	set_progname(t_file *file, t_line *line)
 {
 	int		index;
 	char	*tmp;
@@ -291,7 +288,7 @@ void	set_progname(t_file *file, t_line *line)
 	file->header_flags = ON;
 }
 
-void	set_how(t_file *file, t_line *line)
+static void	set_how(t_file *file, t_line *line)
 {
 	int		index;
 	char	*tmp;
@@ -350,9 +347,7 @@ void	bytecode_len(t_line *line)
 void	remove_label_char(char *str)
 {
 	int index;
-	char	*tmp;
 
-	tmp = NULL;
 	index = 0;
 	while (str && str[index])
 	{
@@ -377,9 +372,12 @@ int		file_parse(t_file *file)
 				set_how(file, LINE);
 			if (LINE->type == T_UNKNOWN)
 				LINE->type = T_ASMCODE;
-			if (LINE->type == T_ASMCODE && (!(line_tokenize(LINE)) ||
-				!(validate_opcode_params(LINE))))
-					file_error("parse failed.", file);
+			if (LINE->type == T_ASMCODE && (line_tokenize(LINE) == LINE_FAIL ||
+				validate_opcode_params(LINE) == VAL_OP_PARAM_FAIL))
+			{
+				ft_putendl("parse failed.");
+				return (ASM_FAIL);
+			}
 			if (LINE->type == T_ASMCODE)
 				bytecode_len(LINE);
 			else if (LINE->type == T_LABEL)

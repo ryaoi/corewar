@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 10:24:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 16:51:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 {
 	char	*label;
 	t_list	*traverse;
-	(void)line;
 
 	label = NULL;
 	if (token->type == T_DIRECT || token->type == T_REGISTER)
@@ -119,7 +118,7 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			}
 			traverse = traverse->next;
 		}
-		ERROR("noooooooo label doesn't exist.", 0);
+		ERROR("noooooooo label doesn't exist.", GETVALUE_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -155,8 +154,8 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 	bytecode = line->bytecode;
 	while (traverse)
 	{
-		if (!(param_getvalue(file->lines, line, ((t_token*)traverse->content))))
-			ERROR("param_getvalue failed.", 0);
+		if (param_getvalue(file->lines, line, ((t_token*)traverse->content)) == GETVALUE_FAIL)
+			ERROR("param_getvalue failed.", GETVALUE_FAIL);
 
 		if (((t_token*)traverse->content)->type == T_INDIRECT ||
 				((t_token*)traverse->content)->type == T_INDIRLAB)
@@ -198,14 +197,21 @@ int		file_conversion(t_file *file)
 				ERROR("operation doesn't exist.", CONVERSION_FAIL);
 			if (!(LINE->tokens->next))
 				ERROR("no parameters found.", CONVERSION_FAIL);
-			if (!bytecode_conversion(file, LINE, operation))
+			if (bytecode_conversion(file, LINE, operation) == GETVALUE_FAIL)
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
-		printf("%s\n", LINE->str);
+//////////////////////////////////////////////////////////////////////////
+		if (LINE->type == T_ASMCODE)
+			printf("%s\n", LINE->str);
 		for (int i=0; i < (int)LINE->bytecode_len; i++)
-			printf("0x%02x ", LINE->bytecode[i]);
-		printf("\n-------------------------------------\n");
+		{
+			if (LINE->type == T_ASMCODE)
+				printf("0x%02x ", LINE->bytecode[i]);
+		}
+		if (LINE->type == T_ASMCODE)
+			printf("\n-------------------------------------\n");
+//////////////////////////////////////////////////////////////////////////
 		traverse = traverse->next;
 	}
 	return (SUCCESS);

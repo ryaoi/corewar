@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 11:02:31 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 18:47:36 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,41 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static void	file_name_check(const char *filename, t_file *file)
+static int	file_name_check(const char *filename, t_file *file)
 {
 	size_t	len;
 	char	*tmp;
 
 	len = ft_strlen(filename);
 	if (len < 3 || filename[len - 2] != '.' || filename[len - 1] != 's')
-		file_error("the filename has to end with '.s'", file);
+		ERROR("the filename has to exist and ends with '.s'", 0);
 	if ((file->fd_s = open(filename, O_RDONLY)) == -1)
-		file_error("failed to open the file.", file);
+		ERROR("failed to open the file.", 0);
 	if (!(file->name_s = ft_strdup(filename)))
-		file_error("ft_strdup failed", file);
+		ERROR("ft_strdup failed", 0);
 	if (!(tmp = (char*)ft_strsub(filename, 0, len - 2)))
-		file_error("ft_strndup failed", file);
+		ERROR("ft_strndup failed", 0);
 	if (!(file->name_cor = ft_strjoin(tmp, ".cor")))
-		file_error("ft_strjoin failed", file);
+		ERROR("ft_strjoin failed", 0);
 	free(tmp);
+	return (SUCCESS);
 }
 
-static void	file_check(int argc, char **argv, t_file *file)
+static int	argv_check(int argc, char **argv, int *option)
 {
-	(void)argv;
 	if (argc == 1)
-		file_error("no file identified. Usage: ./asm [filename.s] [-mp]", file);
-	else if(argc != 2)
-		file_error("Too many files. Usage: ./asm [filename.s] [-mp]", file);
+	{
+		ft_putendl("no file identified. Usage: ./asm [filename.s] [-p]");
+		return (FILE_ERROR);
+	}
+	else if (argc > 1)
+	{
+		if (!ft_strcmp(argv[1], "-p"))
+			*option = ON;
+	}
+	return (SUCCESS);
+	//else if(argc != 2)
+	//	file_error("Too many files. Usage: ./asm [filename.s] [-p]", file);
 			/* TODO remove after implementing multiple file handler */
 }
 
@@ -57,26 +66,72 @@ static void	file_init(t_file *file)
 	ft_bzero(&(file->header.how[0]), COMMENT_LENGTH + 1);
 }
 
-int		main(int argc, char **argv)
+static void	file_add(t_list **inputs, char *filename)
 {
 	t_file	file;
 
 	file_init(&file);
-	file_check(argc, argv, &file);
-	file_name_check(argv[1], &file);
-	file_read(&file);
-	if (file_parse(&file) == LINE_FAIL)
-		file_error("parse_file() failed.", &file);
-	close(file.fd_s);
-	if (file.header_flags == ON)
+	if (file_name_check(filename, &file) == FILE_ERROR)
+		ft_putendl("file name is invalid. skip!");
+	else
+		list_append(inputs, list_new(&file, sizeof(file)));
+}
+
+int		main(int argc, char **argv)
+{
+	t_list	*inputs;
+	t_list	*traverse;
+	int		index;
+	int		option;
+
+	option = 0;
+	inputs = NULL;
+	if (argv_check(argc, argv, &option) == FILE_ERROR)
 	{
-		if (file_conversion(&file))
-			write_cor_file(&file);
-		else
-			file_error("file_conversion() failed.", &file);
+		ft_putendl("argv_check() failed.");
+		return (0);
 	}
-	ft_printf("%s successfully created.\n", file.name_cor);
-	file_error(NULL, &file);
+	index = option == ON ? 2 : 1;
+	while (index < argc)
+		file_add(&inputs, argv[index++]);
+	traverse = inputs;
+	printf("%p\n", traverse);
+	while (traverse)
+	{
+		if (file_read((t_file*)traverse->content) == FILE_ERROR)
+		{
+			ft_printf("file_read() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			close(((t_file*)traverse->content)->fd_s);
+			traverse = traverse->next;
+			continue ;
+		}
+		if (file_parse((t_file*)traverse->content) == LINE_FAIL)
+		{
+			ft_printf("file_parse() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			close(((t_file*)traverse->content)->fd_s);
+			traverse = traverse->next;
+			continue ;
+		}
+		if (((t_file*)traverse->content)->header_flags == OFF)
+		{
+			ft_printf("header not found in %s.\n", ((t_file*)traverse->content)->name_s);
+			close(((t_file*)traverse->content)->fd_s);
+			traverse = traverse->next;
+			continue ;
+		}
+		if (file_conversion(((t_file*)traverse->content)) == CONVERSION_FAIL)
+		{
+			ft_printf("file_conversion() on %s failed.\n", ((t_file*)traverse->content)->name_s);
+			close(((t_file*)traverse->content)->fd_s);
+			traverse = traverse->next;
+			continue ;
+		}
+		close(((t_file*)traverse->content)->fd_s);
+		write_cor_file(((t_file*)traverse->content));
+		ft_printf("%s successfully created.\n", ((t_file*)traverse->content)->name_cor);
+		traverse = traverse->next;
+	}
+	ft_exit(inputs);
 	return (0);
 	/*TODO handle multiple .s files, print .cor in hexadecimal with option*/
 }

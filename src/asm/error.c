@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:01:53 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 18:43:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 16:46:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,24 @@ void	free_line_content(void *content, size_t size)
 	tmp = NULL;
 }
 
-void	file_error(const char *str, t_file *file)
+void	free_file_content(void *content, size_t size)
 {
-	if (file->name_s)
-		free(file->name_s);
-	if (file->name_cor)
-		free(file->name_cor);
-	list_del(&(file->lines), free_line_content);
-	if (str)
-		ft_putendl(str);
-	exit(EXIT_FAILURE);
+	t_file	*tmp;
+
+	(void)size;
+	tmp = (t_file*)content;
+	if (tmp->name_s)
+		free(tmp->name_s);
+	tmp->name_s = NULL;
+	if (tmp->name_cor)
+		free(tmp->name_cor);
+	tmp->name_cor = NULL;
+	list_del(&(tmp->lines), free_line_content);
+	free(tmp);
 }
+
+void	ft_exit(t_list *inputs)
+{
+	list_del(&inputs, free_file_content);
+}
+

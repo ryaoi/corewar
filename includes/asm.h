@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 11:02:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 18:18:47 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@
 # include "ft_printf.h"
 # define TOKEN_SYNTAX_ERROR 0
 # define SUCCESS 1
+# define FILE_ERROR 0
 # define ASM_FAIL 0
 # define LINE_FAIL 0
 # define TOKEN_FAIL 0
+# define TOKEN_TYPE_FAIL 0
+# define PARAM_CHECK_FAIL 0
+# define INSTR_FAIL 0
 # define PARAM_FAIL 0
+# define VAL_OP_PARAM_FAIL 0
+# define GETVALUE_FAIL 0
 # define CONVERSION_FAIL 0
 # define ON 1
 # define OFF 0
@@ -86,11 +92,10 @@ typedef struct	s_file
 	int			ret;
 }				t_file;
 
-void	file_error(const char *str, t_file *file);
-void	file_read(t_file *file);
+void	ft_exit(t_list *inputs);
+int		file_read(t_file *file);
 int		file_parse(t_file *file);
 int		file_conversion(t_file *file);
-int		add_token(t_line *line, int token_id, int start, int end);
 int		tokenize_line(t_line *line);
 int		add_token(t_line *line, int token_id, int start, int end);
 int		check_token_type(t_token *token, char *str);
