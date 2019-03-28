@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/27 22:10:41 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/28 11:02:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,11 @@ static void	file_name_check(const char *filename, t_file *file)
 
 static void	file_check(int argc, char **argv, t_file *file)
 {
-		if (argc == 1)
-			file_error("no file identified. Usage: ./asm [filename.s] [-mp]", file);
-		else if (argc == 3)
-		{
-			if (!ft_strcmp(argv[3],"-m"))
-				file->options |= MULTIPLE_FILES;
-			else if (!ft_strcmp(argv[3],"-p"))
-				file->options |= PRINT_BYTECODE;
-			else if (!ft_strcmp(argv[3], "-mp"))
-			{
-				file->options |= MULTIPLE_FILES;
-				file->options |= PRINT_BYTECODE;
-			}
-			else
-				file_error("invalid input syntax. Usage: ./asm [filename.s] [-mp]", file);
-		}
-		else if(argc != 2)
-			file_error("Too many files. Usage: ./asm [filename.s] [-mp]", file);
+	(void)argv;
+	if (argc == 1)
+		file_error("no file identified. Usage: ./asm [filename.s] [-mp]", file);
+	else if(argc != 2)
+		file_error("Too many files. Usage: ./asm [filename.s] [-mp]", file);
 			/* TODO remove after implementing multiple file handler */
 }
 
@@ -80,6 +67,7 @@ int		main(int argc, char **argv)
 	file_read(&file);
 	if (file_parse(&file) == LINE_FAIL)
 		file_error("parse_file() failed.", &file);
+	close(file.fd_s);
 	if (file.header_flags == ON)
 	{
 		if (file_conversion(&file))
