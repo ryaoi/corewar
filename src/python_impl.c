@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 16:23:19 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/29 18:10:10 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,20 @@ int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
-	/*TODO*/
-	(void)self;
-	return (0);
+	advance_cycle(&self->data);
+	Py_INCREF(Py_None);
+	return (Py_None);
+}
+
+PyObject	*py_mem_dump(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
+{
+	PyObject *memory;
+
+	memory = PyByteArray_FromStringAndSize((char*)self->data.state.memory, MEM_SIZE);
+	if (!memory)
+		return (NULL);
+	Py_INCREF(memory);
+	return (memory);
 }
 
 static int	py_load_champions(t_array *players, PyObject *champion)
@@ -48,6 +59,7 @@ static int	py_load_champions(t_array *players, PyObject *champion)
 	PyObject	*ascii;
 	t_player	new;
 
+	/* TODO get string representation of object */
 	if (!PyUnicode_Check(champion))
 		return (-1);
 	ascii = PyUnicode_AsASCIIString(champion);

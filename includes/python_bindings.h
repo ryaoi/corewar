@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 19:02:25 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 16:20:37 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/29 18:01:26 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct	s_game_py_wrap
 
 void		py_game_dealloc(t_game_py_wrap *self);
 int			py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused));
+PyObject	*py_mem_dump(t_game_py_wrap *self, PyObject *Py_UNUSED(unused));
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused));
 PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused));
 
