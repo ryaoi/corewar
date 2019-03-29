@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 19:17:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/03/29 11:42:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,14 +203,14 @@ int		file_conversion(t_file *file)
 		}
 		/*TODO print translated code*/
 //////////////////////////////////////////////////////////////////////////
-		if (LINE->type == T_ASMCODE)
-			printf("%s\n", LINE->str);
-		for (int i=0; i < (int)LINE->bytecode_len; i++)
+		if (LST_CONT(traverse, t_line).type == T_ASMCODE)
+			printf("%s\n", LST_CONT(traverse, t_line).str);
+		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
 		{
-			if (LINE->type == T_ASMCODE)
-				printf("0x%02x ", LINE->bytecode[i]);
+			if (LST_CONT(traverse, t_line).type == T_ASMCODE)
+				printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
 		}
-		if (LINE->type == T_ASMCODE)
+		if (LST_CONT(traverse, t_line).type == T_ASMCODE)
 			printf("\n-------------------------------------\n");
 //////////////////////////////////////////////////////////////////////////
 		traverse = traverse->next;
