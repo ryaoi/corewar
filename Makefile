@@ -1,4 +1,6 @@
-CORELIB_SRCS = assert.c \
+CORELIB_SRCS = python_bindings.c \
+	python_impl.c \
+	assert.c \
 	logging.c \
 	vm/vm.c \
 	vm/ocp.c \
@@ -32,7 +34,8 @@ COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
 		includes/instr.h \
-		includes/vm.h
+		includes/vm.h \
+		includes/python_bindings.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
@@ -64,7 +67,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^
+	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
@@ -78,7 +81,7 @@ obj:
 	mkdir -p obj/vm/instr_impl
 
 obj/%.o: src/%.c $(INCLUDES) | obj
-	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
+	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<
 
 tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
