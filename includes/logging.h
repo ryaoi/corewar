@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 14:03:11 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/29 18:34:48 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ typedef struct		s_log_string
 
 typedef struct		s_log_info
 {
-	enum e_log_level	log_levels;
 	enum e_log_mode		log_mode;
 	size_t				logs_num;
 	t_array				logs[e_log_level_max];
+	size_t				log_heads[e_log_level_max];
 }					t_log_info;
 
 /* TODO actually log everything */
