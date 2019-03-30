@@ -1,5 +1,5 @@
-CORELIB_SRCS = python_bindings.c \
-	python_impl.c \
+CORELIB_SRCS = python_bindings/python_bindings.c \
+	python_bindings/python_impl.c \
 	assert.c \
 	logging.c \
 	vm/vm.c \
@@ -66,7 +66,7 @@ include ft_printf/Makefile.mk
 LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
-$(CORELIB_NAME): $(CORELIB_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+$(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
 	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
@@ -79,6 +79,7 @@ obj:
 	mkdir -p obj
 	mkdir -p obj/vm
 	mkdir -p obj/vm/instr_impl
+	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<

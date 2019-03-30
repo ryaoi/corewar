@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   short_game.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:02:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/30 19:40:34 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,5 @@ int		main(void)
 		;
 	dump_memory(&game->state);
 	ft_printf("%d %d\n", ARRAY_PTR(game->state.players, t_player)[0].live, ARRAY_PTR(game->state.players, t_player)[1].live);
+	return (0);
 }

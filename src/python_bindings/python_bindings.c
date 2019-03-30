@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   python_bindings.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 19:01:57 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 18:02:30 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/30 18:49:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static struct PyModuleDef	g_corelib_module = {
 };
 
 static PyMemberDef			g_py_game_members[] = {
-	{"cycle_count", T_ULONG, __offsetof(t_game_py_wrap, data)
-		+ __offsetof(t_game_data, state) + __offsetof(t_vm_state, cycle_count), READONLY, "Currently executed cycles"},
-	{"cycles_to_die", T_INT, __offsetof(t_game_py_wrap, data)
-		+ __offsetof(t_game_data, cycles_to_die), READONLY, "Cycles to die"},
-	{"champions", T_OBJECT_EX, __offsetof(t_game_py_wrap, champions), READONLY, "List of champions to play"},
-	{"logs", T_OBJECT_EX, __offsetof(t_game_py_wrap, logs), READONLY, "Tuple of logs"},
+	{"cycle_count", T_ULONG, offsetof(t_game_py_wrap, data)
+		+ offsetof(t_game_data, state) + offsetof(t_vm_state, cycle_count), READONLY, "Currently executed cycles"},
+	{"cycles_to_die", T_INT, offsetof(t_game_py_wrap, data)
+		+ offsetof(t_game_data, cycles_to_die), READONLY, "Cycles to die"},
+	{"champions", T_OBJECT_EX, offsetof(t_game_py_wrap, champions), READONLY, "List of champions to play"},
+	{"logs", T_OBJECT_EX, offsetof(t_game_py_wrap, logs), READONLY, "Tuple of logs"},
 	{NULL, 0, 0, 0, NULL}
 };
 
@@ -39,6 +39,8 @@ static PyMethodDef			g_py_game_methods[] = {
 	{"update", (PyCFunction)py_update, METH_VARARGS, "Play n cycles of the game"},
 	{"prepare", (PyCFunction)py_prepare, METH_NOARGS, "Prepares VM for match"},
 	{"mem_dump", (PyCFunction)py_mem_dump, METH_NOARGS, "Dumps VM's memory"},
+	{"players", (PyCFunction)py_players, METH_NOARGS, "Returns description of players"},
+	{"processes", (PyCFunction)py_processes, METH_NOARGS, "Returns description of current processes"},
 	{NULL, NULL, 0, NULL}
 };
 

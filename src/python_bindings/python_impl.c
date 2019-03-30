@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   python_impl.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 19:12:22 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/30 19:42:13 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,17 @@ static int	py_init_logs(PyObject *logs)
 	return (0);
 }
 
-int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
+int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused1),
+			PyObject *Py_UNUSED(unused2))
 {
 	self->data.state.log_info.log_mode = e_mode_save;
 	array_init(&self->data.state.players, sizeof(t_player));
 	self->champions = PyList_New(0);
 	if (!self->champions)
 		return (-1);
-	Py_INCREF(self->champions);
 	self->logs = PyTuple_New(e_log_level_max);
 	if (!self->logs)
 		return (-1);
-	Py_INCREF(self->logs);
 	if (py_init_logs(self->logs) < 0)
 		return (-1);
 	self->memory = Py_None;
@@ -101,7 +100,16 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
 
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
-	/* TODO call prepare if not done yet */
+	PyObject	*ret;
+
+	if (!self->ready)
+	{
+		ret = PyObject_CallMethod(self, "prepare", NULL);
+		if (!ret)
+			return (NULL);
+		Py_DECREF(ret);
+		ret = NULL;
+	}
 	advance_cycle(&self->data);
 	py_save_logs(&self->data.state.log_info, self->logs);
 	Py_INCREF(Py_None);
@@ -115,7 +123,6 @@ PyObject	*py_mem_dump(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	memory = PyByteArray_FromStringAndSize((char*)self->data.state.memory, MEM_SIZE);
 	if (!memory)
 		return (NULL);
-	Py_INCREF(memory);
 	return (memory);
 }
 
@@ -130,6 +137,8 @@ static int	py_load_champions(t_array *players, PyObject *champion)
 		return (-1);
 	ascii = PyUnicode_AsASCIIString(champion);
 	name_string = PyBytes_AsString(ascii);
+	Py_DECREF(ascii);
+	ascii = NULL;
 	if (vm_champion_load_file(&new, name_string, -1 - players->length) < 0)
 		return (-1);
 	array_push_back(players, &new);
@@ -169,5 +178,134 @@ PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	log_opts.log_mode = e_mode_save;
 	prepare_game(&self->data, &players, &log_opts);
 	Py_INCREF(Py_None);
+	self->ready = 1;
 	return (Py_None);
+}
+
+static int	py_player_set_properties(PyObject *dict, t_player *player)
+{
+	PyObject	*property;
+
+	/* TODO use PyUnicode_FromStringAndSize ? */
+	property = PyUnicode_FromString(player->header.prog_name);
+	if (!property || PyDict_SetItemString(dict, "name", property) < 0)
+		return (-1);
+	property = PyUnicode_FromString(player->header.comment);
+	if (!property || PyDict_SetItemString(dict, "comment", property) < 0)
+		return (-1);
+	property = PyLong_FromUnsignedLong(player->header.prog_size);
+	if (!property || PyDict_SetItemString(dict, "size", property) < 0)
+		return (-1);
+	property = PyLong_FromLong(player->id);
+	if (!property || PyDict_SetItemString(dict, "id", property) < 0)
+		return (-1);
+	property = PyLong_FromLong(player->live);
+	if (!property || PyDict_SetItemString(dict, "live", property) < 0)
+		return (-1);
+	return (0);
+}
+
+PyObject	*py_players(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
+{
+	PyObject	*list;
+	PyObject	*player;
+	int			ret;
+	size_t		index;
+
+	list = PyList_New(self->data.state.players.length);
+	if (!list)
+		return (NULL);
+	index = 0;
+	while (index < self->data.state.players.length)
+	{
+		player = PyDict_New();
+		if (!player)
+			return (NULL);
+		ret = py_player_set_properties(player,
+			&ARRAY_PTR(self->data.state.players, t_player)[index]);
+		if (ret < 0 || PyList_SetItem(list, index, player) < 0)
+			return (NULL);
+		index++;
+	}
+	return (list);
+}
+
+static int	py_process_set_registers(PyObject *dict, t_process *process)
+{
+	PyObject	*tuple;
+	PyObject	*value;
+	size_t		index;
+
+	tuple = PyTuple_New(REG_SIZE);
+	if (!tuple)
+		return (-1);
+	index = 0;
+	while (index < REG_SIZE)
+	{
+		value = PyLong_FromSize_t(process->registers[index].content.buffer);
+		if (!value || PyTuple_SetItem(tuple, index, value) < 0)
+			return (-1);
+		index++;
+	}
+	return (0);
+}
+
+static int	py_process_set_properties(PyObject *dict, t_process *process)
+{
+	PyObject	*property;
+
+	if (py_process_set_registers(dict, process) < 0)
+		return (-1);
+	property = PyLong_FromLong(process->player->id);
+	if (!property || PyDict_SetItemString(dict, "player_id", property) < 0)
+		return (-1);
+	property = PyLong_FromSize_t(process->program_counter);
+	if (!property || PyDict_SetItemString(dict, "program_counter", property) < 0)
+		return (-1);
+	property = PyLong_FromSize_t(process->id);
+	if (!property || PyDict_SetItemString(dict, "process_id", property) < 0)
+		return (-1);
+	property = PyLong_FromSize_t(process->live_executed);
+	if (!property || PyDict_SetItemString(dict, "lives_since_check", property) < 0)
+		return (-1);
+	property = PyLong_FromUnsignedLong(process->has_jumped);
+	if (!property || PyDict_SetItemString(dict, "has_jumped", property) < 0)
+		return (-1);
+	property = PyLong_FromLong(process->carry);
+	if (!property || PyDict_SetItemString(dict, "carry", property) < 0)
+		return (-1);
+	property = PyLong_FromLong(process->busy);
+	if (!property || PyDict_SetItemString(dict, "busy", property) < 0)
+		return (-1);
+	property = PyLong_FromSize_t(process->birth_cycle);
+	if (!property || PyDict_SetItemString(dict, "birth_cycle", property) < 0)
+		return (-1);
+	return (0);
+}
+
+PyObject	*py_processes(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
+{
+	PyObject	*list;
+	PyObject	*process;
+	t_list		*traverse;
+	int			ret;
+
+	list = PyList_New(0);
+	if (!list)
+		return (NULL);
+	traverse = self->data.state.processes;
+	while (traverse)
+	{
+		process = PyDict_New();
+		if (!process)
+			return (NULL);
+		ret = py_process_set_properties(process,
+			&LST_CONT(traverse, t_process));
+		if (ret < 0 || PyList_Append(list, process) < 0)
+			return (NULL);
+		traverse = traverse->next;
+	}
+	if (PyList_Reverse(list) < 0)
+		return (NULL);
+	return (list);
 }
