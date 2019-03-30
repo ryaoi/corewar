@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+	<link rel="stylesheet" type="text/css" href="{% static 'visu/style.css' %}">
+<body>
+
+	<h2>this is in index.html of templates</h2>
+	<p>{{hello}}</p>
+
+	<div id="memdump">
+		{{screen}}
+	</div>
+	<div>
+		<ul>
+			{% for x in logs %}
+				{% for a in x %}
+				<li>{{a}}</li>
+				{% endfor %}
+			{% endfor %}
+		</ul>
+	</div>
+</body>
+</html>
