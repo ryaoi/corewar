@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:43:39 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 21:52:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,9 @@ PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	}
 	logs_init(&log_opts);
 	log_opts.log_mode = e_mode_save;
+	ft_memcpy(&log_opts.log_active,
+		(uint8_t[e_log_level_max]){1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		sizeof(log_opts.log_active));
 	prepare_game(&self->data, &players, &log_opts);
 	Py_INCREF(Py_None);
 	self->ready = 1;

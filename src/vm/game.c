@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 19:10:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 21:58:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ static void	kill_lazy_processes(t_game_data *game)
 	if (game->checks_since_dec >= MAX_CHECKS || game->live_since_dec >= NBR_LIVE)
 	{
 		game->cycles_to_die = ft_max(game->cycles_to_die - CYCLE_DELTA, 0);
+		log_level(&game->state.log_info, e_log_game,
+			"cycles_to_die is now %d",
+			game->cycles_to_die);
 		game->checks_since_dec = 0;
 		game->live_since_dec = 0;
 	}

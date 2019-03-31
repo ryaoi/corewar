@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 18:27:49 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 21:47:43 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ enum	e_log_level
 	e_log_fork,
 	e_log_game,
 	e_log_deaths,
+	/* TODO e_log_winner_index ? */
 	e_log_memdump,
 	e_log_level_max
 };
@@ -51,6 +52,7 @@ typedef struct		s_log_info
 	size_t				logs_num;
 	t_array				logs[e_log_level_max];
 	size_t				log_heads[e_log_level_max];
+	uint8_t				log_active[e_log_level_max];
 }					t_log_info;
 
 void	log_level_va(t_log_info *info, uint64_t type, const char *format,

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   short_game.c                                       :+:      :+:    :+:   */
+/*   complete_game.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 21:49:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 21:53:05 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		main(void)
 		sizeof(info.log_active));
 	game = malloc(sizeof(t_game_data));
 	prepare_game(game, &players, &info);
-	while (advance_cycle(game) && game->state.cycle_count < 10000)
+	while (advance_cycle(game))
 		;
 	dump_memory(&game->state);
 	ft_printf("%d %d\n", ARRAY_PTR(game->state.players, t_player)[0].live, ARRAY_PTR(game->state.players, t_player)[1].live);
