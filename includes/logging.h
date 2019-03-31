@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 18:34:48 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 17:29:45 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ enum	e_log_level
 	e_log_instr,
 	e_log_store,
 	e_log_load,
+	e_log_jump,
+	e_log_fork,
+	e_log_game,
 	e_log_deaths,
 	e_log_memdump,
 	e_log_level_max

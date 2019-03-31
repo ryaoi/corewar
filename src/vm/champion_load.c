@@ -6,11 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 16:54:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 17:25:46 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "ft_assert.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>

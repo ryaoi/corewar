@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/21 15:51:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 17:22:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 			process->registers[instr->instr_args[0].arg.reg_index - 1].content);
 		process->registers[instr->instr_args[1].arg.reg_index - 1].content
 			= process->registers[instr->instr_args[0].arg.reg_index - 1].content;
+		log_level(&state->log_info, e_log_store,
+			"Storing r%d into r%d, val %#.8zx",
+			instr->instr_args[0].arg.reg_index - 1,
+			instr->instr_args[1].arg.reg_index - 1,
+			process->registers[instr->instr_args[0].arg.reg_index - 1].content);
 	}
 	else
 	{
@@ -35,5 +40,10 @@ void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 			= process->registers[instr->instr_args[0].arg.reg_index - 1].content;
 		process->carry = buffer_is_zero(load_buffer);
 		mem_store(state, offset, REG_SIZE, load_buffer);
+		log_level(&state->log_info, e_log_store,
+			"Storing r%d into %#.8zx, val %#.8zx",
+			instr->instr_args[0].arg.reg_index - 1,
+			offset,
+			process->registers[instr->instr_args[0].arg.reg_index - 1].content);
 	}
 }
