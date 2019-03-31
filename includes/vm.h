@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/28 14:38:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 15:25:35 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ t_bigend_buffer		byte_order_swap(t_bigend_buffer input);
 void				vm_clone_process(t_vm_state *state, size_t address, t_process *original);
 void				vm_init_process(t_vm_state *state, int player_id, size_t address);
 void				vm_state_init(t_vm_state *state);
+void				vm_state_clear(t_vm_state *state);
 int					vm_champion_load_file(t_player *player, const char *filename, int id);
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   python_impl.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/30 19:42:13 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/31 15:58:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 void		py_game_dealloc(t_game_py_wrap *self)
 {
-	/* TODO call function to clear data */;
-	free(self);
+	if (self->ready)
+		vm_state_clear(&self->data.state);
+	Py_DECREF(self->champions);
+	self->champions = NULL;
+	Py_DECREF(self->logs);
+	self->logs = NULL;
+	Py_TYPE(self)->tp_free(self);
 }
 
 static int	py_init_logs(PyObject *logs)
@@ -48,8 +53,6 @@ int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused1),
 		return (-1);
 	if (py_init_logs(self->logs) < 0)
 		return (-1);
-	self->memory = Py_None;
-	Py_INCREF(Py_None);
 	return (0);
 }
 
@@ -72,6 +75,7 @@ static int	py_append_log(PyObject *py_log, t_log_string *string)
 	PyTuple_SET_ITEM(py_log_string, 1, py_id);
 	if (PyList_Append(py_log, py_log_string) < 0)
 		return (-1);
+	Py_DECREF(py_log_string);
 	return (0);
 }
 
@@ -154,6 +158,11 @@ PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	PyObject	*champion;
 	int			is_list;
 
+	if (self->ready)
+	{
+		PyErr_SetString(PyExc_RuntimeError, "Class is only meant to be used for one match. To restart, create another instance.");
+		return (NULL);
+	}
 	is_list = PyList_Check(self->champions);
 	if (is_list)
 		list_size = PyList_Size(self->champions);
@@ -186,7 +195,6 @@ static int	py_player_set_properties(PyObject *dict, t_player *player)
 {
 	PyObject	*property;
 
-	/* TODO use PyUnicode_FromStringAndSize ? */
 	property = PyUnicode_FromString(player->header.prog_name);
 	if (!property || PyDict_SetItemString(dict, "name", property) < 0)
 		return (-1);
@@ -236,17 +244,19 @@ static int	py_process_set_registers(PyObject *dict, t_process *process)
 	PyObject	*value;
 	size_t		index;
 
-	tuple = PyTuple_New(REG_SIZE);
+	tuple = PyTuple_New(REG_NUMBER);
 	if (!tuple)
 		return (-1);
 	index = 0;
-	while (index < REG_SIZE)
+	while (index < REG_NUMBER)
 	{
 		value = PyLong_FromSize_t(process->registers[index].content.buffer);
 		if (!value || PyTuple_SetItem(tuple, index, value) < 0)
 			return (-1);
 		index++;
 	}
+	if (PyDict_SetItemString(dict, "registers", tuple) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -303,6 +313,7 @@ PyObject	*py_processes(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 			&LST_CONT(traverse, t_process));
 		if (ret < 0 || PyList_Append(list, process) < 0)
 			return (NULL);
+		Py_DECREF(process);
 		traverse = traverse->next;
 	}
 	if (PyList_Reverse(list) < 0)
