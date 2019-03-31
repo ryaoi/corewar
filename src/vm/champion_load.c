@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:08:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:45:41 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int		vm_champion_load(t_player *player, int fd, int id)
 	if (player->header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player->champion_code = malloc(player->header.prog_size);
+	MALLOC_ASSERT(player->champion_code);
 	ret = read_whole(fd, (char*)player->champion_code, player->header.prog_size);
 	if (ret < (int32_t)player->header.prog_size)
 		return (ERR_CHAMP_READ);
