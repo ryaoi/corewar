@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 15:58:02 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 17:43:39 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,20 +104,28 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
 
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
-	PyObject	*ret;
+	PyObject	*err;
+	PyObject	*py_game_cont;
+	int			game_cont;
 
+	/* TODO what happens when game is over? */
 	if (!self->ready)
 	{
-		ret = PyObject_CallMethod(self, "prepare", NULL);
-		if (!ret)
+		err = PyObject_CallMethod(self, "prepare", NULL);
+		if (!err)
 			return (NULL);
-		Py_DECREF(ret);
-		ret = NULL;
+		Py_DECREF(err);
+		err = NULL;
 	}
-	advance_cycle(&self->data);
+	game_cont = advance_cycle(&self->data);
 	py_save_logs(&self->data.state.log_info, self->logs);
-	Py_INCREF(Py_None);
-	return (Py_None);
+	if (game_cont)
+	{
+		Py_INCREF(Py_True);
+		return (Py_True);
+	}
+	Py_INCREF(Py_False);
+	return (Py_False);
 }
 
 PyObject	*py_mem_dump(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/31 15:53:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 18:26:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,5 @@ void	vm_state_clear(t_vm_state *state)
 {
 	array_clear(&state->players, player_destroy);
 	list_del(&state->processes, process_free);
+	logs_destroy(&state->log_info);
 }

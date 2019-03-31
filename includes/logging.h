@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:29:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 18:27:49 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ typedef struct		s_log_info
 	size_t				log_heads[e_log_level_max];
 }					t_log_info;
 
-/* TODO actually log everything */
 void	log_level_va(t_log_info *info, uint64_t type, const char *format,
 			va_list *ap);
 void	log_level(t_log_info *info, uint64_t type, const char *format, ...);
 void	logs_init(t_log_info *info);
+void	logs_destroy(t_log_info *info);
 
 #endif

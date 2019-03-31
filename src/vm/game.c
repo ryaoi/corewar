@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 16:46:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 18:53:25 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,39 @@ static void	kill_lazy_processes(t_game_data *game)
 		game->checks_since_dec++;
 }
 
+static void	log_game_over(t_game_data *game)
+{
+	size_t	index;
+	size_t	winner;
+
+	if (game->cycles_to_die <= 0)
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: cycles_to_die became negative.");
+	else
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: no alive processes.");
+	winner = 0;
+	index = 1;
+	while (index < game->state.players.length)
+	{
+		if (ARRAY_PTR(game->state.players, t_player)[index].live >
+			ARRAY_PTR(game->state.players, t_player)[winner].live)
+			winner = index;
+		index++;
+	}
+	log_level(&game->state.log_info, e_log_game,
+		"Winner: player %s, of id %d",
+		ARRAY_PTR(game->state.players, t_player)[winner].header.prog_name,
+		ARRAY_PTR(game->state.players, t_player)[winner].id);
+}
+
 int		advance_cycle(t_game_data *game)
 {
 	if (game->cycles_to_die <= 0 || !game->state.processes)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	vm_exec_cycle(&game->state);
 	if (game->state.cycle_count - game->last_check >= (size_t)game->cycles_to_die)
 	{
@@ -92,6 +121,9 @@ int		advance_cycle(t_game_data *game)
 		game->last_check = game->state.cycle_count;
 	}
 	if (game->cycles_to_die <= 0 || !game->state.processes)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	return (1);
 }

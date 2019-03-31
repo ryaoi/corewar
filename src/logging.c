@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 16:22:00 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 18:53:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 18:27:41 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,27 @@ void	logs_init(t_log_info *info)
 	while (index < e_log_level_max)
 	{
 		array_init(&info->logs[index], sizeof(t_log_string));
+		index++;
+	}
+}
+
+static void	log_string_destroy(void *ptr)
+{
+	t_log_string	*string;
+
+	string = ptr;
+	free(string->string);
+	string->string = NULL;
+}
+
+void	logs_destroy(t_log_info *info)
+{
+		size_t	index;
+
+	index = 0;
+	while (index < e_log_level_max)
+	{
+		array_clear(&info->logs[index], log_string_destroy);
 		index++;
 	}
 }
