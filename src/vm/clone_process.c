@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/31 16:44:54 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:55:39 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	new_process.registers[0].content = byte_order_swap(
 		(t_bigend_buffer){(int64_t)player_id});
 	search = 0;
-	/* TODO error check */
 	while (search < state->players.length)
 	{
 		if (ARRAY_PTR(state->players, t_player)[search].id == player_id)

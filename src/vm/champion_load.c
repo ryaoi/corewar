@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 16:45:41 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:54:53 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,11 @@
 #include <fcntl.h>
 #include <errno.h>
 
-/* TODO python interface for this */
-
 int		vm_champion_load_file(t_player *player, const char *filename, int id)
 {
 	int	fd;
 	int	ret;
 
-	/* TODO check there's no other champion with the same id */
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
@@ -33,7 +30,6 @@ int		vm_champion_load_file(t_player *player, const char *filename, int id)
 	}
 	ret = vm_champion_load(player, fd, id);
 	close(fd);
-	/* TODO logging system? */
 	if (ret == ERR_HEADER_READ)
 		ft_dprintf(2,
 			"Error reading file %s: unexpected eof before end of header\n",
@@ -58,7 +54,6 @@ int		vm_champion_load(t_player *player, int fd, int id)
 	int			ret;
 
 	ret = read_whole(fd, (char*)&player->header, sizeof(t_header));
-	/* TODO good error handling */
 	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
 	player->header.magic = byte_order_swap(

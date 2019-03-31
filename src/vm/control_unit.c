@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 14:48:17 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:03:35 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	load_arg.buffer = 0;
 	if (instr->instr_args[argument].arg_type == e_register)
 	{
-		/* TODO what to do if register index is higher than NUM_REG? */
 		load_arg = mem_load(state, address + instr->size, 1);
 		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[7];
 		if (!instr->instr_args[argument].arg.reg_index

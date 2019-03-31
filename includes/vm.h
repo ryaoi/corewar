@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/31 15:25:35 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:55:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ typedef struct		s_register
 
 typedef struct		s_direct
 {
-	/* uint8_t			relative; */
 	t_bigend_buffer	content;
 }					t_direct;
 

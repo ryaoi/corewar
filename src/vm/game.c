@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:13:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:46:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,6 @@ void	prepare_game(t_game_data *game, t_array *players,
 	game->live_since_dec = 0;
 	game->checks_since_dec = 0;
 }
-
-/* static void	clear_game(t_vm_state *state)
-{
-	array_clear(&state->players, NULL);
-	list_del(&state->processes, free_stub);
-	free(state);
-} */
 
 static void	kill_lazy_processes(t_game_data *game)
 {
