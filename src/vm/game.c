@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 18:53:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 19:10:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	log_game_over(t_game_data *game)
 		index++;
 	}
 	log_level(&game->state.log_info, e_log_game,
-		"Winner: player %s, of id %d",
+		"Winner: %s, of id %d",
 		ARRAY_PTR(game->state.players, t_player)[winner].header.prog_name,
 		ARRAY_PTR(game->state.players, t_player)[winner].id);
 }
