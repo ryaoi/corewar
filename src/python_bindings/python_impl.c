@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 13:13:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 15:58:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs, size_t cycle)
 				return (-1);
 			info->log_heads[log_level]++;
 		}
+		array_clear(&info->logs[log_level], log_string_destroy);
+		info->log_heads[log_level] = 0;
 		log_level++;
 	}
 	return (0);
@@ -110,13 +112,12 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs, size_t cycle)
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
 	PyObject	*err;
-	PyObject	*py_game_cont;
 	int			game_cont;
 
 	/* TODO what happens when game is over? */
 	if (!self->ready)
 	{
-		err = PyObject_CallMethod(self, "prepare", NULL);
+		err = PyObject_CallMethod((PyObject*)self, "prepare", NULL);
 		if (!err)
 			return (NULL);
 		Py_DECREF(err);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   python_bindings.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 19:01:57 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/30 18:49:25 by alex             ###   ########.fr       */
+/*   Updated: 2019/04/01 15:57:49 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static struct PyModuleDef	g_corelib_module = {
 	"corelib",
 	"Interface for the Corewars game",
 	-1,
-	g_module_methods
+	g_module_methods,
+	.m_slots = NULL
 };
 
 static PyMemberDef			g_py_game_members[] = {

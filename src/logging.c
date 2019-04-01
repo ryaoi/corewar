@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 16:22:00 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 21:50:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 15:06:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	logs_init(t_log_info *info)
 	}
 }
 
-static void	log_string_destroy(void *ptr)
+void	log_string_destroy(void *ptr)
 {
 	t_log_string	*string;
 
