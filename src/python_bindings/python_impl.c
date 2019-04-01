@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 21:52:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 13:13:27 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,30 +56,35 @@ int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused1),
 	return (0);
 }
 
-static int	py_append_log(PyObject *py_log, t_log_string *string)
+static int	py_append_log(PyObject *py_log, t_log_string *string, size_t cycle)
 {
 	PyObject	*py_string;
 	PyObject	*py_id;
+	PyObject	*py_creation_cycle;
 	PyObject	*py_log_string;
 
 	py_string = PyUnicode_FromString(string->string);
 	if (!py_string)
 		return (-1);
-	py_id = PyLong_FromLong(string->id);
+	py_id = PyLong_FromSize_t(string->id);
 	if (!py_id)
 		return (-1);
-	py_log_string = PyTuple_New(2);
+	py_creation_cycle = PyLong_FromSize_t(cycle);
+	if (!py_creation_cycle)
+		return (-1);
+	py_log_string = PyTuple_New(3);
 	if (!py_log_string)
 		return (-1);
 	PyTuple_SET_ITEM(py_log_string, 0, py_string);
 	PyTuple_SET_ITEM(py_log_string, 1, py_id);
+	PyTuple_SET_ITEM(py_log_string, 2, py_creation_cycle);
 	if (PyList_Append(py_log, py_log_string) < 0)
 		return (-1);
 	Py_DECREF(py_log_string);
 	return (0);
 }
 
-static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
+static int	py_save_logs(t_log_info	*info, PyObject *py_logs, size_t cycle)
 {
 	enum e_log_level	log_level;
 	t_log_string		*string;
@@ -93,7 +98,7 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
 			string = &ARRAY_PTR(info->logs[log_level], t_log_string)
 				[info->log_heads[log_level]];
 			py_list = PyTuple_GetItem(py_logs, log_level);
-			if (!py_list || py_append_log(py_list, string) < 0)
+			if (!py_list || py_append_log(py_list, string, cycle) < 0)
 				return (-1);
 			info->log_heads[log_level]++;
 		}
@@ -118,7 +123,7 @@ PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 		err = NULL;
 	}
 	game_cont = advance_cycle(&self->data);
-	py_save_logs(&self->data.state.log_info, self->logs);
+	py_save_logs(&self->data.state.log_info, self->logs, self->data.state.cycle_count);
 	if (game_cont)
 	{
 		Py_INCREF(Py_True);
