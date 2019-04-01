@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:09:20 by alex              #+#    #+#             */
-/*   Updated: 2019/03/31 17:15:31 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	impl_fork(t_vm_state *state, t_process *process, t_instr *instr)
 {
-	int64_t	offset;
+	int32_t	offset;
 
 	offset = byte_order_swap(
 		instr->instr_args[0].arg.direct.content).buffer;

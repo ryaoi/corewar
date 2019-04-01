@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:22:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	impl_st(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	load_buffer;
-	int64_t			offset;
+	int32_t			offset;
 
 	load_buffer.buffer = 0;
 	if (instr->instr_args[1].arg_type == e_register)

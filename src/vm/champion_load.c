@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:25:46 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:08:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int		vm_champion_load(t_player *player, int fd, int id)
 	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
 	player->header.magic = byte_order_swap(
-		(t_bigend_buffer){(size_t)player->header.magic << 32}).buffer;
+		(t_bigend_buffer){player->header.magic}).buffer;
 	if (player->header.magic != COREWAR_EXEC_MAGIC)
 		return (ERR_HEADER_MAGIC);
 	player->header.prog_size = byte_order_swap(
-		(t_bigend_buffer){(size_t)player->header.prog_size << 32}).buffer;
+		(t_bigend_buffer){player->header.prog_size}).buffer;
 	if (player->header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player->champion_code = malloc(player->header.prog_size);

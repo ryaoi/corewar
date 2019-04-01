@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:17:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	impl_ldi(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	first_param;
 	t_bigend_buffer	second_param;
-	int64_t			offset;
+	int32_t			offset;
 
 	first_param.buffer = 0;
 	second_param.buffer = 0;

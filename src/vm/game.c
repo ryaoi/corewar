@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 21:58:37 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:40:55 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	prepare_game(t_game_data *game, t_array *players,
 	game->cycles_to_die = CYCLE_TO_DIE;
 	game->live_since_dec = 0;
 	game->checks_since_dec = 0;
+	game->last_check = 0;
 }
 
 static void	kill_lazy_processes(t_game_data *game)

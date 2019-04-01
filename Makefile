@@ -15,6 +15,9 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	vm/util.c \
 	vm/buffer_invert_bits.c \
 	vm/buffer_is_zero.c \
+	vm/instr_impl/impl_and.c \
+	vm/instr_impl/impl_or.c \
+	vm/instr_impl/impl_xor.c \
 	vm/instr_impl/impl_add.c \
 	vm/instr_impl/impl_aff.c \
 	vm/instr_impl/impl_ld.c \

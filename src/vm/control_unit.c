@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 16:03:35 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:36:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	if (instr->instr_args[argument].arg_type == e_register)
 	{
 		load_arg = mem_load(state, address + instr->size, 1);
-		instr->instr_args[argument].arg.reg_index = ((uint8_t*)&load_arg.buffer)[7];
+		instr->instr_args[argument].arg.reg_index
+			= ((uint8_t*)&load_arg.buffer)[sizeof(load_arg.buffer) - 1];
 		if (!instr->instr_args[argument].arg.reg_index
 			|| instr->instr_args[argument].arg.reg_index > REG_NUMBER)
 			instr->invalid = 1;
@@ -62,7 +63,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	if (g_opcode_table[instr->opcode].has_ocp)
 	{
 		load_buffer = mem_load(state, address + instr->size, 1);
-		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[7]);
+		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[sizeof(load_buffer.buffer) - 1]);
 		arg_types_ocp(instr, ocp);
 		instr->size++;
 	}
@@ -105,7 +106,7 @@ enum e_instr	fetch_opcode(t_vm_state *state, size_t address)
 	enum e_instr	opcode;
 
 	load_buffer = mem_load(state, address, 1);
-	opcode = ((uint8_t*)&load_buffer.buffer)[7] - 1;
+	opcode = ((uint8_t*)&load_buffer.buffer)[sizeof(load_buffer.buffer) - 1] - 1;
 	if (opcode > e_invalid)
 		opcode = e_invalid;
 	return (opcode);

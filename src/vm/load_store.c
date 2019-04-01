@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:30:29 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:03:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size)
 	ASSERT(size <= REG_SIZE, "Tried to load size larger than REG_SIZE");
 	index = 0;
 	ret.buffer = 0;
-	msb = 8 - size;
+	msb = sizeof(ret.buffer) - size;
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;
@@ -49,7 +49,7 @@ void	mem_store(t_vm_state *state, int64_t address, size_t size,
 
 	ASSERT(size <= REG_SIZE, "Tried to store size larger than REG_SIZE");
 	index = 0;
-	msb = 8 - size;
+	msb = sizeof(store.buffer) - size;
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;

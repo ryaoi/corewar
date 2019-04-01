@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/31 16:55:08 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:01:30 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ typedef struct		s_player
 typedef struct		s_bigend_buffer
 {
 	/* TODO max buffer size? asserts? */
-	size_t		buffer;
+	uint32_t	buffer;
 }					t_bigend_buffer;
 
 typedef struct		s_register
@@ -154,13 +154,13 @@ typedef struct		s_process
 {
 	t_register	registers[REG_NUMBER];
 	t_player	*player;
-	size_t		program_counter;
-	int			carry;
-	int			busy;
-	uint8_t		has_jumped;
+	uint32_t	program_counter;
 	size_t		live_executed;
 	size_t		id;
 	size_t		birth_cycle;
+	int32_t		busy;
+	uint8_t		carry;
+	uint8_t		has_jumped;
 	enum e_instr	pending_operation;
 }					t_process;
 
