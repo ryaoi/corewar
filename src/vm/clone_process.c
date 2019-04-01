@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/04/01 17:12:47 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 19:34:55 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ size_t	vm_new_id(t_vm_state *state)
 void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 {
 	t_process	new_process;
-	t_list		*new_node;
 	size_t		search;
 
 	ft_bzero(&new_process, sizeof(t_process));
@@ -47,15 +46,12 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else
 		new_process.busy = 1;
-	new_node = list_new(&new_process, sizeof(t_process));
-	MALLOC_ASSERT(new_node);
-	list_add(&state->processes, new_node);
+	array_push_back(&state->processes, &new_process);
 }
 
 void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 {
 	t_process	new_process;
-	t_list		*new_node;
 
 	ft_bzero(&new_process, sizeof(t_process));
 	ft_memcpy(new_process.registers, original->registers,
@@ -71,7 +67,5 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else
 		new_process.busy = 1;
-	new_node = list_new(&new_process, sizeof(t_process));
-	MALLOC_ASSERT(new_node);
-	list_add(&state->processes, new_node);
+	array_push_back(&state->processes, &new_process);
 }

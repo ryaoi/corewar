@@ -6,17 +6,18 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 19:40:48 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:51:31 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_zjmp(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_zjmp(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	int32_t	offset;
+	t_process	*process;
 
-	(void)state;
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	offset = byte_order_swap(instr->instr_args[0].arg.direct.content).buffer;
 	if (process->carry)
 	{

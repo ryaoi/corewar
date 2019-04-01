@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/01 17:01:30 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:49:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ typedef struct		s_process
 
 typedef struct		s_vm_state
 {
-	t_list		*processes;
+	t_array		processes;
 	t_array		players;
 	size_t		process_count;
 	size_t		cycle_count;
@@ -191,39 +191,39 @@ typedef struct		s_ocp
 	enum e_instr_arg_type	fields[3];
 }					t_ocp;
 
-typedef void		(*t_instr_impl)(t_vm_state *, t_process *, t_instr *);
+typedef void		(*t_instr_impl)(t_vm_state *, size_t, t_instr *);
 void				impl_live(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_ld(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_st(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_add(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_sub(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_and(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_or(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_xor(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_zjmp(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_ldi(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_sti(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_fork(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_lld(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_lldi(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_lfork(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 void				impl_aff(t_vm_state *state,
-						t_process *process, t_instr *instr);
+						size_t process, t_instr *instr);
 
 void				arg_types_ocp(t_instr *instr, t_ocp ocp);
 void				arg_types_non_ocp(t_instr *instr);
@@ -248,7 +248,7 @@ int					vm_champion_load_file(t_player *player, const char *filename, int id);
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
-void				process_exec_cycle(t_vm_state *state, t_process *process);
+void				process_exec_cycle(t_vm_state *state, size_t process);
 void				dump_memory(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];

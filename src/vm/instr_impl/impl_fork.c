@@ -6,23 +6,24 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:09:20 by alex              #+#    #+#             */
-/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:53:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_fork(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_fork(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	int32_t	offset;
 
 	offset = byte_order_swap(
 		instr->instr_args[0].arg.direct.content).buffer;
-	offset = process->program_counter + (offset % IDX_MOD);
-	vm_clone_process(state, offset, process);
+	offset = ARRAY_PTR(state->processes, t_process)[p_index].program_counter
+		+ (offset % IDX_MOD);
+	vm_clone_process(state, offset, &ARRAY_PTR(state->processes, t_process)[p_index]);
 	log_level(&state->log_info, e_log_fork,
 		"Process %zu creates %zu at offset %zu",
-		process->id,
-		LST_CONT(state->processes, t_process).id,
+		ARRAY_PTR(state->processes, t_process)[p_index].id,
+		ARRAY_PTR(state->processes, t_process)[state->processes.length - 1].id,
 		offset % MEM_SIZE);
 }

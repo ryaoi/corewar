@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:41:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:51:11 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ static t_bigend_buffer	bitwise_or(t_bigend_buffer f, t_bigend_buffer s)
 	return (ret);
 }
 
-void					impl_or(t_vm_state *state, t_process *process,
+void					impl_or(t_vm_state *state, size_t p_index,
 							t_instr *instr)
 {
 	t_bigend_buffer	first_operand;
 	t_bigend_buffer	second_operand;
 	uint32_t			offset;
+	t_process	*process;
 
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	if (instr->instr_args[0].arg_type == e_register)
 		ft_memcpy(&first_operand,
 			&process->registers[instr->instr_args[0].arg.reg_index].content,

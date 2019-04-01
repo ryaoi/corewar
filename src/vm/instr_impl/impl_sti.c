@@ -6,18 +6,20 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/04/01 17:11:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:51:21 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_sti(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_sti(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_bigend_buffer	first_param;
 	t_bigend_buffer	second_param;
 	int32_t			offset;
+	t_process	*process;
 
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	first_param.buffer = 0;
 	second_param.buffer = 0;
 	if (instr->instr_args[1].arg_type == e_register)
