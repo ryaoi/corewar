@@ -1,6 +1,5 @@
 CORELIB_SRCS = python_bindings/python_bindings.c \
 	python_bindings/python_impl.c \
-	assert.c \
 	logging.c \
 	vm/vm.c \
 	vm/ocp.c \
@@ -32,6 +31,8 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 ASM_SRCS =
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
+		libft/includes/array.h \
+		libft/includes/ft_assert.h \
 		ft_printf/includes/ft_printf.h \
 		includes/instr.h \
 		includes/vm.h \
@@ -40,7 +41,8 @@ CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
-TESTS_SRCS = short_game.c
+TESTS_SRCS = short_game.c \
+	complete_game.c
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 

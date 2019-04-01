@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/28 14:02:07 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 18:26:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,30 @@ void	vm_state_init(t_vm_state *state)
 	ft_bzero(state, sizeof(t_vm_state));
 	array_init(&state->players, sizeof(t_player));
 	state->processes = NULL;
+}
+
+static void	player_destroy(void *ptr)
+{
+	t_player *player;
+
+	player = ptr;
+	free(player->champion_code);
+	player->champion_code = NULL;
+}
+
+static void	process_free(void *ptr, size_t stub)
+{
+	t_process *process;
+
+	(void)stub;
+	process = ptr;
+	process->player = NULL;
+	free(process);
+}
+
+void	vm_state_clear(t_vm_state *state)
+{
+	array_clear(&state->players, player_destroy);
+	list_del(&state->processes, process_free);
+	logs_destroy(&state->log_info);
 }

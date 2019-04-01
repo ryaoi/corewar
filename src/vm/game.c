@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:13:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/03/31 21:58:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,6 @@ void	prepare_game(t_game_data *game, t_array *players,
 	game->checks_since_dec = 0;
 }
 
-/* static void	clear_game(t_vm_state *state)
-{
-	array_clear(&state->players, NULL);
-	list_del(&state->processes, free_stub);
-	free(state);
-} */
-
 static void	kill_lazy_processes(t_game_data *game)
 {
 	t_list	**traverse;
@@ -81,6 +74,9 @@ static void	kill_lazy_processes(t_game_data *game)
 	if (game->checks_since_dec >= MAX_CHECKS || game->live_since_dec >= NBR_LIVE)
 	{
 		game->cycles_to_die = ft_max(game->cycles_to_die - CYCLE_DELTA, 0);
+		log_level(&game->state.log_info, e_log_game,
+			"cycles_to_die is now %d",
+			game->cycles_to_die);
 		game->checks_since_dec = 0;
 		game->live_since_dec = 0;
 	}
@@ -88,10 +84,39 @@ static void	kill_lazy_processes(t_game_data *game)
 		game->checks_since_dec++;
 }
 
+static void	log_game_over(t_game_data *game)
+{
+	size_t	index;
+	size_t	winner;
+
+	if (game->cycles_to_die <= 0)
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: cycles_to_die became negative.");
+	else
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: no alive processes.");
+	winner = 0;
+	index = 1;
+	while (index < game->state.players.length)
+	{
+		if (ARRAY_PTR(game->state.players, t_player)[index].live >
+			ARRAY_PTR(game->state.players, t_player)[winner].live)
+			winner = index;
+		index++;
+	}
+	log_level(&game->state.log_info, e_log_game,
+		"Winner: %s, of id %d",
+		ARRAY_PTR(game->state.players, t_player)[winner].header.prog_name,
+		ARRAY_PTR(game->state.players, t_player)[winner].id);
+}
+
 int		advance_cycle(t_game_data *game)
 {
 	if (game->cycles_to_die <= 0 || !game->state.processes)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	vm_exec_cycle(&game->state);
 	if (game->state.cycle_count - game->last_check >= (size_t)game->cycles_to_die)
 	{
@@ -99,6 +124,9 @@ int		advance_cycle(t_game_data *game)
 		game->last_check = game->state.cycle_count;
 	}
 	if (game->cycles_to_die <= 0 || !game->state.processes)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	return (1);
 }

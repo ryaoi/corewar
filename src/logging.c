@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 16:22:00 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 18:53:32 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 15:06:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,22 @@ static void	log_save(t_log_info *info, uint64_t type,
 void	log_level_va(t_log_info *info, uint64_t type,
 			const char *format, va_list *ap)
 {
-	if (info->log_mode == e_mode_stdout)
+	if (info->log_active[type])
 	{
-		ft_printf_va(format, ap);
-		ft_printf("\n");
-	}
-	else if (info->log_mode == e_mode_stderr)
-	{
-		ft_dprintf_va(2, format, ap);
-		ft_dprintf_va(2, "\n", ap);
-	}
-	else if (info->log_mode == e_mode_save)
-	{
-		log_save(info, type, format, ap);
+		if (info->log_mode == e_mode_stdout)
+		{
+			ft_printf_va(format, ap);
+			ft_printf("\n");
+		}
+		else if (info->log_mode == e_mode_stderr)
+		{
+			ft_dprintf_va(2, format, ap);
+			ft_dprintf_va(2, "\n", ap);
+		}
+		else if (info->log_mode == e_mode_save)
+		{
+			log_save(info, type, format, ap);
+		}
 	}
 	info->logs_num++;
 }
@@ -63,6 +66,27 @@ void	logs_init(t_log_info *info)
 	while (index < e_log_level_max)
 	{
 		array_init(&info->logs[index], sizeof(t_log_string));
+		index++;
+	}
+}
+
+void	log_string_destroy(void *ptr)
+{
+	t_log_string	*string;
+
+	string = ptr;
+	free(string->string);
+	string->string = NULL;
+}
+
+void	logs_destroy(t_log_info *info)
+{
+		size_t	index;
+
+	index = 0;
+	while (index < e_log_level_max)
+	{
+		array_clear(&info->logs[index], log_string_destroy);
 		index++;
 	}
 }
