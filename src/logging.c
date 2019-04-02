@@ -6,11 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 16:22:00 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 15:06:03 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/02 16:06:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "logging.h"
+#include "ft_assert.h"
 
 static void	log_save(t_log_info *info, uint64_t type,
 				const char *format, va_list *ap)
@@ -19,7 +20,8 @@ static void	log_save(t_log_info *info, uint64_t type,
 
 	if (type >= e_log_level_max)
 		return ;
-	log.string = ft_memalloc(1024);
+	log.string = malloc(1024);
+	MALLOC_ASSERT(log.string);
 	ft_snprintf_va(log.string, 1024, format, ap);
 	log.id = info->logs_num;
 	array_push_back(&info->logs[type], &log);
