@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   python_impl.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/30 19:42:13 by alex             ###   ########.fr       */
+/*   Updated: 2019/04/01 21:31:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 void		py_game_dealloc(t_game_py_wrap *self)
 {
-	/* TODO call function to clear data */;
-	free(self);
+	if (self->ready)
+		vm_state_clear(&self->data.state);
+	Py_DECREF(self->champions);
+	self->champions = NULL;
+	Py_DECREF(self->logs);
+	self->logs = NULL;
+	Py_TYPE(self)->tp_free(self);
 }
 
 static int	py_init_logs(PyObject *logs)
@@ -48,34 +53,38 @@ int		py_game_init(t_game_py_wrap *self, PyObject *Py_UNUSED(unused1),
 		return (-1);
 	if (py_init_logs(self->logs) < 0)
 		return (-1);
-	self->memory = Py_None;
-	Py_INCREF(Py_None);
 	return (0);
 }
 
-static int	py_append_log(PyObject *py_log, t_log_string *string)
+static int	py_append_log(PyObject *py_log, t_log_string *string, size_t cycle)
 {
 	PyObject	*py_string;
 	PyObject	*py_id;
+	PyObject	*py_creation_cycle;
 	PyObject	*py_log_string;
 
 	py_string = PyUnicode_FromString(string->string);
 	if (!py_string)
 		return (-1);
-	py_id = PyLong_FromLong(string->id);
+	py_id = PyLong_FromSize_t(string->id);
 	if (!py_id)
 		return (-1);
-	py_log_string = PyTuple_New(2);
+	py_creation_cycle = PyLong_FromSize_t(cycle);
+	if (!py_creation_cycle)
+		return (-1);
+	py_log_string = PyTuple_New(3);
 	if (!py_log_string)
 		return (-1);
 	PyTuple_SET_ITEM(py_log_string, 0, py_string);
 	PyTuple_SET_ITEM(py_log_string, 1, py_id);
+	PyTuple_SET_ITEM(py_log_string, 2, py_creation_cycle);
 	if (PyList_Append(py_log, py_log_string) < 0)
 		return (-1);
+	Py_DECREF(py_log_string);
 	return (0);
 }
 
-static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
+static int	py_save_logs(t_log_info	*info, PyObject *py_logs, size_t cycle)
 {
 	enum e_log_level	log_level;
 	t_log_string		*string;
@@ -89,10 +98,12 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
 			string = &ARRAY_PTR(info->logs[log_level], t_log_string)
 				[info->log_heads[log_level]];
 			py_list = PyTuple_GetItem(py_logs, log_level);
-			if (!py_list || py_append_log(py_list, string) < 0)
+			if (!py_list || py_append_log(py_list, string, cycle) < 0)
 				return (-1);
 			info->log_heads[log_level]++;
 		}
+		array_clear(&info->logs[log_level], log_string_destroy);
+		info->log_heads[log_level] = 0;
 		log_level++;
 	}
 	return (0);
@@ -100,20 +111,27 @@ static int	py_save_logs(t_log_info	*info, PyObject *py_logs)
 
 PyObject	*py_update(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
-	PyObject	*ret;
+	PyObject	*err;
+	int			game_cont;
 
+	/* TODO what happens when game is over? */
 	if (!self->ready)
 	{
-		ret = PyObject_CallMethod(self, "prepare", NULL);
-		if (!ret)
+		err = PyObject_CallMethod((PyObject*)self, "prepare", NULL);
+		if (!err)
 			return (NULL);
-		Py_DECREF(ret);
-		ret = NULL;
+		Py_DECREF(err);
+		err = NULL;
 	}
-	advance_cycle(&self->data);
-	py_save_logs(&self->data.state.log_info, self->logs);
-	Py_INCREF(Py_None);
-	return (Py_None);
+	game_cont = advance_cycle(&self->data);
+	py_save_logs(&self->data.state.log_info, self->logs, self->data.state.cycle_count);
+	if (game_cont)
+	{
+		Py_INCREF(Py_True);
+		return (Py_True);
+	}
+	Py_INCREF(Py_False);
+	return (Py_False);
 }
 
 PyObject	*py_mem_dump(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
@@ -154,6 +172,11 @@ PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	PyObject	*champion;
 	int			is_list;
 
+	if (self->ready)
+	{
+		PyErr_SetString(PyExc_RuntimeError, "Class is only meant to be used for one match. To restart, create another instance.");
+		return (NULL);
+	}
 	is_list = PyList_Check(self->champions);
 	if (is_list)
 		list_size = PyList_Size(self->champions);
@@ -176,6 +199,9 @@ PyObject	*py_prepare(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 	}
 	logs_init(&log_opts);
 	log_opts.log_mode = e_mode_save;
+	ft_memcpy(&log_opts.log_active,
+		(uint8_t[e_log_level_max]){1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		sizeof(log_opts.log_active));
 	prepare_game(&self->data, &players, &log_opts);
 	Py_INCREF(Py_None);
 	self->ready = 1;
@@ -186,7 +212,6 @@ static int	py_player_set_properties(PyObject *dict, t_player *player)
 {
 	PyObject	*property;
 
-	/* TODO use PyUnicode_FromStringAndSize ? */
 	property = PyUnicode_FromString(player->header.prog_name);
 	if (!property || PyDict_SetItemString(dict, "name", property) < 0)
 		return (-1);
@@ -236,17 +261,19 @@ static int	py_process_set_registers(PyObject *dict, t_process *process)
 	PyObject	*value;
 	size_t		index;
 
-	tuple = PyTuple_New(REG_SIZE);
+	tuple = PyTuple_New(REG_NUMBER);
 	if (!tuple)
 		return (-1);
 	index = 0;
-	while (index < REG_SIZE)
+	while (index < REG_NUMBER)
 	{
 		value = PyLong_FromSize_t(process->registers[index].content.buffer);
 		if (!value || PyTuple_SetItem(tuple, index, value) < 0)
 			return (-1);
 		index++;
 	}
+	if (PyDict_SetItemString(dict, "registers", tuple) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -287,23 +314,24 @@ PyObject	*py_processes(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
 	PyObject	*list;
 	PyObject	*process;
-	t_list		*traverse;
+	size_t		index;
 	int			ret;
 
 	list = PyList_New(0);
 	if (!list)
 		return (NULL);
-	traverse = self->data.state.processes;
-	while (traverse)
+	index = 0;
+	while (index < self->data.state.processes.length)
 	{
 		process = PyDict_New();
 		if (!process)
 			return (NULL);
 		ret = py_process_set_properties(process,
-			&LST_CONT(traverse, t_process));
+			&ARRAY_PTR(self->data.state.processes, t_process)[index]);
 		if (ret < 0 || PyList_Append(list, process) < 0)
 			return (NULL);
-		traverse = traverse->next;
+		Py_DECREF(process);
+		index++;
 	}
 	if (PyList_Reverse(list) < 0)
 		return (NULL);

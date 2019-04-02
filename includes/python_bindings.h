@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   python_bindings.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 19:02:25 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/30 18:45:55 by alex             ###   ########.fr       */
+/*   Updated: 2019/03/31 15:46:06 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _PYTHON_BINDINGS_H
 # define _PYTHON_BINDINGS_H
 #include <Python.h>
+#include <structmember.h>
 #include "game.h"
 
 typedef struct	s_game_py_wrap
@@ -21,7 +22,6 @@ typedef struct	s_game_py_wrap
 	t_game_data	data;
 	PyObject	*champions;
 	PyObject	*logs;
-	PyObject	*memory;
 	size_t		py_curr_cycle;
 	uint8_t		ready;
 }				t_game_py_wrap;

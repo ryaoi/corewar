@@ -6,11 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/03/26 11:43:50 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 19:34:55 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "ft_assert.h"
 
 size_t	vm_new_id(t_vm_state *state)
 {
@@ -24,9 +25,8 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 
 	ft_bzero(&new_process, sizeof(t_process));
 	new_process.registers[0].content = byte_order_swap(
-		(t_bigend_buffer){(int64_t)player_id});
+		(t_bigend_buffer){(int32_t)player_id});
 	search = 0;
-	/* TODO error check */
 	while (search < state->players.length)
 	{
 		if (ARRAY_PTR(state->players, t_player)[search].id == player_id)
@@ -36,6 +36,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 		}
 		search++;
 	}
+	ASSERT(search < state->players.length, "Tried to init process with player id that does not exist.");
 	new_process.program_counter = address;
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
@@ -45,7 +46,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else
 		new_process.busy = 1;
-	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
+	array_push_back(&state->processes, &new_process);
 }
 
 void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
@@ -66,5 +67,5 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 		new_process.busy = g_opcode_table[new_process.pending_operation].cycles;
 	else
 		new_process.busy = 1;
-	list_add(&state->processes, list_new(&new_process, sizeof(t_process)));
+	array_push_back(&state->processes, &new_process);
 }

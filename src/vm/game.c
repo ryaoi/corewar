@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:13:53 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 19:42:39 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,43 +44,42 @@ void	prepare_game(t_game_data *game, t_array *players,
 	game->cycles_to_die = CYCLE_TO_DIE;
 	game->live_since_dec = 0;
 	game->checks_since_dec = 0;
+	game->last_check = 0;
 }
-
-/* static void	clear_game(t_vm_state *state)
-{
-	array_clear(&state->players, NULL);
-	list_del(&state->processes, free_stub);
-	free(state);
-} */
 
 static void	kill_lazy_processes(t_game_data *game)
 {
-	t_list	**traverse;
-	t_list	*pop;
+	size_t	index;
+	t_array	new_array;
 
-	traverse = &game->state.processes;
-	while (*traverse)
+	index = 0;
+	array_init(&new_array, sizeof(t_process));
+	while (index < game->state.processes.length)
 	{
-		if (!LST_CONT(*traverse, t_process).live_executed
-			&& LST_CONT(*traverse, t_process).birth_cycle
-				< (game->state.cycle_count - game->cycles_to_die))
+		if (ARRAY_PTR(game->state.processes, t_process)[index].live_executed
+			|| ARRAY_PTR(game->state.processes, t_process)[index].birth_cycle
+				>= (game->state.cycle_count - game->cycles_to_die))
 		{
-			log_level(&game->state.log_info, e_log_deaths,
-				"Process %d smothered!",
-				LST_CONT(*traverse, t_process).id);
-			pop = list_pop(traverse);
-			list_delone(&pop, free_stub);
+			game->live_since_dec
+				+= ARRAY_PTR(game->state.processes, t_process)[index].live_executed;
+			ARRAY_PTR(game->state.processes, t_process)[index].live_executed = 0;
+			array_push_back(&new_array,
+				&ARRAY_PTR(game->state.processes, t_process)[index]);
 		}
 		else
-		{
-			game->live_since_dec += LST_CONT(*traverse, t_process).live_executed;
-			LST_CONT(*traverse, t_process).live_executed = 0;
-			traverse = &((*traverse)->next);
-		}
+			log_level(&game->state.log_info, e_log_deaths,
+				"Process %d smothered!",
+				ARRAY_PTR(game->state.processes, t_process)[index].id);
+		index++;
 	}
+	array_clear(&game->state.processes, NULL);
+	game->state.processes = new_array;
 	if (game->checks_since_dec >= MAX_CHECKS || game->live_since_dec >= NBR_LIVE)
 	{
 		game->cycles_to_die = ft_max(game->cycles_to_die - CYCLE_DELTA, 0);
+		log_level(&game->state.log_info, e_log_game,
+			"cycles_to_die is now %d",
+			game->cycles_to_die);
 		game->checks_since_dec = 0;
 		game->live_since_dec = 0;
 	}
@@ -88,17 +87,49 @@ static void	kill_lazy_processes(t_game_data *game)
 		game->checks_since_dec++;
 }
 
+static void	log_game_over(t_game_data *game)
+{
+	size_t	index;
+	size_t	winner;
+
+	if (game->cycles_to_die <= 0)
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: cycles_to_die became negative.");
+	else
+		log_level(&game->state.log_info, e_log_game,
+			"Game over: no alive processes.");
+	winner = 0;
+	index = 1;
+	while (index < game->state.players.length)
+	{
+		if (ARRAY_PTR(game->state.players, t_player)[index].live >
+			ARRAY_PTR(game->state.players, t_player)[winner].live)
+			winner = index;
+		index++;
+	}
+	log_level(&game->state.log_info, e_log_game,
+		"Winner: %s, of id %d",
+		ARRAY_PTR(game->state.players, t_player)[winner].header.prog_name,
+		ARRAY_PTR(game->state.players, t_player)[winner].id);
+}
+
 int		advance_cycle(t_game_data *game)
 {
-	if (game->cycles_to_die <= 0 || !game->state.processes)
+	if (game->cycles_to_die <= 0 || !game->state.processes.length)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	vm_exec_cycle(&game->state);
 	if (game->state.cycle_count - game->last_check >= (size_t)game->cycles_to_die)
 	{
 		kill_lazy_processes(game);
 		game->last_check = game->state.cycle_count;
 	}
-	if (game->cycles_to_die <= 0 || !game->state.processes)
+	if (game->cycles_to_die <= 0 || !game->state.processes.length)
+	{
+		log_game_over(game);
 		return (0);
+	}
 	return (1);
 }

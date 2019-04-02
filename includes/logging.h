@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/29 18:34:48 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 15:22:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ enum	e_log_level
 	e_log_instr,
 	e_log_store,
 	e_log_load,
+	e_log_jump,
+	e_log_fork,
+	e_log_game,
 	e_log_deaths,
+	/* TODO e_log_winner_index ? */
 	e_log_memdump,
 	e_log_level_max
 };
@@ -48,12 +52,14 @@ typedef struct		s_log_info
 	size_t				logs_num;
 	t_array				logs[e_log_level_max];
 	size_t				log_heads[e_log_level_max];
+	uint8_t				log_active[e_log_level_max];
 }					t_log_info;
 
-/* TODO actually log everything */
 void	log_level_va(t_log_info *info, uint64_t type, const char *format,
 			va_list *ap);
 void	log_level(t_log_info *info, uint64_t type, const char *format, ...);
 void	logs_init(t_log_info *info);
+void	log_string_destroy(void *ptr);
+void	logs_destroy(t_log_info *info);
 
 #endif

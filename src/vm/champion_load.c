@@ -6,24 +6,22 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:08:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:08:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+#include "ft_assert.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-
-/* TODO python interface for this */
 
 int		vm_champion_load_file(t_player *player, const char *filename, int id)
 {
 	int	fd;
 	int	ret;
 
-	/* TODO check there's no other champion with the same id */
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
@@ -33,7 +31,6 @@ int		vm_champion_load_file(t_player *player, const char *filename, int id)
 	}
 	ret = vm_champion_load(player, fd, id);
 	close(fd);
-	/* TODO logging system? */
 	if (ret == ERR_HEADER_READ)
 		ft_dprintf(2,
 			"Error reading file %s: unexpected eof before end of header\n",
@@ -58,18 +55,18 @@ int		vm_champion_load(t_player *player, int fd, int id)
 	int			ret;
 
 	ret = read_whole(fd, (char*)&player->header, sizeof(t_header));
-	/* TODO good error handling */
 	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
 	player->header.magic = byte_order_swap(
-		(t_bigend_buffer){(size_t)player->header.magic << 32}).buffer;
+		(t_bigend_buffer){player->header.magic}).buffer;
 	if (player->header.magic != COREWAR_EXEC_MAGIC)
 		return (ERR_HEADER_MAGIC);
 	player->header.prog_size = byte_order_swap(
-		(t_bigend_buffer){(size_t)player->header.prog_size << 32}).buffer;
+		(t_bigend_buffer){player->header.prog_size}).buffer;
 	if (player->header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player->champion_code = malloc(player->header.prog_size);
+	MALLOC_ASSERT(player->champion_code);
 	ret = read_whole(fd, (char*)player->champion_code, player->header.prog_size);
 	if (ret < (int32_t)player->header.prog_size)
 		return (ERR_CHAMP_READ);
