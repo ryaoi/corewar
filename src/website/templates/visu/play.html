@@ -1,0 +1,31 @@
+{% load static from staticfiles %}
+{% load tools %}
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'visu/style1.css' %}">
+		<script src="jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<div class="title">
+			<h2>COREWAR</h2>
+		</div>
+		<div class="control">
+			<p>control</p>
+			<a href="../../{{ cycle|next_cycle }}/play" id="link_next_cycle">next_cycle</a>
+			{% ifequal play True %}
+			{% endifequal%}
+		</div>
+		<div class="mem">
+			<p>
+			{{screen}}
+			</p>
+		</div>
+		<div class="logs">
+					<ul>
+				{% for x in logs %}
+				<li>{{x}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</body>
+</html>

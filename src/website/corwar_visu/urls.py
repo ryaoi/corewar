@@ -20,3 +20,4 @@ urlpatterns = [
     path('visu/', include('visu.urls')),
     path('admin/', admin.site.urls),
 ]
+
