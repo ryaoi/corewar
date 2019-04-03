@@ -1,22 +1,15 @@
-{% load static %}
+{% load static from staticfiles %}
 <html>
-	<link rel="stylesheet" type="text/css" href="{% static 'visu/style.css' %}">
-<body>
-
-	<h2>this is in index.html of templates</h2>
-	<p>{{hello}}</p>
-
-	<div id="memdump">
-		{{screen}}
-	</div>
-	<div>
-		<ul>
-			{% for x in logs %}
-				{% for a in x %}
-				<li>{{a}}</li>
-				{% endfor %}
-			{% endfor %}
-		</ul>
-	</div>
-</body>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'visu/style1.css' %}">
+		<script src="jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<div class="title">
+			<h2>COREWAR</h2>
+		</div>
+		<div>
+			<a href="play/"><p>play</p></a>	
+		</div>
+	</body>
 </html>

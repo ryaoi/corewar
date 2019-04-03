@@ -6,17 +6,19 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 17:17:18 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:50:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_ld(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_ld(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_bigend_buffer	load_buffer;
-	int64_t			offset;
+	int32_t			offset;
+	t_process		*process;
 
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	load_buffer.buffer = 0;
 	if (instr->instr_args[0].arg_type == e_index)
 	{

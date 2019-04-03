@@ -6,17 +6,19 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 14:01:42 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:50:53 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_live(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 {
-	int		parameter;
-	size_t	index;
+	int			parameter;
+	size_t		index;
+	t_process	*process;
 
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	process->live_executed++;
 	parameter = byte_order_swap(
 		instr->instr_args[0].arg.direct.content).buffer;

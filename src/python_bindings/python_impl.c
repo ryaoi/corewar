@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 15:58:27 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:31:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,24 +314,24 @@ PyObject	*py_processes(t_game_py_wrap *self, PyObject *Py_UNUSED(unused))
 {
 	PyObject	*list;
 	PyObject	*process;
-	t_list		*traverse;
+	size_t		index;
 	int			ret;
 
 	list = PyList_New(0);
 	if (!list)
 		return (NULL);
-	traverse = self->data.state.processes;
-	while (traverse)
+	index = 0;
+	while (index < self->data.state.processes.length)
 	{
 		process = PyDict_New();
 		if (!process)
 			return (NULL);
 		ret = py_process_set_properties(process,
-			&LST_CONT(traverse, t_process));
+			&ARRAY_PTR(self->data.state.processes, t_process)[index]);
 		if (ret < 0 || PyList_Append(list, process) < 0)
 			return (NULL);
 		Py_DECREF(process);
-		traverse = traverse->next;
+		index++;
 	}
 	if (PyList_Reverse(list) < 0)
 		return (NULL);

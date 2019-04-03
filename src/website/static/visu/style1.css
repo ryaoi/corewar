@@ -1,0 +1,43 @@
+body {
+	
+	font-family: Menlo, Monaco, 'Courier New', monospace;
+}
+
+
+div {
+	border:1px solid black;
+}
+
+.title{
+	margin:auto;
+	width:50%;
+}
+.title h2{
+	font-size:2em;
+	margin: 3px auto;
+	text-align:center;
+}
+.titile p{
+	margin:0 auto;
+	text-align:center;
+}
+.control{
+	border:none;
+}
+
+.mem {
+	color:darkgray;
+	text-align: center;
+	font-size: 1em;
+	width:80em;
+	float:left;
+}
+
+.logs{
+	max-width:18%;
+	float:right;
+}
+
+ul{
+	list-style-type: none;
+}

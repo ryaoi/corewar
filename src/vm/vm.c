@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/03/31 18:26:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:54:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 
 int		vm_exec_cycle(t_vm_state *state)
 {
-	t_list	*traverse;
+	size_t	index;
+
 	log_level(&state->log_info, e_log_cycles,
 		"Cycle %d", state->cycle_count + 1);
-	traverse = state->processes;
-	while (traverse)
-	{
-		process_exec_cycle(state, &LST_CONT(traverse, t_process));
-		traverse = traverse->next;
-	}
+	index = state->processes.length - 1;
+	while (index-- > 0)
+		process_exec_cycle(state, index);
 	state->cycle_count++;
 	return (0);
 }
@@ -50,7 +48,7 @@ void	vm_state_init(t_vm_state *state)
 {
 	ft_bzero(state, sizeof(t_vm_state));
 	array_init(&state->players, sizeof(t_player));
-	state->processes = NULL;
+	array_init(&state->processes, sizeof(t_process));
 }
 
 static void	player_destroy(void *ptr)
@@ -62,19 +60,9 @@ static void	player_destroy(void *ptr)
 	player->champion_code = NULL;
 }
 
-static void	process_free(void *ptr, size_t stub)
-{
-	t_process *process;
-
-	(void)stub;
-	process = ptr;
-	process->player = NULL;
-	free(process);
-}
-
 void	vm_state_clear(t_vm_state *state)
 {
 	array_clear(&state->players, player_destroy);
-	list_del(&state->processes, process_free);
+	array_clear(&state->processes, NULL);
 	logs_destroy(&state->log_info);
 }

@@ -6,16 +6,18 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/21 15:51:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/01 21:50:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	impl_aff(t_vm_state *state, t_process *process, t_instr *instr)
+void	impl_aff(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_bigend_buffer	character_buffer;
+	t_process		*process;
 
+	process = &ARRAY_PTR(state->processes, t_process)[p_index];
 	character_buffer.buffer = 0;
 	(void)state;
 	character_buffer
