@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 19:39:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 20:17:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ int		add_token(t_line *line, int token_id, int start, int end)
 
 int		line_tokenize(t_line *line)
 {
-	size_t	len;
 	int		i;
 	int		j;
 	int		token_id;
@@ -178,7 +177,6 @@ int		line_tokenize(t_line *line)
 	token_id = 0;
 	i = 0;
 	j = 0;
-	len = ft_strlen(line->str);
 	while (token_id < 7)
 	{
 		if (token_id > 5)
@@ -200,7 +198,7 @@ int		line_tokenize(t_line *line)
 	return (SUCCESS);
 }
 
-int		validate_parameters(t_token *token, t_op opcode, int param_id)
+int		validate_param(t_token *token, t_op opcode, int param_id)
 {
 	int converted_type;
 
@@ -215,7 +213,10 @@ int		validate_parameters(t_token *token, t_op opcode, int param_id)
 	//printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
 	//printf("param_types[%d] = %d\n-------------------\n", param_id, opcode.param_types[param_id]);
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
-		ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
+	{
+		ft_putendl("not valid parameter_type for particular opcode.");
+		return (PARAM_FAIL);
+	}
 	return (SUCCESS);
 }
 
@@ -225,10 +226,7 @@ int		opcode_cmp(t_line *line)
 	int		instr;
 	int		param_id;
 
-	traverse = line->tokens;
 	if (!(traverse = line->tokens))
-		return (LINE_FAIL);
-	if (traverse->next == NULL)
 		return (LINE_FAIL);
 	instr = LST_CONT(traverse, t_token).op->opcode - 1;
 //	printf("line type : %d\n", line->type);
@@ -238,12 +236,12 @@ int		opcode_cmp(t_line *line)
 		ERROR("wrong number of parameters", OPCODE_CMP_FAIL);
 	if (traverse->next == NULL)
 		ERROR ("where are the params!!.", OPCODE_CMP_FAIL);
-	traverse = traverse->next;
+	if (!(traverse = traverse->next))
+		return (LINE_FAIL);
 	param_id = 0;
-	while (traverse || param_id < g_op_tab[instr].nbr_params)
+	while (traverse && param_id < g_op_tab[instr].nbr_params)
 	{
-		if (validate_parameters(&LST_CONT(traverse, t_token),
-				g_op_tab[instr], param_id))
+		if (validate_param(&LST_CONT(traverse, t_token), g_op_tab[instr], param_id))
 		{
 			traverse = traverse->next;
 			param_id++;
@@ -346,7 +344,7 @@ void	bytecode_len(t_line *line)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
-		line->bytecode_len += param_size(&LST_CONT(traverse, t_token).type,
+		line->bytecode_len += param_size(LST_CONT(traverse, t_token).type,
 											op->relative);
 		traverse = traverse->next;
 	}
