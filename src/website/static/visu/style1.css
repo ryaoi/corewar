@@ -1,13 +1,20 @@
 body {
-	
+
 	font-family: Menlo, Monaco, 'Courier New', monospace;
 }
 
+p{
+	margin: 0;
+	padding: 0;
+}
 
 div {
 	border:1px solid black;
 }
 
+body{
+	margin 0px 1%;
+}
 .title{
 	margin:auto;
 	width:50%;
@@ -26,18 +33,30 @@ div {
 }
 
 .mem {
-	color:darkgray;
-	text-align: center;
-	font-size: 1em;
-	width:80em;
+	min-width:80%;
+	display:inline-block;
 	float:left;
 }
 
+.address {
+	color:green;
+	display:inline;
+	width:8em;
+	float:left;
+}
+
+.mem_dump{
+	color:darkgray;
+	width:80em;
+	font-size: 1em;
+	float:left;
+}
 .logs{
-	max-width:18%;
+	width:15%;
 	float:right;
 }
 
 ul{
 	list-style-type: none;
 }
+

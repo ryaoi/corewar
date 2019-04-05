@@ -1,0 +1,92 @@
+{% load static from staticfiles %}
+{% load tools %}
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'visu/style1.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div class="title">
+			<h2>COREWAR</h2>
+		</div>
+		<div class="control">
+			<p>control</p>
+			<a href="../../{{ cycle|next_cycle }}/play" id="link_next_cycle">next_cycle</a>
+			<a href="javascript:play();" id="link_play">Play</a>
+			<a href="javascript:pause();" id="link_pause">Pause</a>
+		</div>
+		<div class="mem" style="height: 100%;">
+			<p id="mem_dump">
+			</p>
+		</div>
+		<div class="logs">
+			<ul>
+			</ul>
+		</div>
+	</body>
+</html>
+
+<script>
+
+
+
+
+function play()
+{
+	if (sessionStorage.pause)
+		sessionStorage.pause = "0";
+	else
+		sessionStorage.setItem("pause","0");
+	return ;
+}
+
+function store()
+{
+	sessionStorage.setItem("mem{{cycle}}", "{{mem}}");
+	var str_logs = JSON.stringify({{logs}});
+	sessionStorage.setItem("log{{cycle}}", "str_logs");
+	if (sessionStorage.length == 43)
+	{
+		sessionStorage.removeItem("log{{cycle | delete_cycle_num }}")
+			sessionStorage.removeItem("mem{{cycle | delete_cycle_num }}")
+	}
+	return ;
+}
+
+function pause()
+{
+	if (sessionStorage.pause)
+		sessionStorage.pause = 1;
+	else:
+		sessionStorage.setItem("pause", "1");
+	return ;
+}
+
+
+function hey(){
+	alert("hello");
+	store();
+	if (sessionStorage.pause)
+	{	
+		if (sessionStorage.pause == "0")
+		{
+			window.location.href = "../../{{ cycle|next_cycle }}/play";
+		}
+	}
+	else
+	{
+		sessionStorage.setItem("pause","0");
+	}
+	if (sessionStorage.pause)
+	{
+		document.getElementById("test").innerHTML = "You have created pause session storage";	
+	}
+	else
+	{
+		document.getElementById("test").innerHTML = "no puase session storage";
+	}
+	return ;
+}
+
+window.onload = hey();
+</script>

@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'corwar_visu.urls'
+ROOT_URLCONF = 'corewar_visu.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'corwar_visu.wsgi.application'
+WSGI_APPLICATION = 'corewar_visu.wsgi.application'
 
 
 # Database

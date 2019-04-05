@@ -4,20 +4,8 @@ from django.template import loader, Context
 from . import libcore
 from visu.models import logs, memory
 
+# Create your views here.
 game = libcore.CorewarGame()
-cycle = 0
-
-class SessionData:
-    game = None
-    ...
-
-
-def handle_request(stuff):
-    if stuff.session_data.game is None:
-        stuff.session_data.game = libcore.CorewarGame();
-    game.update()
-    parse_stuff()
-    reply()
 
 def play_game():
     game.champions.append("../../resources/test_champ1.cor")
@@ -34,27 +22,25 @@ def index(request):
             } 
     return HttpResponse(template.render(context, request))
 
-def play(request):
+def play_cycle(request, cycle):
     template = loader.get_template('visu/play.html')
     for x in game.logs:
         x.clear()
     game.update()
-    #cycle += 1
     mem_dump = game.mem_dump().hex()
     i = 0
     mem = ""
     while (i < 64):
         mem = mem + mem_dump[i* 128:i * 128 + 128]
-        mem = mem + "\n"
+        mem = mem + " "
         i += 1
     active_logs = game.logs[0] + game.logs[1]
     active_logs.sort(key=lambda x: x[1])
     context = {
             "logs" : active_logs,
             "mem" : mem,
-            "mem_dump": mem_dump,
-            "cycle": "1",
-            "range" : range(64)
+            #"screen": mems[cycle],
+            "cycle": cycle
             } 
     return HttpResponse(template.render(context, request))
 
@@ -66,22 +52,6 @@ def show_cycle(request, cycle):
     return HttpResponse(template.render(context, request))
 
 
-def prepare(request):
+def play(request):
     play_game()
-    return redirect('play')
-
-def update():
-    for x in game.logs:
-        x.clear()
-    game.update()
-    #cycle += 1
-    mem_dump = game.mem_dump().hex()
-    i = 0
-    mem = ""
-    while (i < 64):
-        mem = mem + mem_dump[i* 128:i * 128 + 128]
-        mem = mem + "\n"
-        i += 1
-    active_logs = game.logs[0] + game.logs[1]
-    active_logs.sort(key=lambda x: x[1])
-    return (active_logs)
+    return redirect('play_cycle', cycle='1')
