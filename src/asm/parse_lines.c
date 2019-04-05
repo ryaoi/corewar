@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 19:18:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 18:01:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,15 +318,15 @@ static void	set_how(t_file *file, t_line *line)
 void	bytecode_len(t_line *line)
 {
 	t_list	*traverse;
-	t_op	*operation;
+	t_op	*op;
 
 	traverse = line->tokens;
-	operation = LST_CONT(traverse, t_token).op;
-	if (!line->tokens || !operation)
+	op = LST_CONT(traverse, t_token).op;
+	if (!line->tokens || !op)
 		return ;
 	if (LST_CONT(traverse, t_token).type == T_NAME_CMD ||
 			LST_CONT(traverse, t_token).type == T_COMMENT_CMD ||
-		LST_CONT(traverse, t_token).type == T_COMMENT)
+				LST_CONT(traverse, t_token).type == T_COMMENT)
 		return ;
 	line->bytecode_len = 1;
 	if (LST_CONT(traverse, t_token).op->ocp == 1)
@@ -334,17 +334,15 @@ void	bytecode_len(t_line *line)
 	while (traverse)
 	{
 		if (LST_CONT(traverse, t_token).type == T_REGISTER)
-			line->bytecode_len += REGISTER_INDEX_SIZE;
-		else if (LST_CONT(traverse, t_token).type == T_DIRECT &&
-					!(operation->relative))
-			line->bytecode_len += DIRECT_D4_SIZE;
+			line->bytecode_len += REG_INDEX_SIZE;
+		else if (LST_CONT(traverse, t_token).type == T_DIRECT && !(op->relative))
+			line->bytecode_len += DIR_D4_SIZE;
 		else if (LST_CONT(traverse, t_token).type == T_DIRLAB ||
-					(LST_CONT(traverse, t_token).type == T_DIRECT &&
-							operation->relative))
-			line->bytecode_len += DIRECT_D2_SIZE;
+				(LST_CONT(traverse, t_token).type == T_DIRECT && op->relative))
+			line->bytecode_len += DIR_D2_SIZE;
 		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
-					LST_CONT(traverse, t_token).type == T_INDIRLAB)
-			line->bytecode_len += INDIRECT_SIZE;
+				LST_CONT(traverse, t_token).type == T_INDIRLAB)
+			line->bytecode_len += INDIR_SIZE;
 		traverse = traverse->next;
 	}
 }

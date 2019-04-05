@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/29 11:42:23 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 18:10:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 		direct = 4
 		direct_label = 2
 		indirect = 2
+ocp :
 01 Register, followed by a byte (the register number)
 10 Direct, followed by DIR_SIZE bytes (the direct value)
 11 Indirect, followed by IND_SIZE bytes (the value of the indirection) */
@@ -27,26 +28,26 @@
 static void	ocp_set(t_list *tokens, unsigned char *bytecode)
 {
 	unsigned int	ocp;
+	t_list			*traverse;
 	int	index;
 
 	ocp = 0;
 	index = 0;
-
-	while (tokens)
+	traverse = tokens;
+	while (traverse)
 	{
-		if (((t_token*)tokens->content)->type == T_REGISTER)
+		if (LST_CONT(traverse, t_token).type == T_REGISTER)
 			ocp |= 1 << (6 - index);
-		else if (((t_token*)tokens->content)->type == T_DIRECT ||
-					((t_token*)tokens->content)->type == T_DIRLAB)
+		else if (LST_CONT(traverse, t_token).type == T_DIRECT ||
+				LST_CONT(traverse, t_token).type == T_DIRLAB)
 			ocp |= 2 << (6 - index);
-		else if (((t_token*)tokens->content)->type == T_INDIRECT ||
-					((t_token*)tokens->content)->type == T_INDIRLAB)
+		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
+					LST_CONT(traverse, t_token).type == T_INDIRLAB)
 			ocp |= 3 << (6 - index);
-		tokens = tokens->next;
+		traverse = traverse->next;
 		index += 2;
 	}
 	bytecode[1] = ocp;
-//	printf("%d | %d\n----------------\n", bytecode[0], bytecode[1]);
 }
 
 t_op	*operation_set(t_line *line)
@@ -54,14 +55,13 @@ t_op	*operation_set(t_line *line)
 	t_token	*token;
 
 	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len))))
-		ERROR("malloc failed.", 0);
+		ERROR("malloc failed.", NULL);
 	token = (t_token*)line->tokens->content;
 	if (token->op)
 	{
 		line->bytecode[0] = token->op->opcode;
 		if (token->op->ocp)
 			ocp_set(line->tokens->next, line->bytecode);
-		//printf("0x%2x | 0x%2x\n-------------\n", line->bytecode[0], line->bytecode[1]);
 		return (((t_token*)line->tokens->content)->op);
 	}
 	return (NULL);
@@ -99,7 +99,6 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 	char	*label;
 	t_list	*traverse;
 
-	label = NULL;
 	if (token->type == T_DIRECT || token->type == T_REGISTER)
 		token->value = ft_atoi(token->str + 1);
 	else if (token->type == T_INDIRECT)
@@ -110,20 +109,22 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 		traverse = lines;
 		while (traverse)
 		{
-			if (((t_line*)traverse->content)->type == T_LABEL &&
-				!ft_strcmp(label, ((t_line*)traverse->content)->str))
+			if (LST_CONT(traverse, t_line).type == T_LABEL &&
+				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
 			{
-				token->value = get_label_value(line, ((t_line*)traverse->content), traverse);
+				token->value = get_label_value(line,
+					&LST_CONT(traverse, t_line), traverse);
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
 		}
-		ERROR("noooooooo label doesn't exist.", GETVALUE_FAIL);
+		ERROR("noooooooo label doesn't exist.", 0);
 	}
 	return (SUCCESS);
 }
 
-void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int value)
+void	param_trans(unsigned char *bytecode, int size,
+							int *bc_index, int value)
 {
 	/*TODO check if 'unsigned int' casting is OK */
 	if (size == 1)
@@ -146,37 +147,28 @@ void	param_translate(unsigned char *bytecode, size_t size, int *bc_index, int va
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
 	t_list			*traverse;
-	int				bc_index;
-	unsigned char	*bytecode;
+	int				i;
+	unsigned char	*bc;
+	int				value;
+	int				type;
 
-	bc_index = 0;
+	i = 0;
 	traverse = line->tokens->next;
-	bytecode = line->bytecode;
+	bc = line->bytecode;
 	while (traverse)
 	{
-		if (param_getvalue(file->lines, line, ((t_token*)traverse->content)) == GETVALUE_FAIL)
-			ERROR("param_getvalue() failed.", GETVALUE_FAIL);
-
-		if (((t_token*)traverse->content)->type == T_INDIRECT ||
-				((t_token*)traverse->content)->type == T_INDIRLAB)
-			param_translate(&bytecode[1 + op->ocp + bc_index], INDIRECT_SIZE, &bc_index,
-				((t_token*)traverse->content)->value);
-
-		else if (((t_token*)traverse->content)->type == T_DIRLAB ||
-					(((t_token*)traverse->content)->type == T_DIRECT &&
-						op->relative))
-			param_translate(&bytecode[1 + op->ocp + bc_index], DIRECT_D2_SIZE, &bc_index,
-				((t_token*)traverse->content)->value);
-
-		else if (((t_token*)traverse->content)->type == T_DIRECT &&
-					!(op->relative))
-			param_translate(&bytecode[1 + op->ocp + bc_index], DIRECT_D4_SIZE, &bc_index,
-				((t_token*)traverse->content)->value);
-
-		else if (((t_token*)traverse->content)->type == T_REGISTER)
-			param_translate(&bytecode[1 + op->ocp + bc_index], REGISTER_INDEX_SIZE, &bc_index,
-				((t_token*)traverse->content)->value);
-
+		if (!(param_getvalue(file->lines, line, &LST_CONT(traverse, t_token))))
+			ERROR("param_getvalue failed.", 0);
+		value = LST_CONT(traverse, t_token).value;
+		type = LST_CONT(traverse, t_token).type;
+		if (type == T_INDIRECT || type == T_INDIRLAB)
+			param_trans(&bc[1 + op->ocp + i], INDIR_SIZE, &i, value);
+		else if (type == T_DIRLAB || (type == T_DIRECT && op->relative))
+			param_trans(&bc[1 + op->ocp + i], DIR_D2_SIZE, &i, value);
+		else if (type == T_DIRECT && !(op->relative))
+			param_trans(&bc[1 + op->ocp + i], DIR_D4_SIZE, &i, value);
+		else if (type == T_REGISTER)
+			param_trans(&bc[1 + op->ocp + i], REG_INDEX_SIZE, &i, value);
 		traverse = traverse->next;
 	}
 	return (SUCCESS);
@@ -191,28 +183,20 @@ int		file_conversion(t_file *file)
 	while (traverse)
 	{
 		if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
-				LST_CONT(traverse, t_line).tokens)
+			LST_CONT(traverse, t_line).tokens)
 		{
 			if (!(operation = operation_set(&LST_CONT(traverse, t_line))))
 				ERROR("operation doesn't exist.", CONVERSION_FAIL);
 			if (!(LST_CONT(traverse, t_line).tokens->next))
 				ERROR("no parameters found.", CONVERSION_FAIL);
-			if (bytecode_conversion(file, &LST_CONT(traverse, t_line),
-					operation) == GETVALUE_FAIL)
+			if (!bytecode_conversion(file, &LST_CONT(traverse, t_line), operation))
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
-//////////////////////////////////////////////////////////////////////////
-		if (LST_CONT(traverse, t_line).type == T_ASMCODE)
-			printf("%s\n", LST_CONT(traverse, t_line).str);
+		printf("%s\n", LST_CONT(traverse, t_line).str);
 		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
-		{
-			if (LST_CONT(traverse, t_line).type == T_ASMCODE)
-				printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
-		}
-		if (LST_CONT(traverse, t_line).type == T_ASMCODE)
-			printf("\n-------------------------------------\n");
-//////////////////////////////////////////////////////////////////////////
+			printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
+		printf("\n-------------------------------------\n");
 		traverse = traverse->next;
 	}
 	return (SUCCESS);

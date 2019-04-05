@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 19:22:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 17:48:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "list.h"
 # include "op.h"
 # include "ft_printf.h"
+
 # define SUCCESS 1
 # define FILE_ERROR 0
 # define ASM_FAIL 0
@@ -26,15 +27,17 @@
 # define INSTR_FAIL 0
 # define PARAM_FAIL 0
 # define OPCODE_CMP_FAIL 0
-# define GETVALUE_FAIL 0
+# define GETVALUE_FAIL -1
 # define CONVERSION_FAIL 0
+
 # define ON 1
 # define OFF 0
 # define REGISTER_CHAR 'r'
-# define REGISTER_INDEX_SIZE 1
-# define DIRECT_D2_SIZE 2
-# define DIRECT_D4_SIZE 4
-# define INDIRECT_SIZE 2
+
+# define REG_INDEX_SIZE 1
+# define DIR_D2_SIZE 2
+# define DIR_D4_SIZE 4
+# define INDIR_SIZE 2
 
 typedef enum e_token_types
 {
