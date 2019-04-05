@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 18:10:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 19:01:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ t_op	*operation_set(t_line *line)
 	return (NULL);
 }
 
-int		get_label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
+int		label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
 {
 	int	value;
-	/*TODO offset reference is from beginning of instr->label_line OR param->label_line */
+
 	value = 0;
 	if (curr_line->id > label_line->id)
 	{
@@ -112,13 +112,13 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			if (LST_CONT(traverse, t_line).type == T_LABEL &&
 				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
 			{
-				token->value = get_label_value(line,
-					&LST_CONT(traverse, t_line), traverse);
+				token->value = label_value(line, &LST_CONT(traverse, t_line), traverse);
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
 		}
-		ERROR("noooooooo label doesn't exist.", 0);
+		ft_putendl("Label doesn't exist in the file.");
+		return (GETVALUE_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -147,8 +147,8 @@ void	param_trans(unsigned char *bytecode, int size,
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 {
 	t_list			*traverse;
-	int				i;
 	unsigned char	*bc;
+	int				i;
 	int				value;
 	int				type;
 
@@ -158,7 +158,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 	while (traverse)
 	{
 		if (!(param_getvalue(file->lines, line, &LST_CONT(traverse, t_token))))
-			ERROR("param_getvalue failed.", 0);
+			return (CONVERSION_FAIL);
 		value = LST_CONT(traverse, t_token).value;
 		type = LST_CONT(traverse, t_token).type;
 		if (type == T_INDIRECT || type == T_INDIRLAB)
@@ -177,7 +177,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 int		file_conversion(t_file *file)
 {
 	t_list	*traverse;
-	t_op	*operation;
+	t_op	*op;
 
 	traverse = file->lines;
 	while (traverse)
@@ -185,11 +185,11 @@ int		file_conversion(t_file *file)
 		if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
 			LST_CONT(traverse, t_line).tokens)
 		{
-			if (!(operation = operation_set(&LST_CONT(traverse, t_line))))
+			if (!(op = operation_set(&LST_CONT(traverse, t_line))))
 				ERROR("operation doesn't exist.", CONVERSION_FAIL);
 			if (!(LST_CONT(traverse, t_line).tokens->next))
 				ERROR("no parameters found.", CONVERSION_FAIL);
-			if (!bytecode_conversion(file, &LST_CONT(traverse, t_line), operation))
+			if (!bytecode_conversion(file, &LST_CONT(traverse, t_line), op))
 				ERROR("conversion failed.", CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/

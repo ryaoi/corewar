@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 18:01:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/05 19:39:43 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,15 @@ int		check_token_type(t_token *token, char *str)
 
 	len = ft_strlen(str);
 	if (token->id == 0)
-	{
 		if (str[len - 1] == LABEL_CHAR)
 			token->type = T_LABEL;
 		else
 			token->type = T_INSTR;
-	}
 	else if (str[0] == DIRECT_CHAR)
-	{
 		if (str[1] == LABEL_CHAR)
 			token->type = T_DIRLAB;
 		else
 			token->type = T_DIRECT;
-	}
 	else if (str[0] == REGISTER_CHAR && is_str_digit(str + 1))
 		token->type = T_REGISTER;
 	else if (str[0] == LABEL_CHAR)
@@ -100,10 +96,7 @@ int		check_token_type(t_token *token, char *str)
 	else if (is_str_digit(str))
 		token->type = T_INDIRECT;
 	else
-	{
-		/*ft_printf("%s\n", str);*/
 		ERROR("no token_type found.", TOKEN_TYPE_FAIL);
-	}
 	return (SUCCESS);
 }
 
@@ -315,6 +308,28 @@ static void	set_how(t_file *file, t_line *line)
 		line->type = T_COMMENT_CMD;
 	}
 }
+
+static int	token_type_valid(int token_type)
+{
+	if (token_type == T_NAME_CMD || token_type == T_COMMENT_CMD ||
+		token_type == T_COMMENT)
+		return (0);
+	return (1);
+}
+
+static int	param_size(int type, int relative)
+{
+	if (type == T_REGISTER)
+		return (REG_INDEX_SIZE);
+	else if (type == T_DIRECT && !relative)
+		return (DIR_D4_SIZE);
+	else if (type == T_DIRLAB || (type == T_DIRECT && relative))
+		return (DIR_D2_SIZE);
+	else if (type == T_INDIRECT || type == T_INDIRLAB)
+		return (INDIR_SIZE);
+	return (0);
+}
+
 void	bytecode_len(t_line *line)
 {
 	t_list	*traverse;
@@ -324,25 +339,15 @@ void	bytecode_len(t_line *line)
 	op = LST_CONT(traverse, t_token).op;
 	if (!line->tokens || !op)
 		return ;
-	if (LST_CONT(traverse, t_token).type == T_NAME_CMD ||
-			LST_CONT(traverse, t_token).type == T_COMMENT_CMD ||
-				LST_CONT(traverse, t_token).type == T_COMMENT)
+	if (!token_type_valid(LST_CONT(traverse, t_token).type))
 		return ;
 	line->bytecode_len = 1;
 	if (LST_CONT(traverse, t_token).op->ocp == 1)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
-		if (LST_CONT(traverse, t_token).type == T_REGISTER)
-			line->bytecode_len += REG_INDEX_SIZE;
-		else if (LST_CONT(traverse, t_token).type == T_DIRECT && !(op->relative))
-			line->bytecode_len += DIR_D4_SIZE;
-		else if (LST_CONT(traverse, t_token).type == T_DIRLAB ||
-				(LST_CONT(traverse, t_token).type == T_DIRECT && op->relative))
-			line->bytecode_len += DIR_D2_SIZE;
-		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
-				LST_CONT(traverse, t_token).type == T_INDIRLAB)
-			line->bytecode_len += INDIR_SIZE;
+		line->bytecode_len += param_size(&LST_CONT(traverse, t_token).type,
+											op->relative);
 		traverse = traverse->next;
 	}
 }
