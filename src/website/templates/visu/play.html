@@ -73,7 +73,7 @@ function update()
 	if (pause == 1)
 	{
 	cycle += 1;
-	$.post( "update/", function( data ) {
+	$.get( "update/", function( data ) {
 		alert( "Data Loaded: " + data );
 	});
 	var now = new Date().getTime();
