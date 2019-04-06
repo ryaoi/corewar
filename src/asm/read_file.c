@@ -6,14 +6,14 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 16:39:17 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/06 20:09:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 #include "get_next_line.h"
 
-int		is_whitespaces_line(const char *str)
+int		line_is_ws(const char *str)
 {
 	size_t index;
 
@@ -49,7 +49,10 @@ int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
 
 	new_line.tokens = NULL;
 	if (!(new_line.str = ft_strtrim(line)))
-		ERROR("ft_strtrim() failed", LINE_FAIL);
+	{
+		ft_putendl("line_create() failed.");
+		return (LINE_FAIL);
+	}
 	new_line.nbr_params = 0;
 	new_line.id = nbr_lines;
 	new_line.type = line_type;
@@ -71,19 +74,20 @@ int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 		/* parse label : && treat label: instructions format */
 		line[label_pos + 1] = '\0';
 		if (line_create(file, line, *nbr_lines, T_LABEL) == LINE_FAIL)
-			ERROR("line_create() failed.", ASM_FAIL);
+			return (ASM_FAIL);
 		line[label_pos + 1] = ' ';
 		/*parse asm code */
-		if (len > label_pos + 1 && !is_whitespaces_line((&line[label_pos + 2])))
+		if (len > label_pos + 1 && !line_is_ws((&line[label_pos + 2])))
 		{
-			if (line_create(file, line + label_pos + 2, ++(*nbr_lines), T_UNKNOWN) == LINE_FAIL)
-				ERROR("line_create() failed.", ASM_FAIL);
+			if (line_create(file, line + label_pos + 2, ++(*nbr_lines),
+								T_UNKNOWN) == LINE_FAIL)
+			return (ASM_FAIL);
 		}
 	}
 	else
 	{
 		if (line_create(file, line, *nbr_lines, T_UNKNOWN) == LINE_FAIL)
-			ERROR("line_create() failed.", ASM_FAIL);
+			return (ASM_FAIL);
 	}
 	free(line);
 	return (SUCCESS);
@@ -98,7 +102,7 @@ int		file_read(t_file *file)
 	line = NULL;
 	while ((file->ret = get_next_line(file->fd_s, &line)) > 0)
 	{
-		if (line && (line[0] =='\0' || is_whitespaces_line(line)))
+		if (line && (line[0] =='\0' || line_is_ws(line)))
 		{
 			free(line);
 			continue ;
@@ -106,24 +110,20 @@ int		file_read(t_file *file)
 		if (line_add(file, line, &nbr_lines, label_check(line)) == ASM_FAIL)
 		{
 			free(line);
-			ERROR("syntax error in line.", FILE_ERROR);
+			return (FILE_ERROR);
 		}
 		nbr_lines++;
 	}
 	free(line);
 	if (file->ret == -1)
-		ERROR("get_next_line failed.", FILE_ERROR);
-	if ((file->nbr_line = nbr_lines) == 0)
-		ERROR("no instructions.", FILE_ERROR);
-	return (SUCCESS);
-	/* print lines
-	int i = 0;
-	t_list *traverse;
-	traverse = file->lines;
-	while (traverse != NULL)
 	{
-		printf("line[%d] = %s\n", i, ((t_line*)traverse->content)->str);
-		traverse = traverse->next;
-		i++;
-	}*/
+		ft_putendl("get_next_line failed.");
+		return (FILE_ERROR);
+	}
+	if ((file->nbr_line = nbr_lines) == 0)
+	{
+		ft_putendl("no instructions.");
+		return (FILE_ERROR);
+	}
+	return (SUCCESS);
 }

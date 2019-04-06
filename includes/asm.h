@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 17:48:28 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/06 20:09:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "ft_printf.h"
 
 # define SUCCESS 1
+# define MALLOC_FAIL 0
 # define FILE_ERROR 0
 # define ASM_FAIL 0
 # define LINE_FAIL 0
@@ -39,6 +40,7 @@
 # define DIR_D4_SIZE 4
 # define INDIR_SIZE 2
 
+# define PREWORK_FLAG_ON 3
 typedef enum e_token_types
 {
 	T_NAME_CMD, /* .name WHITE_SPACES "strings"*/
@@ -54,6 +56,15 @@ typedef enum e_token_types
 	T_INDIRLAB = 16, /* ':' + T_LABEL */
 	T_UNKNOWN /* added to handle other than labels later */
 }			t_token_types;
+
+typedef enum e_err_types_file
+{
+	DOT_S_ERROR = -5,
+	OPEN_FILE_ERROR,
+	STRDUP_FAIL,
+	STRNDUP_FAIL,
+	STRJOIN_FAIL
+}			t_err_types_file;
 
 # define ERROR(msg, ret) {ft_putendl(msg);return(ret);}
 
@@ -85,7 +96,7 @@ typedef struct	s_file
 	size_t		nbr_line;
 	char		*name_s;
 	char		*name_cor;
-	int			header_flags;
+	int			prework_flag;
 	header_t	header; /* TODO initialize header!! */
 	int			fd_cor;
 	int			fd_s;

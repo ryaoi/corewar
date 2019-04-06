@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 19:39:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/06 22:33:37 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int		check_token_type(t_token *token, char *str)
 		token->type = T_INDIRECT;
 	else
 		ERROR("no token_type found.", TOKEN_TYPE_FAIL);
+		//return (TOKEN_TYPE_FAIL);
 	return (SUCCESS);
 }
 
@@ -114,6 +115,7 @@ int		check_parameter(t_token *token, char *str)
 				!(index == 0 && str[index] == DIRECT_CHAR) &&
 					!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
 				ERROR("wrong syntax of label.", PARAM_CHECK_FAIL);
+				//return (PARAM_CHECK_FAIL);
 			index++;
 		}
 		return (SUCCESS);
@@ -122,6 +124,7 @@ int		check_parameter(t_token *token, char *str)
 	{
 		if (ft_atoi(str + 1) > REG_NUMBER)
 			ERROR("register number too high.", PARAM_CHECK_FAIL);
+			//return (PARAM_CHECK_FAIL);
 		return (SUCCESS);
 	}
 	return (SUCCESS);
@@ -138,11 +141,13 @@ int		check_instr(t_token *token, char *str)
 		{
 			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
 				ERROR("malloc failed", INSTR_FAIL);
+				//return (MALLOC_FAIL);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
 			return (SUCCESS);
 		}
 		index++;
 	}
+	ft_putendl(str);
 	return (INSTR_FAIL);
 }
 
@@ -155,15 +160,20 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	init_token(&token);
 	if (!(token.str = ft_strsub(line->str, start, len)))
 		ERROR("ft_strsub failed.", TOKEN_FAIL);
+	//	return (TOKEN_FAIL);
 	token.id = token_id;
 	if (check_token_type(&token, token.str) == TOKEN_TYPE_FAIL)
 		ERROR("token_type error.", TOKEN_FAIL);
+	//	return (TOKEN_FAIL);
 	if (check_parameter(&token, token.str) == PARAM_CHECK_FAIL)
 		ERROR("wrong parameter.", TOKEN_FAIL);
+	//	return (TOKEN_FAIL);
 	if (token.type == T_UNKNOWN)
 		ERROR("token_type not found.", TOKEN_FAIL);
+	//	return (TOKEN_FAIL);
 	if (token.type == T_INSTR && check_instr(&token, token.str) == INSTR_FAIL)
 		ERROR("no opcode match found.", TOKEN_FAIL);
+	//	return (TOKEN_FAIL);
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
 	return (SUCCESS);
 }
@@ -183,6 +193,7 @@ int		line_tokenize(t_line *line)
 	{
 		if (token_id > 5)
 			ERROR("Too many tokens.", LINE_FAIL);
+		//	return (LINE_FAIL);
 		while (line->str[i] && ft_isspace(line->str[i]))
 			i++;
 		j = i;
@@ -191,6 +202,7 @@ int		line_tokenize(t_line *line)
 			j++;
 		if (add_token(line, token_id, i, j) == TOKEN_FAIL)
 			ERROR("tokenize failed.", LINE_FAIL);
+		//	return (LINE_FAIL);
 		i = j + 1;
 		if (line->str[i - 1] == '\0')
 			break ;
@@ -215,7 +227,8 @@ int		validate_parameters(t_token *token, t_op opcode, int param_id)
 	//printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
 	//printf("param_types[%d] = %d\n-------------------\n", param_id, opcode.param_types[param_id]);
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
-		ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
+	//	ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
+		return (PARAM_FAIL);
 	return (SUCCESS);
 }
 
@@ -225,20 +238,15 @@ int		opcode_cmp(t_line *line)
 	int		instr;
 	int		param_id;
 
-	traverse = line->tokens;
 	if (!(traverse = line->tokens))
-		return (LINE_FAIL);
-	if (traverse->next == NULL)
-		return (LINE_FAIL);
+		return (OPCODE_CMP_FAIL);
 	instr = LST_CONT(traverse, t_token).op->opcode - 1;
-//	printf("line type : %d\n", line->type);
-//	printf("original : %s\nthe_code : %s\n", g_op_tab[instr].name, line->str);
-//	printf("original nbr : %d\nthe_code nbr : %d\n---------------\n", g_op_tab[instr].nbr_params, line->nbr_params);
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
-		ERROR("wrong number of parameters", OPCODE_CMP_FAIL);
-	if (traverse->next == NULL)
-		ERROR ("where are the params!!.", OPCODE_CMP_FAIL);
-	traverse = traverse->next;
+	//	ERROR("wrong number of parameters", OPCODE_CMP_FAIL);
+		return (OPCODE_CMP_FAIL);
+	if (!(traverse = traverse->next))
+	//	ERROR ("where are the params!!.", OPCODE_CMP_FAIL);
+		return (OPCODE_CMP_FAIL);
 	param_id = 0;
 	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
@@ -249,7 +257,8 @@ int		opcode_cmp(t_line *line)
 			param_id++;
 		}
 		else
-			ERROR("not valid parameters.", OPCODE_CMP_FAIL);
+		//	ERROR("not valid parameters.", OPCODE_CMP_FAIL);
+			return (OPCODE_CMP_FAIL);
 	}
 	return (SUCCESS);
 }
@@ -279,7 +288,7 @@ static void	set_progname(t_file *file, t_line *line)
 			ft_memcpy(file->header.prog_name, line->str + start, end - start);
 		line->type = T_NAME_CMD;
 	}
-	file->header_flags = ON;
+	file->prework_flag |= 2;
 }
 
 static void	set_how(t_file *file, t_line *line)
@@ -307,6 +316,7 @@ static void	set_how(t_file *file, t_line *line)
 			ft_memcpy(file->header.how, line->str + start, end - start);
 		line->type = T_COMMENT_CMD;
 	}
+	file->prework_flag |= 1;
 }
 
 static int	token_type_valid(int token_type)
@@ -346,7 +356,7 @@ void	bytecode_len(t_line *line)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
-		line->bytecode_len += param_size(&LST_CONT(traverse, t_token).type,
+		line->bytecode_len += param_size(LST_CONT(traverse, t_token).type,
 											op->relative);
 		traverse = traverse->next;
 	}
@@ -365,6 +375,22 @@ void	remove_label_char(char *str)
 	}
 }
 
+void	prework(t_file *file, t_line *line)
+{
+	if (~file->prework_flag & 2)
+		set_progname(file, line);
+	else if (~file->prework_flag & 1)
+		set_how(file, line);
+}
+
+void	extra_work(t_line *line)
+{
+	if (line->type == T_ASMCODE)
+		bytecode_len(line);
+	else
+		remove_label_char(line->str);
+}
+
 int		file_parse(t_file *file)
 {
 	t_list	*traverse;
@@ -372,25 +398,27 @@ int		file_parse(t_file *file)
 	traverse = file->lines;
 	while(traverse)
 	{
-		if (!is_comment(&LST_CONT(traverse, t_line)))
+		if (!is_comment(&LST_CONT(traverse, t_line))) /*TODO comment handler */
 		{
-			if (!(file->header.prog_name[0]))
+			if (file->prework_flag != PREWORK_FLAG_ON)
+				prework(file, &LST_CONT(traverse, t_line));
+/*			if (!(file->header.prog_name[0]))
 				set_progname(file, &LST_CONT(traverse, t_line));
-			if (!(file->header.how[0]))
-				set_how(file, &LST_CONT(traverse, t_line));
+			else if (!(file->header.how[0]))
+				set_how(file, &LST_CONT(traverse, t_line));*/
 			if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
 				LST_CONT(traverse, t_line).type = T_ASMCODE;
 			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
 				(line_tokenize(&LST_CONT(traverse, t_line)) == LINE_FAIL ||
 				opcode_cmp(&LST_CONT(traverse, t_line)) == OPCODE_CMP_FAIL))
-			{
-				ft_putendl("parse failed.");
-				return (ASM_FAIL);
-			}
-			if (LST_CONT(traverse, t_line).type == T_ASMCODE)
+					return (ASM_FAIL);
+			if (LST_CONT(traverse, t_line).type == T_ASMCODE ||
+				LST_CONT(traverse, t_line).type == T_LABEL)
+				extra_work(&LST_CONT(traverse, t_line));
+			/*if (LST_CONT(traverse, t_line).type == T_ASMCODE)
 				bytecode_len(&LST_CONT(traverse, t_line));
 			else if (LST_CONT(traverse, t_line).type == T_LABEL)
-				remove_label_char(LST_CONT(traverse, t_line).str);
+				remove_label_char(LST_CONT(traverse, t_line).str);*/
 		}
 		traverse = traverse->next;
 	}

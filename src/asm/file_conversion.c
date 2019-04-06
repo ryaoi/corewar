@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/05 19:01:07 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/06 19:09:30 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ t_op	*operation_set(t_line *line)
 	t_token	*token;
 
 	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len))))
-		ERROR("malloc failed.", NULL);
+	{
+		ft_putendl("malloc failed.");
+		return (NULL);
+	}
 	token = (t_token*)line->tokens->content;
 	if (token->op)
 	{
@@ -142,6 +145,7 @@ void	param_trans(unsigned char *bytecode, int size,
 		bytecode[3] = ((((unsigned int)value) << 6) >> 6) % 0x100;
 	}
 	*bc_index = *bc_index + size;
+	/*TODO LITTLE -> BIG ENDIAN */
 }
 
 int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
@@ -187,10 +191,13 @@ int		file_conversion(t_file *file)
 		{
 			if (!(op = operation_set(&LST_CONT(traverse, t_line))))
 				ERROR("operation doesn't exist.", CONVERSION_FAIL);
+			//	return (CONVERSION_FAIL);
 			if (!(LST_CONT(traverse, t_line).tokens->next))
 				ERROR("no parameters found.", CONVERSION_FAIL);
+			//	return (CONVERSION_FAIL);
 			if (!bytecode_conversion(file, &LST_CONT(traverse, t_line), op))
 				ERROR("conversion failed.", CONVERSION_FAIL);
+			//	return (CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
 		printf("%s\n", LST_CONT(traverse, t_line).str);
