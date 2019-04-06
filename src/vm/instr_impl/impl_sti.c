@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/04/06 22:42:49 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 22:45:30 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static t_bigend_buffer	sti_first_p(t_vm_state *state,
 							t_process *process, t_instr *instr)
 {
-	t_process		*process;
 	t_bigend_buffer	first_param;
 	size_t			offset;
 
@@ -40,6 +39,7 @@ static t_bigend_buffer	sti_second_p(t_vm_state *state,
 {
 	t_bigend_buffer	second_param;
 
+	(void)state;
 	second_param.buffer = 0;
 	if (ARG_TYPE(instr, 2) == e_register)
 		second_param = REGISTER(process, ARG_REG(instr, 2) - 1).content;
