@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:15:54 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:41:34 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	impl_add(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_process	*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
+	process = &PROCESS(state, p_index);
 	REGISTER(process, ARG_REG(instr, 2) - 1).content
 		= add_bigend(REGISTER(process, ARG_REG(instr, 0) - 1).content,
 		REGISTER(process, ARG_REG(instr, 1) - 1).content, 0);

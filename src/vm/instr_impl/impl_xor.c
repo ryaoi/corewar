@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:41:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:15:54 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void					impl_xor(t_vm_state *state, size_t p_index,
 	uint32_t			offset;
 	t_process	*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
+	process = &PROCESS(state, p_index);
 	if (ARG_TYPE(instr, 0) == e_register)
 		ft_memcpy(&first_operand,
 			&REGISTER(process, ARG_REG(instr, 0)).content,

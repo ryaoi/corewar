@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:08:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	impl_aff(t_vm_state *state, size_t p_index, t_instr *instr)
 	t_bigend_buffer	character_buffer;
 	t_process		*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
+	process = &PROCESS(state, p_index);
 	character_buffer.buffer = 0;
 	(void)state;
 	character_buffer

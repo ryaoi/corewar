@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:08:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	impl_st(t_vm_state *state, size_t p_index, t_instr *instr)
 	int32_t			offset;
 	t_process	*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
+	process = &PROCESS(state, p_index);
 	load_buffer.buffer = 0;
 	if (ARG_TYPE(instr, 1) == e_register)
 	{
