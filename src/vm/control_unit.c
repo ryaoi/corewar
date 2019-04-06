@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:03:04 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:59:12 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	if (ARG_TYPE(instr, argument) == e_register)
 	{
 		load_arg = mem_load(state, address + instr->size, 1);
-		ARG_REG(instr, argument)
-			= ((uint8_t*)&load_arg.buffer)[sizeof(load_arg.buffer) - 1];
-		if (!ARG_REG(instr, argument)
-			|| ARG_REG(instr, argument) > REG_NUMBER)
+		ARG_REG(instr, argument) = INDEX_BUFF(load_arg, L_BUFF_SIZE - 1);
+		if (!ARG_REG(instr, argument) || ARG_REG(instr, argument) > REG_NUMBER)
 			instr->invalid = 1;
 		return (1);
 	}
@@ -36,21 +34,12 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	}
 	else if (ARG_TYPE(instr, argument) == e_direct)
 	{
-		if (g_opcode_table[instr->opcode].relative)
-		{
-			load_arg = mem_load(state, address + instr->size, IND_SIZE);
-			ARG_DIR(instr, argument).content = load_arg;
-			return (2);
-		}
-		else
-		{
-			load_arg = mem_load(state, address + instr->size, DIR_SIZE);
-			ARG_DIR(instr, argument).content = load_arg;
-			return (4);
-		}
+		load_arg = mem_load(state, address + instr->size,
+			g_opcode_table[instr->opcode].relative ? IND_SIZE : DIR_SIZE);
+		ARG_DIR(instr, argument).content = load_arg;
+		return (g_opcode_table[instr->opcode].relative ? 2 : 4);
 	}
-	else
-		return (0);
+	return (0);
 }
 
 static void		parse_instruction(t_vm_state *state, t_instr *instr,
@@ -63,7 +52,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	if (g_opcode_table[instr->opcode].has_ocp)
 	{
 		load_buffer = mem_load(state, address + instr->size, 1);
-		ocp = parse_ocp(((uint8_t*)&load_buffer.buffer)[sizeof(load_buffer.buffer) - 1]);
+		ocp = parse_ocp(INDEX_BUFF(load_buffer, L_BUFF_SIZE - 1));
 		arg_types_ocp(instr, ocp);
 		instr->size++;
 	}
@@ -77,7 +66,8 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	}
 }
 
-t_instr			fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address)
+t_instr			fetch_arguments(t_vm_state *state, enum e_instr opcode,
+					size_t address)
 {
 	t_instr			instr;
 
@@ -101,12 +91,11 @@ t_instr			fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address
 
 enum e_instr	fetch_opcode(t_vm_state *state, size_t address)
 {
-
 	t_bigend_buffer	load_buffer;
 	enum e_instr	opcode;
 
 	load_buffer = mem_load(state, address, 1);
-	opcode = ((uint8_t*)&load_buffer.buffer)[sizeof(load_buffer.buffer) - 1] - 1;
+	opcode = INDEX_BUFF(load_buffer, L_BUFF_SIZE - 1);
 	if (opcode > e_invalid)
 		opcode = e_invalid;
 	return (opcode);

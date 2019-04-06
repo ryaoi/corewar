@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/06 19:41:21 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:56:53 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@
 # define ERR_CHAMP_READ -4
 # define ERR_HEADER_MAGIC -5
 
+# define L_BUFF_SIZE sizeof(t_bigend_buffer)
 # define REGISTER(proc, id) ((proc)->registers[id])
 # define ARG_REG(instr, id) ((instr)->instr_args[id].arg.reg_index)
 # define ARG_IND(instr, id) ((instr)->instr_args[id].arg.index)
