@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:08:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:15:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry)
 	new_carry = 0;
 	while (index-- > 0)
 	{
-		if (((uint8_t*)&f.buffer)[index] > (255 - carry)
-			|| (((uint8_t*)&f.buffer)[index] + carry) > (255 - ((uint8_t*)&s.buffer)[index]))
+		if (INDEX_BUFF(f, index) > (255 - carry)
+			|| (INDEX_BUFF(f, index) + carry) > (255 - INDEX_BUFF(s, index)))
 			new_carry = 1;
 		else
 			new_carry = 0;
-		((uint8_t*)&ret.buffer)[index] = ((uint8_t*)&f.buffer)[index] + ((uint8_t*)&s.buffer)[index] + carry;
+		INDEX_BUFF(ret, index) = INDEX_BUFF(f, index) + INDEX_BUFF(s, index) + carry;
 		carry = new_carry;
 	}
 	return (ret);

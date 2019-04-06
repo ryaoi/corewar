@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:41:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:08:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:15:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static t_bigend_buffer	bitwise_or(t_bigend_buffer f, t_bigend_buffer s)
 	while (index < sizeof(f.buffer))
 	{
 		/* TODO just give up and use size_t internally? */
-		((uint8_t*)&ret.buffer)[index] = ((uint8_t*)&f.buffer)[index]
-			| ((uint8_t*)&s.buffer)[index];
+		INDEX_BUFF(ret, index) = INDEX_BUFF(f, index)
+			| INDEX_BUFF(s, index);
 		index++;
 	}
 	return (ret);

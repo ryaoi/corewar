@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/06 19:07:59 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:15:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@
 # define ARG_IND(instr, id) ((instr)->instr_args[id].arg.index)
 # define ARG_DIR(instr, id) ((instr)->instr_args[id].arg.direct)
 # define ARG_TYPE(instr, id) ((instr)->instr_args[id].arg_type)
+# define INDEX_BUFF(buff_name, id) (((uint8_t*)&(buff_name).buffer)[id])
 
 enum	e_instr_arg_type
 {
