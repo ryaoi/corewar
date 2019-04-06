@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 21:49:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 20:01:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry)
 {
-	uint8_t	new_carry;
-	size_t	index;
+	uint8_t			new_carry;
+	size_t			index;
 	t_bigend_buffer	ret;
 
 	ret.buffer = 0;
@@ -23,25 +23,26 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry)
 	new_carry = 0;
 	while (index-- > 0)
 	{
-		if (((uint8_t*)&f.buffer)[index] > (255 - carry)
-			|| (((uint8_t*)&f.buffer)[index] + carry) > (255 - ((uint8_t*)&s.buffer)[index]))
+		if (INDEX_BUFF(f, index) > (255 - carry)
+			|| (INDEX_BUFF(f, index) + carry) > (255 - INDEX_BUFF(s, index)))
 			new_carry = 1;
 		else
 			new_carry = 0;
-		((uint8_t*)&ret.buffer)[index] = ((uint8_t*)&f.buffer)[index] + ((uint8_t*)&s.buffer)[index] + carry;
+		INDEX_BUFF(ret, index) = INDEX_BUFF(f, index)
+			+ INDEX_BUFF(s, index) + carry;
 		carry = new_carry;
 	}
 	return (ret);
 }
 
-void	impl_add(t_vm_state *state, size_t p_index, t_instr *instr)
+void			impl_add(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_process	*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
-	process->registers[instr->instr_args[2].arg.reg_index - 1].content
-		= add_bigend(process->registers[instr->instr_args[0].arg.reg_index - 1].content,
-		process->registers[instr->instr_args[1].arg.reg_index - 1].content, 0);
+	process = &PROCESS(state, p_index);
+	REGISTER(process, ARG_REG(instr, 2) - 1).content = add_bigend(
+		REGISTER(process, ARG_REG(instr, 0) - 1).content,
+		REGISTER(process, ARG_REG(instr, 1) - 1).content, 0);
 	process->carry = buffer_is_zero(
-		process->registers[instr->instr_args[2].arg.reg_index - 1].content);
+		REGISTER(process, ARG_REG(instr, 2) - 1).content);
 }

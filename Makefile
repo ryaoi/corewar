@@ -45,7 +45,8 @@ ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
 
 TESTS_SRCS = short_game.c \
-	complete_game.c
+	complete_game.c \
+	invalid_champ.c
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 
