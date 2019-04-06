@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 17:36:37 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:03:04 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,34 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	t_bigend_buffer	load_arg;
 
 	load_arg.buffer = 0;
-	if (instr->instr_args[argument].arg_type == e_register)
+	if (ARG_TYPE(instr, argument) == e_register)
 	{
 		load_arg = mem_load(state, address + instr->size, 1);
-		instr->instr_args[argument].arg.reg_index
+		ARG_REG(instr, argument)
 			= ((uint8_t*)&load_arg.buffer)[sizeof(load_arg.buffer) - 1];
-		if (!instr->instr_args[argument].arg.reg_index
-			|| instr->instr_args[argument].arg.reg_index > REG_NUMBER)
+		if (!ARG_REG(instr, argument)
+			|| ARG_REG(instr, argument) > REG_NUMBER)
 			instr->invalid = 1;
 		return (1);
 	}
-	else if (instr->instr_args[argument].arg_type == e_index)
+	else if (ARG_TYPE(instr, argument) == e_index)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		instr->instr_args[argument].arg.index.content = load_arg;
+		ARG_IND(instr, argument).content = load_arg;
 		return (2);
 	}
-	else if (instr->instr_args[argument].arg_type == e_direct)
+	else if (ARG_TYPE(instr, argument) == e_direct)
 	{
 		if (g_opcode_table[instr->opcode].relative)
 		{
 			load_arg = mem_load(state, address + instr->size, IND_SIZE);
-			instr->instr_args[argument].arg.direct.content = load_arg;
+			ARG_DIR(instr, argument).content = load_arg;
 			return (2);
 		}
 		else
 		{
 			load_arg = mem_load(state, address + instr->size, DIR_SIZE);
-			instr->instr_args[argument].arg.direct.content = load_arg;
+			ARG_DIR(instr, argument).content = load_arg;
 			return (4);
 		}
 	}

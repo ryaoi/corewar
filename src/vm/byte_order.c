@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:24 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 17:07:50 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 18:39:13 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,3 @@ t_bigend_buffer	byte_order_swap(t_bigend_buffer input)
 	}
 	return (output);
 }
-

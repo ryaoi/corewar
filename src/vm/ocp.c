@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:15:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 14:47:24 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:03:04 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,23 @@ void		arg_types_ocp(t_instr *instr, t_ocp ocp)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG))
 				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_register;
+			ARG_TYPE(instr, arg_index) = e_register;
 		}
 		else if (ocp.fields[arg_index] == e_index)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND))
 				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_index;
+			ARG_TYPE(instr, arg_index) = e_index;
 		}
 		else if (ocp.fields[arg_index] == e_direct)
 		{
 			if (!(g_opcode_table[instr->opcode].arg_types[arg_index] & T_DIR))
 				instr->invalid = 1;
-			instr->instr_args[arg_index].arg_type = e_direct;
+			ARG_TYPE(instr, arg_index) = e_direct;
 		}
 		else
 		{
-			instr->instr_args[arg_index].arg_type = e_absent;
+			ARG_TYPE(instr, arg_index) = e_absent;
 			instr->invalid = 1;
 		}
 		arg_index++;
@@ -78,11 +78,11 @@ void		arg_types_non_ocp(t_instr *instr)
 	while (arg_index < g_opcode_table[instr->opcode].arg_num)
 	{
 		if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_REG)
-			instr->instr_args[arg_index].arg_type = e_register;
+			ARG_TYPE(instr, arg_index) = e_register;
 		else if (g_opcode_table[instr->opcode].arg_types[arg_index] & T_IND)
-			instr->instr_args[arg_index].arg_type = e_index;
+			ARG_TYPE(instr, arg_index) = e_index;
 		else
-			instr->instr_args[arg_index].arg_type = e_direct;
+			ARG_TYPE(instr, arg_index) = e_direct;
 		arg_index++;
 	}
 }
