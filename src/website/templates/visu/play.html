@@ -5,23 +5,24 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'visu/style1.css' %}">
 		<script src="{% static "/visu/jquery.js" %}"></script>
 	</head>
-	<body onload="fill()">
+	<body>
 		<div id="content">
 			<div class="title">
 				<h2>COREWAR</h2>
 			</div>
 			<div class="control">
 				<p>control</p>
-				<a href="../../play" id="link_next_cycle">next_cycle</a>
+				<a href="javascript:update()" id="link_next_cycle">next_cycle</a>
 				<a href="javascript:play()" id="link_play">Play</a>
+				<p class="cycle_show">cycle: 1</p>
 			</div>
 			<p id="test"></p>
 			<div class="mem" style="height: 100%;">
 				<p class="mem_dump">
 				{{mem}}
 				<!--{% for i in range %}	
-				<p>{{i | get_address}}</p><div id="line{{i}}"></div>
-				{% endfor %}-->
+		<p>{{i | get_address}}</p><div id="line{{i}}"></div>
+		{% endfor %}-->
 				</p>
 			</div>
 			<div class="logs">
@@ -37,56 +38,52 @@
 
 <script>
 
+var pause = 0;
+var cycle = 0;
+
+function toggle_pause()
+{
+	if (pause == 0)
+		pause = 1;
+	else
+		pause = 0;
+}
 
 
 function play()
 {
-	if (sessionStorage.pause && sessionStorage.pause == "1")
-		sessionStorage.pause = "0";
-	else if (sessionStorage.pause && sessionStorage.pause == "0")
-		sessionStorage.pause = "1";
-	else
-		sessionStorage.setItem("pause","1");
-	location.reload();
+	while (1)
+	{
+	if (pause == 0)
+	{
+	cycle += 1;
+	$.post( "update/", function( data ) {
+		alert( "Data Loaded: " + data );
+	});
+	var now = new Date().getTime();
+	while ( new Date().getTime() < now + 200)
+	{
+	}	
+	$("p.cycle_show").html("cycle: " + cycle);
+	}	
+}
+}
+function update()
+{
+	if (pause == 1)
+	{
+	cycle += 1;
+	$.post( "update/", function( data ) {
+		alert( "Data Loaded: " + data );
+	});
+	var now = new Date().getTime();
+	while ( new Date().getTime() < now + 200)
+	{
+	}	
+	$("p.cycle_show").html("cycle: " + cycle);
+	}
 }
 
-function store()
-{
-	var sessionStrage = window.sessionStrage;
-	if (sessionStrage)
-	{
-		sessionStorage.setItem("mem{{cycle}}", "{{mem_dump}}");
-		var str_logs = JSON.stringify(logs);
-		sessionStorage.setItem("log{{cycle}}", "str_logs");
-		if (sessionStorage.length == 43)
-		{
-			//sessionStorage.removeItem("log{{cycle | delete_cycle_num }}");
-			//sessionStorage.removeItem("mem{{cycle | delete_cycle_num }}");
-		}
-	}
-}
 
-function fill()
-{
-	store();
-	if (sessionStorage.pause)
-	{	
-		if (sessionStorage.pause == "0")
-		{
-			location.reload();
-			$.post( "update/", function( data ) {
-				  alert( "Data Loaded: " + data );
-			});
-			var now = new Date().getTime();
-			while ( new Date().getTime() < now + 200)
-			{
-			}
-		}
-	}
-	else
-	{
-		sessionStorage.setItem("pause","1");
-	}
-}
 </script>
 

@@ -4,29 +4,10 @@ from django.template import loader, Context
 from . import libcore
 from visu.models import logs, memory
 
-game = libcore.CorewarGame()
-cycle = 0
-
 class SessionData:
-    game = None
-    ...
-
-
-def handle_request(stuff):
-    if stuff.session_data.game is None:
-        stuff.session_data.game = libcore.CorewarGame();
-    game.update()
-    parse_stuff()
-    reply()
-
-def play_game():
-    game.champions.append("../../resources/test_champ1.cor")
-    game.champions.append("../../resources/test_champ2.cor")
-    game.prepare()
-  #  while game.update() ==  True:
-  #      mems.append(game.mem_dump().hex())
-   # active_logs = game.logs[0] + game.logs[1]
-   # active_logs.sort(key=lambda x: x[1])
+    def __init__(game, game_id):
+        game = game;
+        game_id = game_id;
 
 def index(request):
     template = loader.get_template('visu/index.html')
@@ -38,8 +19,6 @@ def play(request):
     template = loader.get_template('visu/play.html')
     for x in game.logs:
         x.clear()
-    game.update()
-    #cycle += 1
     mem_dump = game.mem_dump().hex()
     i = 0
     mem = ""
@@ -67,10 +46,15 @@ def show_cycle(request, cycle):
 
 
 def prepare(request):
-    play_game()
-    return redirect('play')
+    game = libcore.CorewarGame()
+    game_id = "safh glaja" #TODO generate here or client side
+    sd = SessionData(game, game_id)
+    game.champions.append("../../resources/test_champ1.cor")
+    game.champions.append("../../resources/test_champ2.cor")
+    game.prepare()
+    return redirect('play') #TODO give  gamae_id
 
-def update():
+def update(request):
     for x in game.logs:
         x.clear()
     game.update()
