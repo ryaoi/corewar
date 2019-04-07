@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import $ from jquery
 import './index.css'
 import './upload.css'
 
 class PlayerUploadForm extends Component {
-	constructor (parent) {
-		super()
-		this.parent = parent
+	constructor (props) {
+		super(props)
 		this.state = {files: []}
 	}
 	addFile(event) {
@@ -24,8 +22,24 @@ class PlayerUploadForm extends Component {
 	resetFiles () {
 		this.setState({files: []})
 	}
+	sendFailed() {
+		alert('Upload failed')
+	}
 	sendFiles () {
-		this.parent.setState({is_playing: true})
+		if (!this.state.files || !this.state.files.length)
+		{
+			alert('No champions selected')
+			return
+		}
+		const formData = new FormData()
+		const parent = this.props.parent
+
+		this.state.files.map((file) => formData.append(file.name, file))
+		fetch('http://localhost:3000/game_start', {
+			method: "POST",
+			body: formData
+		}).then(parent.gameStarted.bind(parent),
+			() => alert('Upload failed'))
 	}
 	renderFile (file) {
 		return (

@@ -8,6 +8,9 @@ class CorewarsApp extends React.Component {
 		this.state = {is_playing: false}
 		this.game_id = null;
 	}
+	gameStarted (response) {
+		alert('Somehow got a response!')
+	}
 	render() {
 		if (!this.game_id)
 			return (
