@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 18:14:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 23:16:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,14 @@ typedef enum e_token_types
 
 typedef enum	e_err_types
 {
-	/* string / malloc fail */
+	/* libft / malloc fail */
 	STRDUP_FAIL = -50,
 	STRNDUP_FAIL,
 	STRJOIN_FAIL,
 	STRTRIM_FAIL,
 	MALLOC_FAIL,
 	STRSUB_FAIL,
+	GNL_FAIL,
 /* file error */
 	DOT_S_ERROR,
 	OPEN_FILE_ERROR,
@@ -75,8 +76,9 @@ typedef enum	e_err_types
 	FILE_UNKNOWN_HEADER,
 	FILE_CONVERSION_FAIL,
 /* file read error */
-	GNL_FAIL,
 	INSTR_NOT_EXIST,
+	LINECREATE_FAIL,
+	HANDLE_CMT_FAIL,
 /* file parse error */
 	TOKENIZER_FAIL,
 	OPCOMDE_CMP_FAIL,
@@ -94,8 +96,8 @@ typedef enum	e_err_types
 	PARAM_NOT_VALID,
 /* file_conversion error */
 	OPERATION_NOT_EXIST,
-	PARAM_GETVALUE_FAIL,
-
+	PARAMS_NOT_EXIST,
+	LABEL_NOT_EXIST,
 }				t_err_types;
 
 //printf("%s\n", #TOKEN_TOO_MANY);
@@ -155,5 +157,6 @@ void	print_errmsg_file(int err_type);
 void	print_errmsg_tokenizer(int err_type, char *line);
 void	print_errmsg_opcode_cmp(int err_type, char *line);
 void	print_errmsg_parser(int err_type);
+void	print_errmsg_conversion(int err_type, char *line);
 /*TODO duplicate labels handling!!!! */
 #endif

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 19:36:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 22:46:04 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ int		check_token_type(t_token *token, char *str)
 			token->type = T_INSTR;
 	}
 	else if (len > 2 && str[0] == DIRECT_CHAR && str[1] == LABEL_CHAR)
-			token->type = T_DIRLAB;
+		token->type = T_DIRLAB;
 	else if (len > 1 && str[0] == DIRECT_CHAR && is_str_digit(str + 1))
-			token->type = T_DIRECT;
+		token->type = T_DIRECT;
 	else if (len > 1 && str[0] == REGISTER_CHAR && is_str_digit(str + 1))
 		token->type = T_REGISTER;
 	else if (str[0] == LABEL_CHAR)
@@ -154,8 +154,8 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	if (check_token_type(&token, token.str) < 0)
 		return (TOKEN_TYPE_FAIL);
 	if ((token.type == T_LABEL || token.type == T_DIRLAB
-			|| token.type == T_INDIRLAB)
-		 && check_label_syntax(token.str) < 0)
+		|| token.type == T_INDIRLAB)
+			&& check_label_syntax(token.str) < 0)
 		return (TOKEN_LABEL_SYNTAX_FAIL);
 	if (token.type == T_REGISTER && check_register(token.str) < 0)
 		return (TOKEN_REGISTER_FAIL);
@@ -326,6 +326,7 @@ void	prework(t_file *file, t_line *line)
 	else if (~file->prework_flag & 1)
 		set_how(file, line);
 }
+
 static int	token_type_valid(int token_type)
 {
 	if (token_type == T_NAME_CMD || token_type == T_COMMENT_CMD ||
@@ -347,7 +348,7 @@ static int	param_size(int type, int relative)
 	return (0);
 }
 
-void	bytecode_len(t_line *line)
+void	get_bytecode_len(t_line *line)
 {
 	t_list	*traverse;
 	t_op	*op;
@@ -384,7 +385,7 @@ int		tokenizer(t_line *line)
 		print_errmsg_opcode_cmp(ret_valid, line->str);
 		return (OPCODE_CMP_FAIL);
 	}
-	bytecode_len(line);
+	get_bytecode_len(line);
 	return (SUCCESS);
 }
 

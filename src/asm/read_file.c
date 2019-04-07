@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 18:24:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 23:33:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,15 @@ static size_t	label_check(char *line)
 	return (0);
 }
 
-int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
+int		line_create(t_file *file, char *line, /*size_t nbr_lines,*/ int line_type)
 {
 	t_line new_line;
 
 	new_line.tokens = NULL;
 	if (!(new_line.str = ft_strtrim(line)))
-	{
-		ft_putendl("line_create() failed.");
-		return (STRTRIM_FAIL);
-	}
+		return (LINECREATE_FAIL);
 	new_line.nbr_params = 0;
-	new_line.id = nbr_lines;
+	new_line.id = file->nbr_line;
 	new_line.type = line_type;
 	new_line.pos = 0;
 	new_line.bytecode = NULL;
@@ -64,7 +61,7 @@ int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
 	return (SUCCESS);
 }
 
-int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
+int		line_add(t_file *file, char *line, /*size_t *nbr_lines,*/ size_t label_pos)
 {
 	size_t	len;
 
@@ -72,26 +69,27 @@ int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	if (label_pos)
 	{
 		line[label_pos + 1] = '\0';
-		if (line_create(file, line, *nbr_lines, T_LABEL) < 0)
-			return (STRTRIM_FAIL);
+		if (line_create(file, line, /*nbr_lines,*/ T_LABEL) < 0)
+			return (LINECREATE_FAIL);
 		line[label_pos + 1] = ' ';
 		if (len > label_pos + 1 && !line_is_ws((&line[label_pos + 2])))
 		{
-			if (line_create(file, line + label_pos + 2, ++(*nbr_lines),
+			file->nbr_line++;
+			if (line_create(file, line + label_pos + 2, /*++(*nbr_lines),*/
 								T_UNKNOWN) < 0)
-			return (STRTRIM_FAIL);
+			return (LINECREATE_FAIL);
 		}
 	}
 	else
 	{
-		if (line_create(file, line, *nbr_lines, T_UNKNOWN) < 0)
-			return (STRTRIM_FAIL);
+		if (line_create(file, line, /**nbr_lines,*/ T_UNKNOWN) < 0)
+			return (LINECREATE_FAIL);
 	}
 	free(line);
 	return (SUCCESS);
 }
 
-int		handle_comment(t_file *file, size_t *nbr_lines, char **line)
+int		handle_comment(t_file *file, /*size_t *nbr_lines,*/ char **line)
 {
 	int index;
 	char	*tmp;
@@ -99,15 +97,16 @@ int		handle_comment(t_file *file, size_t *nbr_lines, char **line)
 	index = 0;
 	while (*line && (*line)[index] != COMMENT_CHAR)
 		index++;
-	if (line_create(file, &((*line)[index]), ++(*nbr_lines), T_COMMENT) < 0)
+	if (line_create(file, &((*line)[index]), /*++(*nbr_lines),*/ T_COMMENT) < 0)
 	{
 		free(*line);
-		return (STRTRIM_FAIL);
+		return (LINECREATE_FAIL);
 	}
 	if (index > 0)
 	{
+		file->nbr_line++;
 		if (!(tmp = ft_strsub(*line, 0, index)))
-			return (STRSUB_FAIL);
+			return (HANDLE_CMT_FAIL);
 		free(*line);
 		*line = tmp;
 	}
@@ -115,37 +114,39 @@ int		handle_comment(t_file *file, size_t *nbr_lines, char **line)
 	return (SUCCESS);
 }
 
+int		read_error(t_file *file)
+{
+	if (file->ret == -1)
+		return (GNL_FAIL);
+	if (file->nbr_line == 0)
+		return (INSTR_NOT_EXIST);
+	return (0);
+}
+
 int		file_read(t_file *file)
 {
 	char	*line;
-	size_t	nbr_lines;
 
-	nbr_lines = 0;
 	line = NULL;
 	while ((file->ret = get_next_line(file->fd_s, &line)) > 0)
 	{
-		if (line && (line[0] =='\0' || line_is_ws(line)))
+		if (line && (line[0] == '\0' || line_is_ws(line)))
 		{
 			free(line);
 			continue ;
 		}
 		if (ft_strchr(line, COMMENT_CHAR))
-			if (handle_comment(file, &nbr_lines, &line) < 0)
-			{
-				free(line);
-				return (FILE_ERROR); /*TODO msg */
-			}
-		if (!line || line_add(file, line, &nbr_lines, label_check(line)) < 0)
+			if (handle_comment(file, /*&nbr_lines,*/ &line) < 0)
+				return (HANDLE_CMT_FAIL); /*TODO msg */
+		if (line && line_add(file, line, /*&nbr_lines,*/ label_check(line)) < 0)
 		{
 			free(line);
-			return (FILE_ERROR); /*TODO msg */
+			return (LINECREATE_FAIL); /*TODO msg */
 		}
-		nbr_lines++;
+		file->nbr_line++;
 	}
 	free(line);
-	if (file->ret == -1)
-		return (GNL_FAIL); /*TODO msg */
-	if ((file->nbr_line = nbr_lines) == 0)
-		return (INSTR_NOT_EXIST); /*TODO msg */
+	if (file->ret == -1 || (file->nbr_line == 0))
+		return (read_error(file));
 	return (SUCCESS);
 }

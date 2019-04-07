@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 19:36:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 22:44:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	ocp_set(t_list *tokens, unsigned char *bytecode)
 {
 	unsigned int	ocp;
 	t_list			*traverse;
-	int	index;
+	int				index;
 
 	ocp = 0;
 	index = 0;
@@ -115,13 +115,13 @@ int		param_getvalue(t_list *lines, t_line *line, t_token *token)
 			if (LST_CONT(traverse, t_line).type == T_LABEL &&
 				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
 			{
-				token->value = label_value(line, &LST_CONT(traverse, t_line), traverse);
+				token->value = label_value(line, &LST_CONT(traverse, t_line),
+											traverse);
 				return (SUCCESS);
 			}
 			traverse = traverse->next;
 		}
-		ft_putendl("Label doesn't exist in the file.");
-		return (GETVALUE_FAIL);
+		return (LABEL_NOT_EXIST);
 	}
 	return (SUCCESS);
 }
@@ -148,21 +148,19 @@ void	param_trans(unsigned char *bytecode, int size,
 	/*TODO LITTLE -> BIG ENDIAN */
 }
 
-int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
+int		bc_translation(t_file *file, t_line *line, t_list *traverse, t_op *op)
 {
-	t_list			*traverse;
 	unsigned char	*bc;
 	int				i;
 	int				value;
 	int				type;
 
 	i = 0;
-	traverse = line->tokens->next;
 	bc = line->bytecode;
 	while (traverse)
 	{
 		if (param_getvalue(file->lines, line, &LST_CONT(traverse, t_token)) < 0)
-			return (CONVERSION_FAIL);
+			return (LABEL_NOT_EXIST);
 		value = LST_CONT(traverse, t_token).value;
 		type = LST_CONT(traverse, t_token).type;
 		if (type == T_INDIRECT || type == T_INDIRLAB)
@@ -178,10 +176,32 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 	return (SUCCESS);
 }
 
+static int		conversion(t_file *file, t_line *line)
+{
+	t_op	*op;
+	int 	ret_conv;
+
+	if (!(op = operation_set(line)))
+	{
+		print_errmsg_conversion(OPERATION_NOT_EXIST, line->str);
+		return (FILE_CONVERSION_FAIL);
+	}
+	if (!line->tokens->next)
+	{
+		print_errmsg_conversion(PARAMS_NOT_EXIST, line->str);
+		return (FILE_CONVERSION_FAIL);
+	}
+	if ((ret_conv = bc_translation(file, line, line->tokens->next, op)) < 0)
+	{
+		print_errmsg_conversion(LABEL_NOT_EXIST, line->str);
+		return (FILE_CONVERSION_FAIL);
+	}
+	return (SUCCESS);
+}
+
 int		file_conversion(t_file *file)
 {
 	t_list	*traverse;
-	t_op	*op;
 
 	traverse = file->lines;
 	while (traverse)
@@ -189,18 +209,12 @@ int		file_conversion(t_file *file)
 		if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
 			LST_CONT(traverse, t_line).tokens)
 		{
-			if (!(op = operation_set(&LST_CONT(traverse, t_line))))
-				ERROR("operation doesn't exist.", CONVERSION_FAIL);
-			//	return (CONVERSION_FAIL);
-			if (!(LST_CONT(traverse, t_line).tokens->next))
-				ERROR("no parameters found.", CONVERSION_FAIL);
-			//	return (CONVERSION_FAIL);
-			if (!bytecode_conversion(file, &LST_CONT(traverse, t_line), op))
-				ERROR("conversion failed.", CONVERSION_FAIL);
-			//	return (CONVERSION_FAIL);
+			if (conversion(file, &LST_CONT(traverse, t_line)) < 0)
+				return (FILE_CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
 		printf("[%s]\n", LST_CONT(traverse, t_line).str);
+		printf("bc_length : %zu\n", LST_CONT(traverse, t_line).bytecode_len);
 		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
 			printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
 		printf("\n-------------------------------------\n");

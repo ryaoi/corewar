@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/06 19:08:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 23:32:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,24 +80,29 @@ static void	file_add(t_list **inputs, char *filename)
 
 void	assemble_file(t_list *traverse)
 {
+	int ret;
+
 	while (traverse)
 	{
-		if (file_read((t_file*)traverse->content) == FILE_ERROR ||
-			file_parse((t_file*)traverse->content) == FILE_PARSE_FAIL ||
-			((t_file*)traverse->content)->prework_flag != PREWORK_FLAG_ON ||
-			file_conversion(((t_file*)traverse->content)) == CONVERSION_FAIL
-			)
+		if ((ret = file_read((t_file*)traverse->content)) < 0)
 		{
-			ft_printf("%s cannot be parsed.\n",
-						LST_CONT(traverse, t_file).name_s);
+			close(LST_CONT(traverse, t_file).fd_s);
+			//print_errmsg_fileread(ret);
+			traverse = traverse->next;
+			continue;
+		}
+		if (file_parse((t_file*)traverse->content) < 0 ||
+			((t_file*)traverse->content)->prework_flag != PREWORK_FLAG_ON ||
+			file_conversion(((t_file*)traverse->content)) < 0)
+		{
 			close(LST_CONT(traverse, t_file).fd_s);
 			traverse = traverse->next;
 			continue;
 		}
 		close(LST_CONT(traverse, t_file).fd_s);
 		write_cor_file(&LST_CONT(traverse, t_file));
-		ft_printf("%s successfully created.\n",
-					LST_CONT(traverse, t_file).name_cor);
+		ft_printf("[%s] assembled.\n", LST_CONT(traverse, t_file).name_cor);
+		ft_printf("[%d] assembled.\n", LST_CONT(traverse, t_file).nbr_line);
 		traverse = traverse->next;
 	}
 }

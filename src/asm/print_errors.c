@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 16:39:05 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 21:02:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,14 @@ void	print_errmsg_opcode_cmp(int err_type, char *line)
 		ft_printf("at '%s'\nparameter doesn't exist.\n", line);
 	else if (err_type == PARAM_NOT_VALID)
 		ft_printf("at '%s'\nnot valid param according to the op_table.\n", line);
+}
+
+void	print_errmsg_conversion(int err_type, char *line)
+{
+	if (err_type == OPERATION_NOT_EXIST)
+		ft_printf("at '%s'\noperation doesn't exist.\n", line);
+	else if (err_type == PARAMS_NOT_EXIST)
+		ft_printf("at '%s'\nparameter doesn't exist.\n", line);
+	else if (err_type == LABEL_NOT_EXIST)
+		ft_printf("at '%s'\nlabel doesn't exist.\n", line);
 }
