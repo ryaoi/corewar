@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { handleErrors } from './CorewarsApp'
 import './index.css'
 import './upload.css'
 
@@ -31,6 +32,16 @@ class PlayerUploadForm extends Component {
 			alert('No champions selected')
 			return
 		}
+		else if (this.state.files.length  > 4)
+		{
+			alert("Can't play a game with more than 4 players.")
+			return
+		}
+		else if (this.state.files.length < 2)
+		{
+			alert("Can't play a game with less than 2 players.")
+			return
+		}
 		const formData = new FormData()
 		const parent = this.props.parent
 
@@ -38,33 +49,34 @@ class PlayerUploadForm extends Component {
 		fetch('http://localhost:3000/game_start', {
 			method: "POST",
 			body: formData
-		}).then(parent.gameStarted.bind(parent),
-			() => alert('Upload failed'))
+		}).then(handleErrors)
+		.then(parent.gameStarted.bind(parent))
+		.catch(e => console.log(e))
 	}
-	renderFile (file) {
+	renderFile (item, i) {
 		return (
-			<div class="file-name">
-				{file.name}
+			<div className="file-name" key={i}>
+				{item.name}
 			</div>
 		)
 	}
 	render () {
 		return (
-			<div class="upload-form">
-				<div class="upload-title">
+			<div className="upload-form">
+				<div className="upload-title">
 					Title placeholder<br/>
 					Upload your files here:
 				</div>
-				<div class="files-list">
+				<div className="files-list">
 					{this.state.files.map(this.renderFile)}
 				</div>
-				<div class="upload-button">
-					<label for="upload-champion">
+				<div className="upload-button">
+					<label htmlFor="upload-champion">
 						Upload champion:<br/>
 					</label>
 					<input type="file" name="upload-champion" onChange={this.addFile.bind(this)} multiple />
 				</div>
-				<span class="champ-buttons">
+				<span className="champ-buttons">
 					<button name="reset-champions" onClick={this.resetFiles.bind(this)}>Reset champions</button>
 					<button name="send-champions" onClick={this.sendFiles.bind(this)}>Send champions</button>
 				</span>
