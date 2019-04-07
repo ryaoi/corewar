@@ -72,7 +72,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
+	gcc $(LDFLAGS) -shared -o src/flask/$@ $^ `pkg-config python3 --libs`
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore

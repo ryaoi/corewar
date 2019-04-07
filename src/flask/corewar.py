@@ -1,13 +1,11 @@
 from flask import Flask, render_template
 import libcore
 from flask_wtf.csrf import CsrfProtect
-import json
-import string, random, os, time
+import json, string, random, os, time
 from datetime import datetime
+from flask import request
 
-csrf = CsrfProtect()
 app = Flask(__name__)
-csrf.init_app(app)
 
 sessions = []
 
@@ -16,29 +14,15 @@ class SessionData:
         self.game = game
         self.game_id = game_id
         self.atime = time.time()
-#csrf able
 
 @app.route("/")
 def index():
-    return render_template("test.html", variable="this is var")
+    return render_template("index.html")
 
-@app.route("/play/<game_id>")
-def play(game_id):
-    game = None
-    for x in sessions:
-        if x.game_id == game_id:
-            game = x.game
-            break;
-    if game == None:
-        return render_template("error.html", m="no game found")
-    for x in game.logs:
-        x.clear()
-    mem_dump = game.mem_dump().hex()
-    return render_template("play.html", logs=logs, mem=mem_dump)
-
-#@app.route("/prepare/<player1>/<player2>/<game_id>")
-def prepare(game_info):#upload players with json
-    info = json.leads(game_info)
+@app.route("/AJAX/prepare/", methods=['POST'])
+def prepare():
+    game_info = request.data
+    info = json.loads(game_info)
     game = libcore.CorewarGame()
     game_id = create_game_id()
     sd = SessionData(game, game_id)
@@ -47,7 +31,7 @@ def prepare(game_info):#upload players with json
         name = "p" + str(i)
         if info[name]:
             fo = open(game_id[50] +"p" + str(i) + ".cor", "w")
-            fo.write(info["p1"])
+            fo.write(info["p"+str(i)])
             fo.close()
             game.champions.append("players/" + game_id[50] +"p" + str(i)+ ".cor")
     try:
@@ -63,45 +47,48 @@ def create_game_id():
         ret = ret + random.choice(string.ascii_letters)
     return ret
 
-##@app.route("/update/<game_id>")
-def update(play_info):
+@app.route("/AJAX/update/", methods=['POST'])
+def update():
+    play_info = request.data
     game = None
-    info = json.leads(play_info)
+    info = json.loads(play_info)
     game_id = info["game_id"]
     now = time.time()
     for x in sessions:
         if x.game_id == game_id:
             game = x.game
             x.atime = now
-        if now - x.atime > datetime.timedelta(minutes=10):
-            sessions.pop(x)
+       # if now - x.atime > timedelta(minutes=10):
+       #     sessions.pop(x)
     if game == None:
-        return
+        return ""
     cycle = int(info["cycle"])
     for i in range(cycle):
         game.update()
     mem_dump = game.mem_dump().hex()
     logs_nbr = info["active_logs"]
     active_logs = []
-    while i in logs_nbr:
-        active_logs = active_logs + game.logs[int(i)]
+    i = 0
+    while i < len(logs_nbr):
+        active_logs = active_logs + game.logs[int(logs_nbr[i])]
+        i += 1
     active_logs.sort(key=lambda x: x[1])
     for x in game.logs:
         x.clear()
     context = {
-            "mem": mem,
+            "mem": mem_dump,
             "log": active_logs
             }
-    delete_untracked_games()
     return json.dumps(context)
 
-
-def end_game(game_info):
-    info = json.leads(game_info)
+@app.route("/AJAX/logout/", methods=['POST'])
+def end_game():
+    game_info = request.data
+    info = json.loads(game_info)
     game_id = info["game_id"]
     for x in sessions:
         if x.game_id == game_id:
-            sessions.pop(x)
+            sessions.pop(sessions.index(x))
             break;
     try:
         os.remove(game_id[50] +"p1" + ".cor")
@@ -109,5 +96,9 @@ def end_game(game_info):
         os.remove(game_id[50] +"p3" + ".cor")
         os.remove(game_id[50] +"p4" + ".cor")
     except:
-        return 
+        return ""
+    return ""
 
+
+if __name__ == '__main__':
+    app.run(debug=True)
