@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:48:39 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 21:55:18 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	process_exec_cycle(t_vm_state *state, size_t p_index)
 	t_instr		instr;
 	t_process	*process;
 
-	process = &ARRAY_PTR(state->processes, t_process)[p_index];
+	process = &PROCESS(state, p_index);
 	if (process->busy == 0)
 	{
 		process->pending_operation = fetch_opcode(state, process->program_counter);
@@ -40,7 +40,7 @@ void	process_exec_cycle(t_vm_state *state, size_t p_index)
 				process->id, g_opcode_table[instr.opcode].name);
 			(g_impl_table[process->pending_operation])
 				(state, p_index, &instr);
-			process = &ARRAY_PTR(state->processes, t_process)[p_index];
+			process = &PROCESS(state, p_index);
 		}
 		if (!process->has_jumped)
 			process->program_counter

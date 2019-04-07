@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/29 14:35:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/01 21:31:07 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:08:09 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ static int	py_process_set_registers(PyObject *dict, t_process *process)
 	index = 0;
 	while (index < REG_NUMBER)
 	{
-		value = PyLong_FromSize_t(process->registers[index].content.buffer);
+		value = PyLong_FromSize_t(REGISTER(process, index).content.buffer);
 		if (!value || PyTuple_SetItem(tuple, index, value) < 0)
 			return (-1);
 		index++;

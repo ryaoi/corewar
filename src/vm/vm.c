@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/01 21:54:28 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/06 19:54:52 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	player_destroy(void *ptr)
 
 void	vm_state_clear(t_vm_state *state)
 {
-	array_clear(&state->players, player_destroy);
 	array_clear(&state->processes, NULL);
+	array_clear(&state->players, player_destroy);
 	logs_destroy(&state->log_info);
 }
