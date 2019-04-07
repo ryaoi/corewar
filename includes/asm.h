@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/06 20:09:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 18:14:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 # include "ft_printf.h"
 
 # define SUCCESS 1
-# define MALLOC_FAIL 0
+# define FAIL 0
+//# define MALLOC_FAIL 0
 # define FILE_ERROR 0
 # define ASM_FAIL 0
 # define LINE_FAIL 0
 # define TOKEN_FAIL 0
-# define TOKEN_TYPE_FAIL 0
 # define PARAM_CHECK_FAIL 0
 # define INSTR_FAIL 0
 # define PARAM_FAIL 0
@@ -57,14 +57,48 @@ typedef enum e_token_types
 	T_UNKNOWN /* added to handle other than labels later */
 }			t_token_types;
 
-typedef enum e_err_types_file
+typedef enum	e_err_types
 {
-	DOT_S_ERROR = -5,
-	OPEN_FILE_ERROR,
-	STRDUP_FAIL,
+	/* string / malloc fail */
+	STRDUP_FAIL = -50,
 	STRNDUP_FAIL,
-	STRJOIN_FAIL
-}			t_err_types_file;
+	STRJOIN_FAIL,
+	STRTRIM_FAIL,
+	MALLOC_FAIL,
+	STRSUB_FAIL,
+/* file error */
+	DOT_S_ERROR,
+	OPEN_FILE_ERROR,
+/* main error */
+	FILE_READ_FAIL,
+	FILE_PARSE_FAIL,
+	FILE_UNKNOWN_HEADER,
+	FILE_CONVERSION_FAIL,
+/* file read error */
+	GNL_FAIL,
+	INSTR_NOT_EXIST,
+/* file parse error */
+	TOKENIZER_FAIL,
+	OPCOMDE_CMP_FAIL,
+/* token error */
+	TOKEN_TOO_MANY,
+	TOKEN_TYPE_FAIL,
+	TOKEN_LABEL_SYNTAX_FAIL,
+	TOKEN_REGISTER_FAIL,
+	TOKEN_TYPE_UNKNOWN,
+	TOKEN_INSTR_INVALID,
+/* opcode compare error */
+	PARAM_OP_NOT_EXIST,
+	PARAM_NBR_FAIL,
+	PARAM_NOT_EXIST,
+	PARAM_NOT_VALID,
+/* file_conversion error */
+	OPERATION_NOT_EXIST,
+	PARAM_GETVALUE_FAIL,
+
+}				t_err_types;
+
+//printf("%s\n", #TOKEN_TOO_MANY);
 
 # define ERROR(msg, ret) {ft_putendl(msg);return(ret);}
 
@@ -117,6 +151,9 @@ int		is_comment(t_line *line);
 int		is_whitespaces_line(const char *str);
 int		write_cor_file(t_file *file);
 
-
+void	print_errmsg_file(int err_type);
+void	print_errmsg_tokenizer(int err_type, char *line);
+void	print_errmsg_opcode_cmp(int err_type, char *line);
+void	print_errmsg_parser(int err_type);
 /*TODO duplicate labels handling!!!! */
 #endif

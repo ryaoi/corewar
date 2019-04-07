@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/06 19:09:30 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 19:36:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
 	else if (curr_line->id < label_line->id)
 	{
 		value += curr_line->bytecode_len;
-		while (traverse && (((t_line*)traverse->content) != curr_line))
+		while (traverse && (&LST_CONT(traverse, t_line) != curr_line))
 		{
 			value += ((t_line*)traverse->content)->bytecode_len;
 			traverse = traverse->prev;
@@ -161,7 +161,7 @@ int		bytecode_conversion(t_file *file, t_line *line, t_op *op)
 	bc = line->bytecode;
 	while (traverse)
 	{
-		if (!(param_getvalue(file->lines, line, &LST_CONT(traverse, t_token))))
+		if (param_getvalue(file->lines, line, &LST_CONT(traverse, t_token)) < 0)
 			return (CONVERSION_FAIL);
 		value = LST_CONT(traverse, t_token).value;
 		type = LST_CONT(traverse, t_token).type;
@@ -200,7 +200,7 @@ int		file_conversion(t_file *file)
 			//	return (CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
-		printf("%s\n", LST_CONT(traverse, t_line).str);
+		printf("[%s]\n", LST_CONT(traverse, t_line).str);
 		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
 			printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
 		printf("\n-------------------------------------\n");

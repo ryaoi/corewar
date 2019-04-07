@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/06 22:33:37 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 19:36:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ int		is_comment(t_line *line)
 	while (line->str && line->str[index] && ft_isspace(line->str[index]))
 		index++;
 	if (line->str[index] == COMMENT_CHAR)
-	{
-		line->type = T_COMMENT;
 		return (1);
-	}
 	return (0);
 }
 
@@ -78,55 +75,50 @@ int		check_token_type(t_token *token, char *str)
 {
 	size_t	len;
 
-	len = ft_strlen(str);
+	if (!(len = ft_strlen(str)))
+		return (TOKEN_TYPE_FAIL);
 	if (token->id == 0)
+	{
 		if (str[len - 1] == LABEL_CHAR)
 			token->type = T_LABEL;
 		else
 			token->type = T_INSTR;
-	else if (str[0] == DIRECT_CHAR)
-		if (str[1] == LABEL_CHAR)
+	}
+	else if (len > 2 && str[0] == DIRECT_CHAR && str[1] == LABEL_CHAR)
 			token->type = T_DIRLAB;
-		else
+	else if (len > 1 && str[0] == DIRECT_CHAR && is_str_digit(str + 1))
 			token->type = T_DIRECT;
-	else if (str[0] == REGISTER_CHAR && is_str_digit(str + 1))
+	else if (len > 1 && str[0] == REGISTER_CHAR && is_str_digit(str + 1))
 		token->type = T_REGISTER;
 	else if (str[0] == LABEL_CHAR)
 		token->type = T_INDIRLAB;
 	else if (is_str_digit(str))
 		token->type = T_INDIRECT;
 	else
-		ERROR("no token_type found.", TOKEN_TYPE_FAIL);
-		//return (TOKEN_TYPE_FAIL);
+		return (TOKEN_TYPE_FAIL);
 	return (SUCCESS);
 }
 
-int		check_parameter(t_token *token, char *str)
+int		check_label_syntax(char *str)
 {
 	int index;
 
 	index = 0;
-	if (token->type == T_LABEL || token->type == T_DIRLAB ||
-			token->type == T_INDIRLAB)
+	while (str[index])
 	{
-		while (str[index])
-		{
-			if (!ft_strchr(LABEL_CHARS, str[index]) &&
-				!(index == 0 && str[index] == DIRECT_CHAR) &&
-					!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
-				ERROR("wrong syntax of label.", PARAM_CHECK_FAIL);
-				//return (PARAM_CHECK_FAIL);
-			index++;
-		}
-		return (SUCCESS);
+		if (!ft_strchr(LABEL_CHARS, str[index]) &&
+			!(index == 0 && str[index] == DIRECT_CHAR) &&
+				!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
+			return (TOKEN_LABEL_SYNTAX_FAIL);
+		index++;
 	}
-	else if (token->type == T_REGISTER)
-	{
-		if (ft_atoi(str + 1) > REG_NUMBER)
-			ERROR("register number too high.", PARAM_CHECK_FAIL);
-			//return (PARAM_CHECK_FAIL);
-		return (SUCCESS);
-	}
+	return (SUCCESS);
+}
+
+int		check_register(char *str)
+{
+	if (ft_atoi(str + 1) > REG_NUMBER)
+		return (TOKEN_REGISTER_FAIL);
 	return (SUCCESS);
 }
 
@@ -140,15 +132,13 @@ int		check_instr(t_token *token, char *str)
 		if (!ft_strcmp(str, g_op_tab[index].name))
 		{
 			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
-				ERROR("malloc failed", INSTR_FAIL);
-				//return (MALLOC_FAIL);
+				return (MALLOC_FAIL);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
 			return (SUCCESS);
 		}
 		index++;
 	}
-	ft_putendl(str);
-	return (INSTR_FAIL);
+	return (TOKEN_INSTR_INVALID);
 }
 
 int		add_token(t_line *line, int token_id, int start, int end)
@@ -159,23 +149,31 @@ int		add_token(t_line *line, int token_id, int start, int end)
 	len = end - start;
 	init_token(&token);
 	if (!(token.str = ft_strsub(line->str, start, len)))
-		ERROR("ft_strsub failed.", TOKEN_FAIL);
-	//	return (TOKEN_FAIL);
+		return (STRSUB_FAIL);
 	token.id = token_id;
-	if (check_token_type(&token, token.str) == TOKEN_TYPE_FAIL)
-		ERROR("token_type error.", TOKEN_FAIL);
-	//	return (TOKEN_FAIL);
-	if (check_parameter(&token, token.str) == PARAM_CHECK_FAIL)
-		ERROR("wrong parameter.", TOKEN_FAIL);
-	//	return (TOKEN_FAIL);
+	if (check_token_type(&token, token.str) < 0)
+		return (TOKEN_TYPE_FAIL);
+	if ((token.type == T_LABEL || token.type == T_DIRLAB
+			|| token.type == T_INDIRLAB)
+		 && check_label_syntax(token.str) < 0)
+		return (TOKEN_LABEL_SYNTAX_FAIL);
+	if (token.type == T_REGISTER && check_register(token.str) < 0)
+		return (TOKEN_REGISTER_FAIL);
 	if (token.type == T_UNKNOWN)
-		ERROR("token_type not found.", TOKEN_FAIL);
-	//	return (TOKEN_FAIL);
-	if (token.type == T_INSTR && check_instr(&token, token.str) == INSTR_FAIL)
-		ERROR("no opcode match found.", TOKEN_FAIL);
-	//	return (TOKEN_FAIL);
+		return (TOKEN_TYPE_UNKNOWN);
+	if (token.type == T_INSTR && check_instr(&token, token.str) < 0)
+		return (TOKEN_INSTR_INVALID);
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
 	return (SUCCESS);
+}
+
+void	get_token(char *str, int *i, int *j)
+{
+	while (str[*i] && ft_isspace(str[*i]))
+		(*i)++;
+	*j = *i;
+	while (str[*j] && !(ft_isspace(str[*j])) && str[*j] != SEPARATOR_CHAR)
+		(*j)++;
 }
 
 int		line_tokenize(t_line *line)
@@ -184,25 +182,20 @@ int		line_tokenize(t_line *line)
 	int		i;
 	int		j;
 	int		token_id;
+	int		ret;
 
 	token_id = 0;
 	i = 0;
 	j = 0;
+	ret = 0;
 	len = ft_strlen(line->str);
 	while (token_id < 7)
 	{
 		if (token_id > 5)
-			ERROR("Too many tokens.", LINE_FAIL);
-		//	return (LINE_FAIL);
-		while (line->str[i] && ft_isspace(line->str[i]))
-			i++;
-		j = i;
-		while (line->str[j] && !(ft_isspace(line->str[j])) &&
-			line->str[j] != SEPARATOR_CHAR)
-			j++;
-		if (add_token(line, token_id, i, j) == TOKEN_FAIL)
-			ERROR("tokenize failed.", LINE_FAIL);
-		//	return (LINE_FAIL);
+			return (TOKEN_TOO_MANY);
+		get_token(line->str, &i, &j);
+		if ((ret = add_token(line, token_id, i, j)) < 0)
+			return (ret);
 		i = j + 1;
 		if (line->str[i - 1] == '\0')
 			break ;
@@ -224,11 +217,8 @@ int		validate_parameters(t_token *token, t_op opcode, int param_id)
 	/* filter indirect_label token_type */
 	if (converted_type == T_INDIRLAB - 10)
 		converted_type = T_IND;
-	//printf("t_token->type = %d\nconverted_type = %d\n", token->type, converted_type);
-	//printf("param_types[%d] = %d\n-------------------\n", param_id, opcode.param_types[param_id]);
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
-	//	ERROR("not valid parameter_type for particular opcode.", PARAM_FAIL);
-		return (PARAM_FAIL);
+		return (FAIL);
 	return (SUCCESS);
 }
 
@@ -239,14 +229,12 @@ int		opcode_cmp(t_line *line)
 	int		param_id;
 
 	if (!(traverse = line->tokens))
-		return (OPCODE_CMP_FAIL);
+		return (PARAM_OP_NOT_EXIST);
 	instr = LST_CONT(traverse, t_token).op->opcode - 1;
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
-	//	ERROR("wrong number of parameters", OPCODE_CMP_FAIL);
-		return (OPCODE_CMP_FAIL);
+		return (PARAM_NBR_FAIL);
 	if (!(traverse = traverse->next))
-	//	ERROR ("where are the params!!.", OPCODE_CMP_FAIL);
-		return (OPCODE_CMP_FAIL);
+		return (PARAM_NOT_EXIST);
 	param_id = 0;
 	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
@@ -257,8 +245,7 @@ int		opcode_cmp(t_line *line)
 			param_id++;
 		}
 		else
-		//	ERROR("not valid parameters.", OPCODE_CMP_FAIL);
-			return (OPCODE_CMP_FAIL);
+			return (PARAM_NOT_VALID);
 	}
 	return (SUCCESS);
 }
@@ -319,6 +306,26 @@ static void	set_how(t_file *file, t_line *line)
 	file->prework_flag |= 1;
 }
 
+void	remove_label_char(char *str)
+{
+	int index;
+
+	index = 0;
+	while (str && str[index])
+	{
+		if (str[index] == LABEL_CHAR)
+			str[index] = '\0';
+		index++;
+	}
+}
+
+void	prework(t_file *file, t_line *line)
+{
+	if (~file->prework_flag & 2)
+		set_progname(file, line);
+	else if (~file->prework_flag & 1)
+		set_how(file, line);
+}
 static int	token_type_valid(int token_type)
 {
 	if (token_type == T_NAME_CMD || token_type == T_COMMENT_CMD ||
@@ -362,33 +369,23 @@ void	bytecode_len(t_line *line)
 	}
 }
 
-void	remove_label_char(char *str)
+int		tokenizer(t_line *line)
 {
-	int index;
+	int	ret_token;
+	int	ret_valid;
 
-	index = 0;
-	while (str && str[index])
+	if ((ret_token = line_tokenize(line)) < 0)
 	{
-		if (str[index] == LABEL_CHAR)
-			str[index] = '\0';
-		index++;
+		print_errmsg_tokenizer(ret_token, line->str);
+		return (TOKENIZER_FAIL);
 	}
-}
-
-void	prework(t_file *file, t_line *line)
-{
-	if (~file->prework_flag & 2)
-		set_progname(file, line);
-	else if (~file->prework_flag & 1)
-		set_how(file, line);
-}
-
-void	extra_work(t_line *line)
-{
-	if (line->type == T_ASMCODE)
-		bytecode_len(line);
-	else
-		remove_label_char(line->str);
+	if ((ret_valid = opcode_cmp(line)) < 0)
+	{
+		print_errmsg_opcode_cmp(ret_valid, line->str);
+		return (OPCODE_CMP_FAIL);
+	}
+	bytecode_len(line);
+	return (SUCCESS);
 }
 
 int		file_parse(t_file *file)
@@ -396,29 +393,22 @@ int		file_parse(t_file *file)
 	t_list	*traverse;
 
 	traverse = file->lines;
-	while(traverse)
+	while (traverse)
 	{
-		if (!is_comment(&LST_CONT(traverse, t_line))) /*TODO comment handler */
+		if (!is_comment(&LST_CONT(traverse, t_line)))
 		{
 			if (file->prework_flag != PREWORK_FLAG_ON)
 				prework(file, &LST_CONT(traverse, t_line));
-/*			if (!(file->header.prog_name[0]))
-				set_progname(file, &LST_CONT(traverse, t_line));
-			else if (!(file->header.how[0]))
-				set_how(file, &LST_CONT(traverse, t_line));*/
 			if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
 				LST_CONT(traverse, t_line).type = T_ASMCODE;
 			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
-				(line_tokenize(&LST_CONT(traverse, t_line)) == LINE_FAIL ||
-				opcode_cmp(&LST_CONT(traverse, t_line)) == OPCODE_CMP_FAIL))
-					return (ASM_FAIL);
-			if (LST_CONT(traverse, t_line).type == T_ASMCODE ||
-				LST_CONT(traverse, t_line).type == T_LABEL)
-				extra_work(&LST_CONT(traverse, t_line));
-			/*if (LST_CONT(traverse, t_line).type == T_ASMCODE)
-				bytecode_len(&LST_CONT(traverse, t_line));
-			else if (LST_CONT(traverse, t_line).type == T_LABEL)
-				remove_label_char(LST_CONT(traverse, t_line).str);*/
+				(tokenizer(&(LST_CONT(traverse, t_line))) < 0))
+				return (FILE_PARSE_FAIL);
+			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
+				opcode_cmp(&LST_CONT(traverse, t_line)) < 0)
+				return (OPCOMDE_CMP_FAIL);
+			if (LST_CONT(traverse, t_line).type == T_LABEL)
+				remove_label_char(LST_CONT(traverse, t_line).str);
 		}
 		traverse = traverse->next;
 	}

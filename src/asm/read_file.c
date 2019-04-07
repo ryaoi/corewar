@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/06 20:09:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/07 18:24:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		line_create(t_file *file, char *line, size_t nbr_lines, int line_type)
 	if (!(new_line.str = ft_strtrim(line)))
 	{
 		ft_putendl("line_create() failed.");
-		return (LINE_FAIL);
+		return (STRTRIM_FAIL);
 	}
 	new_line.nbr_params = 0;
 	new_line.id = nbr_lines;
@@ -71,25 +71,47 @@ int		line_add(t_file *file, char *line, size_t *nbr_lines, size_t label_pos)
 	len = ft_strlen(line);
 	if (label_pos)
 	{
-		/* parse label : && treat label: instructions format */
 		line[label_pos + 1] = '\0';
-		if (line_create(file, line, *nbr_lines, T_LABEL) == LINE_FAIL)
-			return (ASM_FAIL);
+		if (line_create(file, line, *nbr_lines, T_LABEL) < 0)
+			return (STRTRIM_FAIL);
 		line[label_pos + 1] = ' ';
-		/*parse asm code */
 		if (len > label_pos + 1 && !line_is_ws((&line[label_pos + 2])))
 		{
 			if (line_create(file, line + label_pos + 2, ++(*nbr_lines),
-								T_UNKNOWN) == LINE_FAIL)
-			return (ASM_FAIL);
+								T_UNKNOWN) < 0)
+			return (STRTRIM_FAIL);
 		}
 	}
 	else
 	{
-		if (line_create(file, line, *nbr_lines, T_UNKNOWN) == LINE_FAIL)
-			return (ASM_FAIL);
+		if (line_create(file, line, *nbr_lines, T_UNKNOWN) < 0)
+			return (STRTRIM_FAIL);
 	}
 	free(line);
+	return (SUCCESS);
+}
+
+int		handle_comment(t_file *file, size_t *nbr_lines, char **line)
+{
+	int index;
+	char	*tmp;
+
+	index = 0;
+	while (*line && (*line)[index] != COMMENT_CHAR)
+		index++;
+	if (line_create(file, &((*line)[index]), ++(*nbr_lines), T_COMMENT) < 0)
+	{
+		free(*line);
+		return (STRTRIM_FAIL);
+	}
+	if (index > 0)
+	{
+		if (!(tmp = ft_strsub(*line, 0, index)))
+			return (STRSUB_FAIL);
+		free(*line);
+		*line = tmp;
+	}
+	free(*line);
 	return (SUCCESS);
 }
 
@@ -107,23 +129,23 @@ int		file_read(t_file *file)
 			free(line);
 			continue ;
 		}
-		if (line_add(file, line, &nbr_lines, label_check(line)) == ASM_FAIL)
+		if (ft_strchr(line, COMMENT_CHAR))
+			if (handle_comment(file, &nbr_lines, &line) < 0)
+			{
+				free(line);
+				return (FILE_ERROR); /*TODO msg */
+			}
+		if (!line || line_add(file, line, &nbr_lines, label_check(line)) < 0)
 		{
 			free(line);
-			return (FILE_ERROR);
+			return (FILE_ERROR); /*TODO msg */
 		}
 		nbr_lines++;
 	}
 	free(line);
 	if (file->ret == -1)
-	{
-		ft_putendl("get_next_line failed.");
-		return (FILE_ERROR);
-	}
+		return (GNL_FAIL); /*TODO msg */
 	if ((file->nbr_line = nbr_lines) == 0)
-	{
-		ft_putendl("no instructions.");
-		return (FILE_ERROR);
-	}
+		return (INSTR_NOT_EXIST); /*TODO msg */
 	return (SUCCESS);
 }

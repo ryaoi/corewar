@@ -4,6 +4,7 @@ ASM_SRCS = asm/main.c \
 			asm/error.c \
 			asm/file_conversion.c \
 			asm/op.c \
+			asm/print_errors.c \
 			asm/write_cor_file.c
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \

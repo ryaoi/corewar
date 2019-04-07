@@ -66,20 +66,6 @@ static void	file_init(t_file *file)
 	ft_bzero(&(file->header.how[0]), COMMENT_LENGTH + 1);
 }
 
-void	print_errmsg_file(int err_type)
-{
-	if (err_type == DOT_S_ERROR)
-		ft_putendl("the filename has to exist and ends with '.s'");
-	else if (err_type == OPEN_FILE_ERROR)
-		ft_putendl("failed to open the file.");
-	else if (err_type == STRDUP_FAIL)
-		ft_putendl("ft_strdup failed.");
-	else if (err_type == STRNDUP_FAIL)
-		ft_putendl("ft_strndup failed.");
-	else if (err_type == STRJOIN_FAIL)
-		ft_putendl("ft_strjoin failed.");
-}
-
 static void	file_add(t_list **inputs, char *filename)
 {
 	t_file	file;
@@ -97,7 +83,7 @@ void	assemble_file(t_list *traverse)
 	while (traverse)
 	{
 		if (file_read((t_file*)traverse->content) == FILE_ERROR ||
-			file_parse((t_file*)traverse->content) == LINE_FAIL ||
+			file_parse((t_file*)traverse->content) == FILE_PARSE_FAIL ||
 			((t_file*)traverse->content)->prework_flag != PREWORK_FLAG_ON ||
 			file_conversion(((t_file*)traverse->content)) == CONVERSION_FAIL
 			)
