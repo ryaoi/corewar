@@ -6,14 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 21:02:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 15:40:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-void	print_errmsg_parser(int err_type);
-
 
 void	print_errmsg_file(int err_type)
 {
@@ -27,6 +24,14 @@ void	print_errmsg_file(int err_type)
 		ft_putendl("ft_strndup failed.");
 	else if (err_type == STRJOIN_FAIL)
 		ft_putendl("ft_strjoin failed.");
+}
+
+void	print_errmsg_file_read(int err_type)
+{
+	if (err_type == GNL_FAIL)
+		ft_putendl("get_next_line() failed.");
+	else if (err_type == CONTENT_EMPTY)
+		ft_putendl("content of the file is empty.");
 }
 
 void	print_errmsg_tokenizer(int err_type, char *line)
@@ -56,7 +61,8 @@ void	print_errmsg_opcode_cmp(int err_type, char *line)
 	else if (err_type == PARAM_NOT_EXIST)
 		ft_printf("at '%s'\nparameter doesn't exist.\n", line);
 	else if (err_type == PARAM_NOT_VALID)
-		ft_printf("at '%s'\nnot valid param according to the op_table.\n", line);
+		ft_printf("at '%s'\nnot valid param according to \
+					the op_table.\n", line);
 }
 
 void	print_errmsg_conversion(int err_type, char *line)

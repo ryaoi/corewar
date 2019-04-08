@@ -6,12 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/07 22:44:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 17:45:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
 
 /* for handling labels in direct and indirect params
 	length of the bytecode is necessary
@@ -25,130 +24,8 @@ ocp :
 10 Direct, followed by DIR_SIZE bytes (the direct value)
 11 Indirect, followed by IND_SIZE bytes (the value of the indirection) */
 
-static void	ocp_set(t_list *tokens, unsigned char *bytecode)
-{
-	unsigned int	ocp;
-	t_list			*traverse;
-	int				index;
-
-	ocp = 0;
-	index = 0;
-	traverse = tokens;
-	while (traverse)
-	{
-		if (LST_CONT(traverse, t_token).type == T_REGISTER)
-			ocp |= 1 << (6 - index);
-		else if (LST_CONT(traverse, t_token).type == T_DIRECT ||
-				LST_CONT(traverse, t_token).type == T_DIRLAB)
-			ocp |= 2 << (6 - index);
-		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
-					LST_CONT(traverse, t_token).type == T_INDIRLAB)
-			ocp |= 3 << (6 - index);
-		traverse = traverse->next;
-		index += 2;
-	}
-	bytecode[1] = ocp;
-}
-
-t_op	*operation_set(t_line *line)
-{
-	t_token	*token;
-
-	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len))))
-	{
-		ft_putendl("malloc failed.");
-		return (NULL);
-	}
-	token = (t_token*)line->tokens->content;
-	if (token->op)
-	{
-		line->bytecode[0] = token->op->opcode;
-		if (token->op->ocp)
-			ocp_set(line->tokens->next, line->bytecode);
-		return (((t_token*)line->tokens->content)->op);
-	}
-	return (NULL);
-}
-
-int		label_value(t_line *curr_line, t_line *label_line, t_list *traverse)
-{
-	int	value;
-
-	value = 0;
-	if (curr_line->id > label_line->id)
-	{
-		while (traverse && (((t_line*)traverse->content) != curr_line))
-		{
-			traverse = traverse->next;
-			if ((((t_line*)traverse->content) == curr_line))
-				break ;
-			value -= ((t_line*)traverse->content)->bytecode_len;
-		}
-	}
-	else if (curr_line->id < label_line->id)
-	{
-		value += curr_line->bytecode_len;
-		while (traverse && (&LST_CONT(traverse, t_line) != curr_line))
-		{
-			value += ((t_line*)traverse->content)->bytecode_len;
-			traverse = traverse->prev;
-		}
-	}
-	return (value);
-}
-
-int		param_getvalue(t_list *lines, t_line *line, t_token *token)
-{
-	char	*label;
-	t_list	*traverse;
-
-	if (token->type == T_DIRECT || token->type == T_REGISTER)
-		token->value = ft_atoi(token->str + 1);
-	else if (token->type == T_INDIRECT)
-		token->value = ft_atoi(token->str);
-	else if (token->type == T_DIRLAB || token->type == T_INDIRLAB)
-	{
-		label = token->type == T_DIRLAB ? token->str + 2 : token->str + 1;
-		traverse = lines;
-		while (traverse)
-		{
-			if (LST_CONT(traverse, t_line).type == T_LABEL &&
-				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
-			{
-				token->value = label_value(line, &LST_CONT(traverse, t_line),
-											traverse);
-				return (SUCCESS);
-			}
-			traverse = traverse->next;
-		}
-		return (LABEL_NOT_EXIST);
-	}
-	return (SUCCESS);
-}
-
-void	param_trans(unsigned char *bytecode, int size,
-							int *bc_index, int value)
-{
-	/*TODO check if 'unsigned int' casting is OK */
-	if (size == 1)
-		bytecode[0] = ((unsigned int)value) % 0x100;
-	else if (size == 2)
-	{
-		bytecode[0] = ((unsigned int)value) / 0x100;
-		bytecode[1] = ((unsigned int)value) % 0x100;
-	}
-	else if (size == 4)
-	{
-		bytecode[0] = ((unsigned int)value) / (0x100 * 0x100 * 0x100);
-		bytecode[1] = ((((unsigned int)value) << 2) >> 2) / (0x100 * 0x100);
-		bytecode[2] = ((((unsigned int)value) << 4) >> 4) / 0x100;
-		bytecode[3] = ((((unsigned int)value) << 6) >> 6) % 0x100;
-	}
-	*bc_index = *bc_index + size;
-	/*TODO LITTLE -> BIG ENDIAN */
-}
-
-int		bc_translation(t_file *file, t_line *line, t_list *traverse, t_op *op)
+int				bc_translation(t_file *file, t_line *line, t_list *traverse,
+								t_op *op)
 {
 	unsigned char	*bc;
 	int				i;
@@ -176,6 +53,51 @@ int		bc_translation(t_file *file, t_line *line, t_list *traverse, t_op *op)
 	return (SUCCESS);
 }
 
+static void		ocp_set(t_list *tokens, unsigned char *bytecode)
+{
+	unsigned int	ocp;
+	t_list			*traverse;
+	int				index;
+
+	ocp = 0;
+	index = 0;
+	traverse = tokens;
+	while (traverse)
+	{
+		if (LST_CONT(traverse, t_token).type == T_REGISTER)
+			ocp |= 1 << (6 - index);
+		else if (LST_CONT(traverse, t_token).type == T_DIRECT ||
+				LST_CONT(traverse, t_token).type == T_DIRLAB)
+			ocp |= 2 << (6 - index);
+		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
+					LST_CONT(traverse, t_token).type == T_INDIRLAB)
+			ocp |= 3 << (6 - index);
+		traverse = traverse->next;
+		index += 2;
+	}
+	bytecode[1] = ocp;
+}
+
+t_op			*operation_set(t_line *line)
+{
+	t_token	*token;
+
+	if (!(line->bytecode = ft_memalloc(sizeof(char) * (line->bytecode_len))))
+	{
+		ft_putendl("malloc failed.");
+		return (NULL);
+	}
+	token = (t_token*)line->tokens->content;
+	if (token->op)
+	{
+		line->bytecode[0] = token->op->opcode;
+		if (token->op->ocp)
+			ocp_set(line->tokens->next, line->bytecode);
+		return (((t_token*)line->tokens->content)->op);
+	}
+	return (NULL);
+}
+
 static int		conversion(t_file *file, t_line *line)
 {
 	t_op	*op;
@@ -199,7 +121,7 @@ static int		conversion(t_file *file, t_line *line)
 	return (SUCCESS);
 }
 
-int		file_conversion(t_file *file)
+int				file_conversion(t_file *file)
 {
 	t_list	*traverse;
 
@@ -213,8 +135,9 @@ int		file_conversion(t_file *file)
 				return (FILE_CONVERSION_FAIL);
 		}
 		/*TODO print translated code*/
-		printf("[%s]\n", LST_CONT(traverse, t_line).str);
-		printf("bc_length : %zu\n", LST_CONT(traverse, t_line).bytecode_len);
+		printf("asm: %s\n", LST_CONT(traverse, t_line).str);
+		printf("line id: %zu\n", LST_CONT(traverse, t_line).id);
+		printf("bc_length : %u\n", LST_CONT(traverse, t_line).bytecode_len);
 		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
 			printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
 		printf("\n-------------------------------------\n");

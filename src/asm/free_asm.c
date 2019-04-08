@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   free_asm.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:01:53 by jaelee            #+#    #+#             */
-/*   Updated: 2019/03/28 16:46:28 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 15:39:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ void	free_file_content(void *content, size_t size)
 	free(tmp);
 }
 
-void	ft_exit(t_list *inputs)
+void	free_asm(t_list *inputs)
 {
 	list_del(&inputs, free_file_content);
 }
-
