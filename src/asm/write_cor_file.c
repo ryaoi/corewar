@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 20:30:55 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 20:37:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void			write_bytecode(int fd, t_list *traverse)
+static void				write_bytecode(int fd, t_list *traverse)
 {
 	unsigned char buf4[4];
 
@@ -30,7 +30,7 @@ void			write_bytecode(int fd, t_list *traverse)
 	}
 }
 
-unsigned char	*get_progsize(t_file *file) /*TODO need check..fuck */
+static unsigned char	*get_progsize(t_file *file)
 {
 	unsigned char	*ret;
 	unsigned int	prog_size;
@@ -52,7 +52,7 @@ unsigned char	*get_progsize(t_file *file) /*TODO need check..fuck */
 	return (ret);
 }
 
-void			write_header_comment(int fd, t_file *file)
+static void				write_header_comment(int fd, t_file *file)
 {
 	unsigned char	magic[3];
 	unsigned char	*prog_size;
@@ -72,8 +72,9 @@ void			write_header_comment(int fd, t_file *file)
 	write(fd, buf4, 4);
 	write(fd, prog_size, 4);
 	write(fd, file->header.how, COMMENT_LENGTH);
+	free(prog_size);
 }
-int		write_cor_file(t_file *file)
+int						write_cor_file(t_file *file)
 {
 	t_list *traverse;
 
