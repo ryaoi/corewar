@@ -6,18 +6,19 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 15:40:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 22:50:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	print_errmsg_file(int err_type)
+void	print_errmsg_file(int err_type, char *filename)
 {
 	if (err_type == DOT_S_ERROR)
 		ft_putendl("the filename has to exist and ends with '.s'");
 	else if (err_type == OPEN_FILE_ERROR)
-		ft_putendl("failed to open the file.");
+		ft_printf("failed to open '%s'. Check if '%s' is existing file.\n",
+						filename, filename);
 	else if (err_type == STRDUP_FAIL)
 		ft_putendl("ft_strdup failed.");
 	else if (err_type == STRNDUP_FAIL)

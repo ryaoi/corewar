@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 16:30:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 22:46:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef enum	e_err_types
 /* file parse error */
 	TOKENIZER_FAIL,
 	OPCOMDE_CMP_FAIL,
+	HEADER_NOT_FOUND,
 /* token error */
 	TOKEN_TOO_MANY,
 	TOKEN_TYPE_FAIL,
@@ -103,6 +104,8 @@ typedef enum	e_err_types
 	OPERATION_NOT_EXIST,
 	PARAMS_NOT_EXIST,
 	LABEL_NOT_EXIST,
+
+	CREATE_FILE_FAIL,
 }				t_err_types;
 
 typedef struct	s_token
@@ -152,7 +155,7 @@ void	file_add(t_list **inputs, char *filename);
 */
 void	file_init(t_file *file);
 int		file_name_check(const char *filename, t_file *file);
-int		argv_check(int argc, char **argv, int *option);
+int		argv_check(int argc);
 void	file_next(t_list **files, t_file *file);
 /*
 ** file_read.c
@@ -232,7 +235,7 @@ int		write_cor_file(t_file *file);
 /*
 ** print_errors.c
 */
-void	print_errmsg_file(int err_type);
+void	print_errmsg_file(int err_type, char *filename);
 void	print_errmsg_file_read(int err_type);
 void	print_errmsg_tokenizer(int err_type, char *line);
 void	print_errmsg_opcode_cmp(int err_type, char *line);

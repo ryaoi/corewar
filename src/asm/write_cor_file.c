@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 20:37:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 22:52:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static unsigned char	*get_progsize(t_file *file)
 		prog_size += LST_CONT(traverse, t_line).bytecode_len;
 		traverse = traverse->next;
 	}
-	ft_printf("prog_size : %u\n", prog_size);
 	ret = (unsigned char*)malloc(sizeof(unsigned char) * 4);
 	ret[0] = prog_size >> 24;
 	ret[1] = (prog_size << 8) >> 24;
@@ -64,7 +63,6 @@ static void				write_header_comment(int fd, t_file *file)
 	magic[2] = 0xf3;
 	ft_bzero(buf1, 1);
 	ft_bzero(buf4, 4);
-
 	prog_size = get_progsize(file);
 	write(fd, buf1, 1);
 	write(fd, magic, 3);
@@ -74,6 +72,7 @@ static void				write_header_comment(int fd, t_file *file)
 	write(fd, file->header.how, COMMENT_LENGTH);
 	free(prog_size);
 }
+
 int						write_cor_file(t_file *file)
 {
 	t_list *traverse;
@@ -81,7 +80,10 @@ int						write_cor_file(t_file *file)
 	traverse = file->lines;
 	if (!(file->fd_cor = open(file->name_cor, O_CREAT | O_WRONLY | O_TRUNC,
 								0644)))
+	{
 		ft_putendl("failed to create file.");
+		return (CREATE_FILE_FAIL);
+	}
 	write_header_comment(file->fd_cor, file);
 	write_bytecode(file->fd_cor, traverse);
 	return (SUCCESS);

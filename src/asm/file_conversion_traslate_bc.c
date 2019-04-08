@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 20:05:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 22:16:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static int	label_value(t_line *curr_line, t_line *label_line,
 	value = 0;
 	if (curr_line->id > label_line->id)
 	{
-		while (traverse && (((t_line*)traverse->content) != curr_line))
+		while (traverse && &LST_CONT(traverse, t_line) != curr_line)
 		{
 			traverse = traverse->next;
-			if ((((t_line*)traverse->content) == curr_line))
+			if (&LST_CONT(traverse, t_line) == curr_line)
 				break ;
-			value -= ((t_line*)traverse->content)->bytecode_len;
+			value -= LST_CONT(traverse, t_line).bytecode_len;
 		}
 	}
 	else if (curr_line->id < label_line->id)
@@ -33,7 +33,7 @@ static int	label_value(t_line *curr_line, t_line *label_line,
 		value += curr_line->bytecode_len;
 		while (traverse && (&LST_CONT(traverse, t_line) != curr_line))
 		{
-			value += ((t_line*)traverse->content)->bytecode_len;
+			value += LST_CONT(traverse, t_line).bytecode_len;
 			traverse = traverse->prev;
 		}
 	}
@@ -72,7 +72,6 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 void		param_trans(unsigned char *bytecode, int size,
 							int *bc_index, int value)
 {
-	/*TODO check if 'unsigned int' casting is OK */
 	if (size == 1)
 		bytecode[0] = ((unsigned int)value) % 0x100;
 	else if (size == 2)
@@ -88,5 +87,4 @@ void		param_trans(unsigned char *bytecode, int size,
 		bytecode[3] = ((((unsigned int)value) << 6) >> 6) % 0x100;
 	}
 	*bc_index = *bc_index + size;
-	/*TODO LITTLE -> BIG ENDIAN */
 }

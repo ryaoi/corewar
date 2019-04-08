@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 15:37:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 22:50:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static int	validate_parameters(t_token *token, t_op opcode,
 		converted_type = T_DIR;
 	else
 		converted_type = token->type - 10;
-	/* filter indirect_label token_type */
 	if (converted_type == T_INDIRLAB - 10)
 		converted_type = T_IND;
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
@@ -93,7 +92,8 @@ static int	tokenizer(t_line *line)
 		print_errmsg_opcode_cmp(ret_valid, line->str);
 		return (FILE_PARSE_FAIL);
 	}
-	get_bytecode_len(line);
+	if (line->type == T_ASMCODE)
+		get_bytecode_len(line);
 	return (SUCCESS);
 }
 
@@ -104,19 +104,24 @@ int			file_parse(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (!is_comment(&LST_CONT(traverse, t_line)))
+		if (!(is_comment(&LST_CONT(traverse, t_line))))
 		{
 			if (file->prework_flag != PREWORK_FLAG_ON)
 				set_header(file, &LST_CONT(traverse, t_line));
-			if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
+			else if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
 				LST_CONT(traverse, t_line).type = T_ASMCODE;
 			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
-				(tokenizer(&(LST_CONT(traverse, t_line))) < 0))
+					(tokenizer(&(LST_CONT(traverse, t_line))) < 0))
 				return (FILE_PARSE_FAIL);
 			if (LST_CONT(traverse, t_line).type == T_LABEL)
 				remove_label_char(LST_CONT(traverse, t_line).str);
 		}
 		traverse = traverse->next;
+	}
+	if (file->prework_flag != PREWORK_FLAG_ON)
+	{
+		ft_printf("header is missing in %s.\n", file->name_s);
+		return (HEADER_NOT_FOUND);
 	}
 	return (SUCCESS);
 }
