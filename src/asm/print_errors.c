@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:50:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 23:10:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	print_errmsg_file(int err_type, char *filename)
 	if (err_type == DOT_S_ERROR)
 		ft_putendl("the filename has to exist and ends with '.s'");
 	else if (err_type == OPEN_FILE_ERROR)
-		ft_printf("failed to open '%s'. Check if '%s' is existing file.\n",
+		ft_printf("failed to open '%s'. Check if '%s' is an existing file.\n",
 						filename, filename);
 	else if (err_type == STRDUP_FAIL)
 		ft_putendl("ft_strdup failed.");
@@ -62,8 +62,8 @@ void	print_errmsg_opcode_cmp(int err_type, char *line)
 	else if (err_type == PARAM_NOT_EXIST)
 		ft_printf("at '%s'\nparameter doesn't exist.\n", line);
 	else if (err_type == PARAM_NOT_VALID)
-		ft_printf("at '%s'\nnot valid param according to \
-					the op_table.\n", line);
+		ft_printf(\
+		"at '%s'\nnot valid params according to the op_table.\n", line);
 }
 
 void	print_errmsg_conversion(int err_type, char *line)

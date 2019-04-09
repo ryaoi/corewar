@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:53:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/08 23:07:43 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,6 @@ int				file_conversion(t_file *file)
 			if (conversion(file, &LST_CONT(traverse, t_line)) < 0)
 				return (FILE_CONVERSION_FAIL);
 		}
-		/*TODO print translated code
-		printf("asm: %s\n", LST_CONT(traverse, t_line).str);
-		printf("line id: %zu\n", LST_CONT(traverse, t_line).id);
-		printf("bc_length : %u\n", LST_CONT(traverse, t_line).bytecode_len);
-		for (int i=0; i < (int)LST_CONT(traverse, t_line).bytecode_len; i++)
-			printf("0x%02x ", LST_CONT(traverse, t_line).bytecode[i]);
-		printf("\n-------------------------------------\n");*/
 		traverse = traverse->next;
 	}
 	return (SUCCESS);
