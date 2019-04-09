@@ -23,34 +23,35 @@ class SessionData:
 def index():
     return render_template("index.html")
 
-@app.route("/AJAX/prepare/", methods=['POST'])
+@app.route("/game_start", methods=['POST'])
 def prepare():
-    game_info = request.data
-    info = json.loads(game_info)
     game = libcore.CorewarGame()
     game_id = create_game_id()
     sd = SessionData(game, game_id)
-    if 'file' not in request.files:
-        return abort(400)
-    files = request.files.getlist("file[]")
+    file_list = request.files.items() 
+    if not file_list:
+       return "cannot get a list of files", 400
     i = 1
-    for f in files
+    for f in file_list:
         if i == 0:
-            sd.p1 = f.filename
+            sd.p1 = f[0]
         elif i == 1:
-            sd.p2 = f.filename
+            sd.p2 = f[0]
         elif i == 2:
-            sd.p3 = f.filename
+            sd.p3 = f[0]
         elif i == 3:
-            sd.p4 = f.filename
-        f.save("players/" + game_id[50] +"p" + str(i)+ ".cor")
-        game.champions.append("players/" + game_id[50] +"p" + str(i)+ ".cor")
+            sd.p4 = f[0]
+        request.files.get(f[0]).save("players/" + game_id[:100] +"p" + str(i)+ ".cor")
+        game.champions.append("players/" + game_id[:100] +"p" + str(i)+ ".cor")
         i += 1
     sessions.append(sd)
     try:
         game.prepare()
     except:
-        return abort(400)
+        a = 1
+        while a < i:
+            os.remove("players/" + game_id[:100] +"p" +str(a) + ".cor")
+        return "cannot start game", 400
     return game_id
 
 def create_game_id():
@@ -102,10 +103,10 @@ def end_game():
             sessions.pop(sessions.index(x))
             break;
     try:
-        os.remove("players/" + game_id[50] +"p1" + ".cor")
-        os.remove("players/" + game_id[50] +"p2" + ".cor")
-        os.remove("players/" + game_id[50] +"p3" + ".cor")
-        os.remove("players/" + game_id[50] +"p4" + ".cor")
+        os.remove("players/" + game_id[:100] +"p1" + ".cor")
+        os.remove("players/" + game_id[:100] +"p2" + ".cor")
+        os.remove("players/" + game_id[:100] +"p3" + ".cor")
+        os.remove("players/" + game_id[:100] +"p4" + ".cor")
     except:
         return ""
     return ""
