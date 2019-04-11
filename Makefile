@@ -64,7 +64,7 @@ CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
 
-all: $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
+all: src/flask/$(CORELIB_NAME) $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
 
 LIBFT_PREFIX = ../libft
 FTPRINTF_PREFIX = ft_printf
@@ -73,7 +73,11 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o src/flask/$@ $^ `pkg-config python3 --libs`
+	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
+	cp $@ src/flask/$@
+
+src/flask/$(CORELIB_NAME): $(CORELIB_NAME)
+	cp $(CORELIB_NAME) src/flask/$(CORELIB_NAME)
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
