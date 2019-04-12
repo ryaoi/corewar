@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import uuid from 'uuid'
 import './style/index.css'
 import './style/game.css'
 
@@ -16,8 +15,6 @@ class LogLine extends Component {
 /* TODO unique ids */
 class LogBox extends Component {
 	lineMarkup (line) {
-		if (!line.key)
-			line.key = uuid.v4()
 		return (
 			<LogLine key={line.key} content={line.text}/>
 		)
@@ -34,6 +31,11 @@ class LogBox extends Component {
 				</div>
 			</div>
 		)
+	}
+	shouldComponentUpdate (nextProps) {
+		if (nextProps.siblings !== this.props.siblings)
+			return true
+		return false
 	}
 }
 

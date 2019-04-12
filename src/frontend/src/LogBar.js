@@ -1,17 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import uuid from 'uuid'
 import LogBox from './LogBox'
 import './style/index.css'
 import './style/game.css'
 
 class LogBar extends Component {
-	logBox (box, index) {
-		/* TODO move key up to store */
-		if (!box.unique_list_key)
-			box.unique_list_key = uuid.v4()
+	logBox (box, index, box_array) {
 		return (
-			<LogBox config={box.config} content={box.logs} key={box.unique_list_key} onDelete={() => this.props.deleteLogBox(index)}/>
+			<LogBox config={box.config} siblings={box_array.length} content={box.logs} key={box.unique_list_key} onDelete={() => this.props.deleteLogBox(index)}/>
 		)
 	}
 	render () {
