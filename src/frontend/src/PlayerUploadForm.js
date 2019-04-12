@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { handleErrors } from './CorewarsApp'
-import './index.css'
-import './upload.css'
+import './style/index.css'
+import './style/upload.css'
 
 class PlayerUploadForm extends Component {
 	constructor (props) {
 		super(props)
 		this.state = {files: []}
 	}
-	addFile(event) {
+	addFile (event) {
 		const newFiles = Array.from(event.target.files)
 
 		if (this.state.files.length + newFiles.length > 4)

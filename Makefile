@@ -115,6 +115,7 @@ fclean: clean
 	rm -rf $(COREWAR_NAME).dSYM/
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
+	rm -f src/flask/$(CORELIB_NAME)
 	rm -rf $(ASM_NAME).dSYM/
 	rm -f $(ASM_NAME)
 

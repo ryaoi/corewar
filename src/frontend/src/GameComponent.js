@@ -1,75 +1,40 @@
 import React, { Component } from 'react'
-import './index.css'
-import './game.css'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import rootReducer from './redux/Reducers'
+import LogBarContainer from './LogBar'
+import './style/index.css'
+import './style/game.css'
 
-class LogPane extends Component {
-	constructor (props) {
-		super(props)
-		this.relevant_logs_updated = false
-	}
-	renderLine() {
-		return (
-			<div>line placeholder</div>
-		)
-	}
-	shouldComponentUpdate(nextProps) {
-		if (this.props.log_conf !== nextProps.log_conf
-			|| this.relevant_logs_updated)
-			return true
-		return false
-	}
-	render () {
-		return (
-			<div className="game-log-pan">
-				{this.props.log_cache.map(() => this.renderLine())}
-			</div>
-		)
-	}
-}
+const store = createStore(rootReducer)
 
 class GameComponent extends Component {
-	constructor (props) {
-		super(props)
-		this.state = {log_pane_conf: [[1, 6, 7]],
-			log_cache: [],
-			log_updated_channels: [1]
-		}
-	}
 	componentDidMount () {
 		this.inverval = setInterval(() => this.updateLogs(), 500)
 	}
 	updateLogs() {
 		console.log('Updating logs but not really')
-		/* TODO fetch new logs, check new used log channels and update accordingly */
-
-		this.setState(function(prevState) {
-			var newState = prevState
-			newState.log_cache = [...newState.log_cache, "message"]
-			return newState
-		})
-	}
-	renderLog (item, i) {
-		return (
-			<LogPane key={i} log_conf={item} log_cache={this.state.log_cache}/>
-		)
+		var example_line = [{
+			text: "example text",
+			type: 1
+		}]
+		store.dispatch({type: 'ADD_LINES', input: example_line})
 	}
 	render () {
 		return (
+			<Provider store={store}>
 			<div className="game-component">
 				<div className="game-top-bar">
 					placeholder
 				</div>
-				<div className="game-container">
-					<div className="game-mem-dump">
-						placeholder
-					</div>
-					<div className="game-logs">
-						{this.state.log_pane_conf.map((item, i) => this.renderLog(item, i))}
-					</div>
+				<div className="game-mem-dump">
+					placeholder
 				</div>
+				<LogBarContainer/>
 			</div>
+			</Provider>
 		);
 	}
 }
 
-export default GameComponent;
+export default GameComponent
