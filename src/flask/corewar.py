@@ -1,13 +1,29 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import libcore
 from flask_wtf.csrf import CsrfProtect
 import json, string, random, os, time
 from datetime import datetime
-from flask import request
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+
+
 
 app = Flask(__name__)
 
 sessions = []
+
+
+def create_game_id(size):
+    ret = ""
+    for i in range(size):
+        ret = ret + random.choice(string.ascii_letters)
+    return ret
+
+
+server_id =  create_game_id(7)
+os.mkdir("/tmp/corewar_server_" + server_id)
+
 
 class SessionData:
     def __init__(self, game, game_id):
@@ -19,6 +35,26 @@ class SessionData:
         self.p3 = ""
         self.p4 = ""
 
+def check_outdated():
+    outdated = time.time() - 5 * 60 * 1000 
+    for x in sessions:
+        if x.atime < outdated:
+            game_id = x.game_id
+            sessions.pop(sessions.index(x))
+            try:
+                gamedirname = '/' + game_id[:20] + '/'
+                for i in range(1 , 4):
+                    os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
+            except:
+                continue;
+
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=check_outdated, trigger="interval", seconds=300)
+scheduler.start()
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -26,14 +62,22 @@ def index():
 @app.route("/game_start", methods=['POST'])
 def prepare():
     game = libcore.CorewarGame()
-    game_id = create_game_id()
+    game_id = create_game_id(200)
     sd = SessionData(game, game_id)
+    gamedirname = '/' + game_id[:20] + '/'
+    try:
+        os.mkdir("/tmp/corewar_server_" + server_id + "/"  + game_id[:20]);
+    except:
+        return "cannot make a game dir.", 400
     file_list = request.files
     if not file_list:
        return "cannot get a list of files", 400
-    i = 1
-    while i < 5:
+    i = 0
+    while i < 4:
         f = file_list.get("file" + str(i))
+        if f == None:
+            print("failed at " + str(i))
+            break;
         if not f:
             break;
         if i == 0:
@@ -44,8 +88,8 @@ def prepare():
             sd.p3 = f.filename
         elif i == 3:
             sd.p4 = f.filename
-        f.save("players/" + game_id[:100] +"p" + str(i)+ ".cor")
-        game.champions.append("players/" + game_id[:100] +"p" + str(i)+ ".cor")
+        f.save("/tmp/corewar_server_" + server_id + gamedirname  + "p" + str(i + 1)+ ".cor")
+        game.champions.append("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i + 1)+ ".cor")
         i += 1
     sessions.append(sd)
     try:
@@ -53,16 +97,11 @@ def prepare():
     except:
         a = 1
         while a < i:
-            os.remove("players/" + game_id[:100] +"p" +str(a) + ".cor")
+            os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
         return "cannot start game", 400
     return game_id
 
-def create_game_id():
-    ret = ""
-    for i in range(200):
-        ret = ret + random.choice(string.ascii_letters)
-    return ret
-
+#tell alex to change the game start request to /AJAX/game_start
 @app.route("/AJAX/update/", methods=['POST'])
 def update():
     signal.signal(signal.SIGALRM, raise_timeout)
@@ -113,10 +152,9 @@ def end_game():
             sessions.pop(sessions.index(x))
             break;
     try:
-        os.remove("players/" + game_id[:100] +"p1" + ".cor")
-        os.remove("players/" + game_id[:100] +"p2" + ".cor")
-        os.remove("players/" + game_id[:100] +"p3" + ".cor")
-        os.remove("players/" + game_id[:100] +"p4" + ".cor")
+        gamedirname = '/' + game_id[:20] + '/'
+        for i in range(1 , 4):
+            os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
     except:
         return ""
     return ""
@@ -124,3 +162,5 @@ def end_game():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+atexit.register(lambda: scheduler.shutdown())
