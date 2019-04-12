@@ -3,6 +3,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './redux/Reducers'
 import LogBarContainer from './LogBar'
+import MemDumpView from './MemDumpView'
 import './style/index.css'
 import './style/game.css'
 
@@ -10,7 +11,7 @@ const store = createStore(rootReducer)
 
 class GameComponent extends Component {
 	componentDidMount () {
-		this.updateLogs()
+		setInterval(this.updateLogs, 1000)
 	}
 	updateLogs() {
 		console.log('Updating logs but not really')
@@ -28,9 +29,7 @@ class GameComponent extends Component {
 					<div className="game-top-bar">
 						placeholder
 					</div>
-					<div className="game-mem-dump">
-						placeholder
-					</div>
+					<MemDumpView/>
 				</div>
 				<LogBarContainer/>
 			</div>
