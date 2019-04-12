@@ -36,7 +36,7 @@ class SessionData:
         self.p4 = ""
 
 def check_outdated():
-    outdated = time.time() - 5 * 60 * 1000 
+    outdated = time.time() - 5 * 60 * 1000
     for x in sessions:
         if x.atime < outdated:
             game_id = x.game_id
@@ -123,11 +123,8 @@ def update():
     mem_dump = game.mem_dump().hex()
     logs_nbr = info["active_logs"]
     active_logs = []
-    i = 0
-    while i < len(logs_nbr):
-        active_logs[]
-        active_logs.append(game.logs[logs_nbr[i]])
-        i += 1
+    for l in logs_nbr:
+        active_logs.append(game.logs[l])
     for x in game.logs:
         x.clear()
     context = {
@@ -136,7 +133,7 @@ def update():
             }
     return json.dumps(context)
 
-@app.route("/AJAX/logout/", methods=['POST'])
+@app.route("/AJAX/logout", methods=['POST'])
 def end_game():
     game_info = request.data
     info = json.loads(game_info)
