@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import uuid from 'uuid'
 import LogBox from './LogBox'
 import './style/index.css'
 import './style/game.css'
 
 class LogBar extends Component {
-	list () {
+	logBox (box, index) {
+		if (!box.unique_list_key)
+			box.unique_list_key = uuid.v4()
 		return (
-			this.props.logs.map((log, i) => <LogBox config={log.config} contents={log.contents} key={i} onDelete={() => this.props.deleteLogBox(i)}/>)
+			<LogBox config={box.config} content={box.logs} key={box.unique_list_key} onDelete={() => this.props.deleteLogBox(index)}/>
 		)
 	}
 	render () {
 		return (
 			<div className="log-bar">
-				{this.list()}
+				{this.props.log_boxes.map(this.logBox.bind(this))}
 				<button className="log-bar-adder" onClick={this.props.addLogBox}/>
 			</div>
 		)
@@ -29,10 +32,10 @@ function doesLogMatch(line, config) {
 
 function mapStateToProps(state) {
 	var new_log_contents = state.log_boxes.map((box) => ({
-		 contents: state.log_lines.filter((line) => doesLogMatch(line, box), state),
+		 logs: state.log_lines.filter((line) => doesLogMatch(line, box), state),
 		 config: box
 		}))
-	return {logs: new_log_contents}
+	return {log_boxes: new_log_contents}
 }
 
 const LogBarContainer = connect(

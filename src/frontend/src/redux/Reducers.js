@@ -14,7 +14,7 @@ function logBoxReducer (state = [], action) {
 			newState.push(default_config)
 			break;
 		case 'DELETE_LOG_BOX':
-			newState.slice(action.index, 1)
+			newState.splice(action.index, 1)
 			break;
 		default:
 	}

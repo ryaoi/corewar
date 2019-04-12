@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { handleErrors } from './CorewarsApp'
+import uuid from 'uuid'
 import './style/index.css'
 import './style/upload.css'
 
@@ -53,9 +54,11 @@ class PlayerUploadForm extends Component {
 		.then(parent.gameStarted.bind(parent))
 		.catch(e => console.log(e))
 	}
-	renderFile (item, i) {
+	renderFile (item) {
+		if (!item.unique_file_key)
+			item.unique_file_key = uuid.v4()
 		return (
-			<div className="file-name" key={i}>
+			<div className="file-name" key={item.unique_file_key}>
 				{item.name}
 			</div>
 		)
