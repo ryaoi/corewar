@@ -59,7 +59,7 @@ scheduler.start()
 def index():
     return render_template("index.html")
 
-@app.route("/game_start", methods=['POST'])
+@app.route("/AJAX/game_start", methods=['POST'])
 def prepare():
     game = libcore.CorewarGame()
     game_id = create_game_id(200)
@@ -71,7 +71,7 @@ def prepare():
         return "cannot make a game dir.", 400
     file_list = request.files
     if not file_list:
-       return "cannot get a list of files", 400
+        return "cannot get a list of files", 400
     i = 0
     while i < 4:
         f = file_list.get("file" + str(i))
@@ -102,45 +102,39 @@ def prepare():
     return game_id
 
 #tell alex to change the game start request to /AJAX/game_start
-@app.route("/AJAX/update/", methods=['POST'])
+@app.route("/AJAX/update", methods=['POST'])
 def update():
-    signal.signal(signal.SIGALRM, raise_timeout)
-    signal.alarm(60000)
-    try:
-        game = None
-        info = json.loads(play_info)
-        game_id = info["game_id"]
-        now = time.time()
-        for x in sessions:
-            if x.game_id == game_id:
-                game = x.game
-                x.atime = now
-       # if now - x.atime > timedelta(minutes=10):
-       #     sessions.pop(x)
-        if game == None:
-            return "no game found with the game_id", 400
-        cycle = int(info["cycle"])
-        if cycle > 500:
-            return "maximum cycle allowd : 500", 400
-        for i in range(cycle):
-            game.update()
-        mem_dump = game.mem_dump().hex()
-        logs_nbr = info["active_logs"]
-        active_logs = []
-        i = 0
-        while i < len(logs_nbr):
-            active_logs = active_logs + game.logs[int(logs_nbr[i])]
-            i += 1
-        active_logs.sort(key=lambda x: x[1])
-        for x in game.logs:
-            x.clear()
-        context = {
-                "mem": mem_dump,
-                "log": active_logs
-                }
-        return json.dumps(context)
-    except:
-        return "timeout.", 400
+    game = None
+    play_info = request.data
+    info = json.loads(play_info)
+    game_id = info["game_id"]
+    now = time.time()
+    for x in sessions:
+        if x.game_id == game_id:
+            game = x.game
+            x.atime = now
+    if game == None:
+        return "no game found with the game_id", 400
+    cycle = int(info["cycles"])
+    if cycle > 500:
+        return "maximum cycle allowed : 500", 400
+    for i in range(cycle):
+        game.update()
+    mem_dump = game.mem_dump().hex()
+    logs_nbr = info["active_logs"]
+    active_logs = []
+    i = 0
+    while i < len(logs_nbr):
+        active_logs = active_logs + game.logs[logs_nbr[i]]
+        i += 1
+    active_logs.sort(key=lambda x: x[1])
+    for x in game.logs:
+        x.clear()
+    context = {
+            "mem": mem_dump,
+            "log": active_logs
+            }
+    return json.dumps(context)
 
 @app.route("/AJAX/logout/", methods=['POST'])
 def end_game():
