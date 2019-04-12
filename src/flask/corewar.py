@@ -123,11 +123,8 @@ def update():
     mem_dump = game.mem_dump().hex()
     logs_nbr = info["active_logs"]
     active_logs = []
-    i = 0
-    while i < len(logs_nbr):
-        active_logs[]
+    while i < range(logs_nbr):
         active_logs.append(game.logs[logs_nbr[i]])
-        i += 1
     for x in game.logs:
         x.clear()
     context = {
@@ -136,7 +133,7 @@ def update():
             }
     return json.dumps(context)
 
-@app.route("/AJAX/logout/", methods=['POST'])
+@app.route("/AJAX/logout", methods=['POST'])
 def end_game():
     game_info = request.data
     info = json.loads(game_info)
