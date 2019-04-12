@@ -12,7 +12,7 @@ function logBoxReducer (state = [], action) {
 	var newState = [...state]
 	switch (action.type) {
 		case 'ADD_LOG_BOX':
-			var new_config = default_config
+			var new_config = Object.assign({}, default_config)
 			new_config.key = uuid.v4()
 			newState.push(new_config)
 			break;
