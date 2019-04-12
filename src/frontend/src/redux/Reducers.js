@@ -28,9 +28,12 @@ function logLinesReducer(state = [], action) {
 	var newState = [...state]
 	switch (action.type) {
 		case 'ADD_LINES':
-			if (!action.input.key)
-				action.input.key = uuid.v4()
-			newState.push(...action.input)
+			var input_keys = action.input.map((line) => {
+				var newLine = line
+				newLine.key = uuid.v4()
+				return (newLine)
+			})
+			newState.push(...input_keys)
 			break;
 		/* TODO clean */
 		default:

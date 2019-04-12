@@ -19,6 +19,9 @@ class LogBox extends Component {
 			<LogLine key={line.key} content={line.text}/>
 		)
 	}
+	componentDidMount () {
+		console.log(this.props.config.key)
+	}
 	render () {
 		return (
 			<div className="log-box">

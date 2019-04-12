@@ -7,7 +7,7 @@ import './style/game.css'
 class LogBar extends Component {
 	logBox (box, index, box_array) {
 		return (
-			<LogBox config={box.config} siblings={box_array.length} content={box.logs} key={box.unique_list_key} onDelete={() => this.props.deleteLogBox(index)}/>
+			<LogBox config={box.config} siblings={box_array.length} content={box.logs} key={box.config.key} onDelete={() => this.props.deleteLogBox(index)}/>
 		)
 	}
 	render () {

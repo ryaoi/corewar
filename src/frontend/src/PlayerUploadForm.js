@@ -47,7 +47,7 @@ class PlayerUploadForm extends Component {
 		const parent = this.props.parent
 
 		this.state.files.map((file, i) => formData.append("file" + i, file))
-		fetch('http://localhost:3000/game_start', {
+		fetch('http://localhost:3000/AJAX/game_start', {
 			method: "POST",
 			body: formData
 		}).then(handleErrors)
