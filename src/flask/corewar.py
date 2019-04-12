@@ -125,9 +125,9 @@ def update():
     active_logs = []
     i = 0
     while i < len(logs_nbr):
-        active_logs = active_logs + game.logs[logs_nbr[i]]
+        active_logs[]
+        active_logs.append(game.logs[logs_nbr[i]])
         i += 1
-    active_logs.sort(key=lambda x: x[1])
     for x in game.logs:
         x.clear()
     context = {
