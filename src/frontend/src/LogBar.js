@@ -7,6 +7,7 @@ import './style/game.css'
 
 class LogBar extends Component {
 	logBox (box, index) {
+		/* TODO move key up to store */
 		if (!box.unique_list_key)
 			box.unique_list_key = uuid.v4()
 		return (

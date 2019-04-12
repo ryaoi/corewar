@@ -6,9 +6,9 @@ import './style/game.css'
 class LogLine extends Component {
 	render () {
 		return (
-			<p className="log-line">
+			<div className="log-text">
 				{this.props.content}
-			</p>
+			</div>
 		)
 	}
 }
@@ -25,9 +25,13 @@ class LogBox extends Component {
 	render () {
 		return (
 			<div className="log-box">
-				<button className="log-box-delete" onClick={this.props.onDelete}/>
-				<button className="log-box-options" /*TODO* with this.props.config */ />
-				{this.props.content.map(this.lineMarkup)}
+				<div className="log-box-icons">
+					<button className="log-box-delete" onClick={this.props.onDelete}/>
+					<button className="log-box-options" /*TODO* with this.props.config */ />
+				</div>
+				<div className="log-box-text-container">
+					{this.props.content.map(this.lineMarkup)}
+				</div>
 			</div>
 		)
 	}

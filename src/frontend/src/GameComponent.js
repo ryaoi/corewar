@@ -10,7 +10,7 @@ const store = createStore(rootReducer)
 
 class GameComponent extends Component {
 	componentDidMount () {
-		this.inverval = setInterval(() => this.updateLogs(), 500)
+		this.updateLogs()
 	}
 	updateLogs() {
 		console.log('Updating logs but not really')
@@ -24,11 +24,13 @@ class GameComponent extends Component {
 		return (
 			<Provider store={store}>
 			<div className="game-component">
-				<div className="game-top-bar">
-					placeholder
-				</div>
-				<div className="game-mem-dump">
-					placeholder
+				<div className="game-pane">
+					<div className="game-top-bar">
+						placeholder
+					</div>
+					<div className="game-mem-dump">
+						placeholder
+					</div>
 				</div>
 				<LogBarContainer/>
 			</div>
