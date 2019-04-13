@@ -37,9 +37,11 @@ def check_outdated():
             game_id = x.game_id
             sessions.pop(sessions.index(x))
             gamedirname = '/' + game_id[:20] + '/'
-            for i in range(1 , 4):
-                os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
-            continue;
+            try:
+                for i in range(1 , 4):
+                    os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
+            except:
+                continue
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=check_outdated, trigger="interval", seconds=300)
@@ -59,8 +61,8 @@ def prepare():
     file_list = request.files
     if not file_list:
         return "cannot get a list of files", 400
-    i = 0
-    while i < 4:
+    i = 1
+    while i < 5:
         f = file_list.get("file" + str(i))
         if not f:
             break
