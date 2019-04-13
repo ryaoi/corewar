@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request
 import libcore
 from flask_wtf.csrf import CsrfProtect
-import json, string, random, os, time
+import json, string, random, os, time, atexit
 from datetime import datetime
-import time
-import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
@@ -33,10 +31,8 @@ def check_outdated():
     for x in sessions:
         if x.atime < outdated:
             game_id = x.game_id
+            print("outdated deleted: " + x.game_id[:20] + "\n");
             sessions.pop(sessions.index(x))
-            for i in x.saved_plaers:
-                os.remove(i)
-    print("outdated deleted.\n");
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=check_outdated, trigger="interval", seconds=300)
@@ -48,7 +44,7 @@ def prepare():
     os.mkdir(server_dir + "/"  + sd.game_id[:20]);
     file_list = request.files
     if not request.files:
-        return "cannot get a list of files.", 400
+        return "file data empty.", 400
     for i in range(4):
         f = file_list.get("file" + str(i))
         if not f:
@@ -61,10 +57,16 @@ def prepare():
     try:
         sd.game.prepare()
     except:
+        sessions.pop(sessions.index(sd))
         for x in sd.saved_players:
             os.remove(x)
-        return "cannot start corewar game.", 500
+        os.rmdir(server_dir + "/"  + sd.game_id[:20])
+        return "corewar game preparing failed.", 500
+    for x in sd.saved_players:
+        os.remove(x)
+    os.rmdir(server_dir + "/"  + sd.game_id[:20])
     return sd.game_id
+
 
 @app.route("/AJAX/update", methods=['POST'])
 def update():
@@ -72,7 +74,13 @@ def update():
     game = None
     try:
         info = json.loads(request.data)
+    except:
+        return "malform json request (no json found)", 400
+    try:
         game_id = info["game_id"]
+    except:
+        return "malform json request (no game_id found)", 400
+    try:
         for x in sessions:
             if x.game_id == game_id:
                 game = x.game
@@ -84,26 +92,27 @@ def update():
     try:
         cycles = info["cycles"]
         if cycles > 500:
-            return "maximum cycle allowed : 500", 400
+            return "too many cycles to update. max: 500", 400
         for i in range(cycles):
             if time.time() >= timeout:
-                return "time out.", 400
-            game.update()
+                break;
+            try:
+                game.update()
+            except:
+                return "corewar game updating failed.", 500
     except:
-        return "cannot update corewar game.", 400
-    mem_dump = game.mem_dump().hex()
+        return "malform json request (invalid cycles)", 400
     try:
         logs_nbr = info["active_logs"]
         active_logs = []
+    except:
+        return "malform json request (no active_logs found)", 400
+    try:
         for l in logs_nbr:
             active_logs.append(game.logs[l])
     except:
-        return "cannot get logs.", 400
-    context = {
-            "mem": mem_dump,
-            "log": active_logs
-    }
-    dump = json.dumps(context)
+        return "malform json request (invalid logs_nbr)", 400
+    dump = json.dumps({"cycles_to_die":game.cycles_to_die, "cycle_count":game.cycle_count, "mem": game.mem_dump().hex(), "log": active_logs})
     for x in game.logs:
         x.clear()
     return dump
@@ -113,15 +122,10 @@ def end_game():
     try:
         game_id= json.loads(request.data)["game_id"]
     except:
-        return "invalid game_id", 400
+        return "form data format is invalid", 400
     for x in sessions:
         if x.game_id == game_id:
-            for i in x.saved_players:
-                os.remove(i);
             sessions.pop(sessions.index(x))
-            break;
-    return ""
-
 
 if __name__ == '__main__':
     app.run(debug=True)
