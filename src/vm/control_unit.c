@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:59:12 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/13 19:02:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ enum e_instr	fetch_opcode(t_vm_state *state, size_t address)
 	enum e_instr	opcode;
 
 	load_buffer = mem_load(state, address, 1);
-	opcode = INDEX_BUFF(load_buffer, L_BUFF_SIZE - 1);
+	opcode = INDEX_BUFF(load_buffer, L_BUFF_SIZE - 1) - 1;
 	if (opcode > e_invalid)
 		opcode = e_invalid;
 	return (opcode);
