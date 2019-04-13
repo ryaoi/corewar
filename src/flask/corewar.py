@@ -114,19 +114,16 @@ def update():
             x.atime = now
     if game == None:
         return "no game found with the game_id", 400
-    cycle = info["cycles"]
-    if cycle > 500:
+    if info["cycles"] > 500:
         return "maximum cycle allowed : 500", 400
-    # while i < range(cycle) doesn't mean anything, pay attention ;)
-    for i in range(cycle):
+    for i in range(info["cycles"]):
         game.update()
-    mem_dump = game.mem_dump().hex()
-    logs_nbr = info["active_logs"]
+    print (game.mem_dump())
     active_logs = []
-    for l in logs_nbr:
+    for l in info["active_logs"]:
         active_logs.append(game.logs[l])
     context = {
-            "mem": mem_dump,
+            "mem": game.mem_dump().hex(),
             "log": active_logs
     }
     # TODO catch key error, possibly other errors
