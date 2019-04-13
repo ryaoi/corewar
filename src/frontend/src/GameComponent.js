@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import rootReducer from './redux/Reducers'
+import { connect } from 'react-redux'
+import { handleErrors } from './CorewarsApp'
 import LogBarContainer from './LogBar'
 import MemDumpView from './MemDumpView'
 import './style/index.css'
 import './style/game.css'
 
-const store = createStore(rootReducer)
-
 class GameComponent extends Component {
 	constructor (props) {
 		super(props)
 		this.time_updated = new Date().getTime()
+		this.state = {}
 	}
 	componentDidMount () {
 		this.fetch_timeout = setTimeout(this.tryFetch.bind(this), 500)
@@ -26,12 +24,18 @@ class GameComponent extends Component {
 		const to_wait = Math.max(0, 500 - elapsed)
 		this.fetch_timeout = setTimeout(this.tryFetch.bind(this), to_wait)
 	}
+	handleUpdate (response) {
+		this.setState({
+			mem_dump: response.mem
+		})
+		this.props.dispatchLogs(response.log)
+	}
 	tryFetch () {
 		console.log('Fetching data')
 		const request_body = {
 			game_id: this.props.game_id,
-			cycles: 1,
-			logs_nbr: [1, 6, 7]
+			cycles: 100,
+			active_logs: [1, 6, 7]
 		}
 		this.time_updated = new Date().getTime()
 		fetch('http://localhost:3000/AJAX/update', {
@@ -40,26 +44,32 @@ class GameComponent extends Component {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(request_body),
-		}).then((response) => response.json())
-		.then((data) => console.log(data) /* TODO put through reducer */)
+		}).then(handleErrors)
+		.then((response) => response.json())
+		.then(this.handleUpdate.bind(this))
 		.then(this.handleFetchTimeout.bind(this))
 		.catch((error) => console.error(error))
 	}
 	render () {
 		return (
-			<Provider store={store}>
 			<div className="game-component">
 				<div className="game-pane">
 					<div className="game-top-bar">
 						placeholder
 					</div>
-					<MemDumpView/>
+					<MemDumpView mem_dump={this.state.mem_dump}/>
 				</div>
 				<LogBarContainer/>
 			</div>
-			</Provider>
 		);
 	}
 }
 
-export default GameComponent
+const GameComponentContainer = connect(
+	null,
+	(dispatch) => ({
+		dispatchLogs: (logs) => dispatch({type: 'ADD_LINES', input: logs})
+	})
+)(GameComponent)
+
+export default GameComponentContainer

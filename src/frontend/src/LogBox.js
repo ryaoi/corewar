@@ -36,7 +36,8 @@ class LogBox extends Component {
 		)
 	}
 	shouldComponentUpdate (nextProps) {
-		if (nextProps.siblings !== this.props.siblings)
+		if (nextProps.siblings !== this.props.siblings
+			|| nextProps.content.length !== this.props.content.length)
 			return true
 		return false
 	}

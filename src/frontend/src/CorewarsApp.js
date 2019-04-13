@@ -1,6 +1,11 @@
 import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import rootReducer from './redux/Reducers'
 import PlayerUploadForm from './PlayerUploadForm'
 import GameComponent from './GameComponent'
+
+const store = createStore(rootReducer)
 
 function handleErrors(response) {
 	if (!response.ok)
@@ -26,7 +31,9 @@ class CorewarsApp extends React.Component {
 			)
 		else
 			return (
-				<GameComponent game_id={this.state.game_id}/>
+				<Provider store={store}>
+					<GameComponent game_id={this.state.game_id}/>
+				</Provider>
 			)
 	}
 }

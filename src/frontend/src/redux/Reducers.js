@@ -6,15 +6,16 @@ const initial_state = {
 	log_lines: []
 }
 
-const default_config = [1] /* TODO */
+const default_config = [0] /* TODO */
 
 function logBoxReducer (state = [], action) {
 	var newState = [...state]
 	switch (action.type) {
 		case 'ADD_LOG_BOX':
-			var new_config = Object.assign({}, default_config)
-			new_config.key = uuid.v4()
-			newState.push(new_config)
+			newState.push({
+				active_logs: [...default_config],
+				key: uuid.v4()
+			})
 			break;
 		case 'DELETE_LOG_BOX':
 			newState.splice(action.index, 1)
@@ -24,16 +25,24 @@ function logBoxReducer (state = [], action) {
 	return newState
 }
 
+function prepareLogs(channels) {
+	var merged = []
+	channels.forEach((channel, index) => {
+		channel.forEach((line) => merged.push({
+			text: line[0],
+			key: line[1],
+			cycle: line[2],
+			type: index
+		}))
+	})
+	return merged
+}
+
 function logLinesReducer(state = [], action) {
 	var newState = [...state]
 	switch (action.type) {
 		case 'ADD_LINES':
-			var input_keys = action.input.map((line) => {
-				var newLine = line
-				newLine.key = uuid.v4()
-				return (newLine)
-			})
-			newState.push(...input_keys)
+			newState.push(...prepareLogs(action.input))
 			break;
 		/* TODO clean */
 		default:

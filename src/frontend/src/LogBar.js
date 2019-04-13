@@ -21,17 +21,14 @@ class LogBar extends Component {
 }
 
 function doesLogMatch(line, config) {
-	var match_channels = config.filter((channel) => (line.type === channel))
-	if (match_channels.length)
-		return true
-	return false
+	return config.active_logs.includes(line.type)
 }
 
 function mapStateToProps(state) {
 	var new_log_contents = state.log_boxes.map((box) => ({
 		 logs: state.log_lines.filter((line) => doesLogMatch(line, box), state),
 		 config: box
-		}))
+	}))
 	return {log_boxes: new_log_contents}
 }
 
