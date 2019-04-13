@@ -51,6 +51,7 @@ class PlayerUploadForm extends Component {
 			method: "POST",
 			body: formData
 		}).then(handleErrors)
+		.then((response) => response.text())
 		.then(parent.gameStarted.bind(parent))
 		.catch(e => console.log(e))
 	}

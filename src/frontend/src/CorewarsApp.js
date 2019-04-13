@@ -14,10 +14,9 @@ class CorewarsApp extends React.Component {
 		this.state = {game_id: null}
 	}
 	gameStarted (response) {
-		var string = response.text()
-		if (string.length > 300)
+		if (response.length > 300)
 			throw Error("game_id too long")
-		this.setState({game_id: string})
+		this.setState({game_id: response})
 		return response
 	}
 	render() {
