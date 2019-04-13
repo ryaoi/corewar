@@ -5,6 +5,7 @@ import json, string, random, os, time
 from datetime import datetime
 import time
 import atexit
+from copy import deepcopy
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -101,7 +102,6 @@ def prepare():
         return "cannot start game", 400
     return game_id
 
-#tell alex to change the game start request to /AJAX/game_start
 @app.route("/AJAX/update", methods=['POST'])
 def update():
     game = None
@@ -115,22 +115,24 @@ def update():
             x.atime = now
     if game == None:
         return "no game found with the game_id", 400
-    cycle = int(info["cycles"])
+    cycle = info["cycles"]
     if cycle > 500:
         return "maximum cycle allowed : 500", 400
+    # while i < range(cycle) doesn't mean anything, pay attention ;)
     for i in range(cycle):
         game.update()
     mem_dump = game.mem_dump().hex()
     logs_nbr = info["active_logs"]
     active_logs = []
     for l in logs_nbr:
-        active_logs.append(game.logs[l])
+        active_logs.append(deepcopy(game.logs[l]))
     for x in game.logs:
         x.clear()
     context = {
             "mem": mem_dump,
             "log": active_logs
-            }
+    }
+    # TODO catch key error, possibly other errors
     return json.dumps(context)
 
 @app.route("/AJAX/logout", methods=['POST'])
