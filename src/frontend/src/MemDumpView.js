@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
 class MemDumpLine extends Component {
-	formatLine(byte) {
+	formatLine(byte, index) {
 		return (
-			<div className="mem-dump-byte">
+			<div className="mem-dump-byte" key={index}>
 				{byte}
 			</div>
 		)
@@ -34,18 +34,18 @@ class MemDumpView extends Component {
 			bytes = this.default_dump
 		else {
 			bytes = []
-			for (var index = 0; index < 64; index++) {
+			for (var line_index = 0; line_index < 64; line_index++) {
 				var line = [];
 				for (var character = 0; character < 64; character++)
 					line.push(this.props.mem_dump.slice(
-						index * 128 + character * 2,
-						index * 128 + character * 2 + 2
+						line_index * 128 + character * 2,
+						line_index * 128 + character * 2 + 2
 					))
 				bytes.push(line)
 			}
 		}
 		return (
-			bytes.map((line) => <MemDumpLine key={index} content={line}/>)
+			bytes.map((line, index) => <MemDumpLine key={index} content={line}/>)
 		)
 	}
 	render () {
