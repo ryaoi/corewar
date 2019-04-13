@@ -42,6 +42,7 @@ def check_outdated():
                     os.remove("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
             except:
                 continue
+    print("outdated deleted.\n");
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=check_outdated, trigger="interval", seconds=300)
@@ -63,7 +64,7 @@ def prepare():
         return "cannot get a list of files", 400
     i = 1
     while i < 5:
-        f = file_list.get("file" + str(i))
+        f = file_list.get("file" + str(i - 1))
         if not f:
             break
         if i == 0:
@@ -74,8 +75,8 @@ def prepare():
             sd.p3 = f.filename
         elif i == 3:
             sd.p4 = f.filename
-        f.save("/tmp/corewar_server_" + server_id + gamedirname  + "p" + str(i + 1)+ ".cor")
-        game.champions.append("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i + 1)+ ".cor")
+        f.save("/tmp/corewar_server_" + server_id + gamedirname  + "p" + str(i)+ ".cor")
+        game.champions.append("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i)+ ".cor")
         i += 1
     sessions.append(sd)
     try:
