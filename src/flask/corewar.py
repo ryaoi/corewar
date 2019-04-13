@@ -5,7 +5,6 @@ import json, string, random, os, time
 from datetime import datetime
 import time
 import atexit
-from copy import deepcopy
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -125,15 +124,16 @@ def update():
     logs_nbr = info["active_logs"]
     active_logs = []
     for l in logs_nbr:
-        active_logs.append(deepcopy(game.logs[l]))
-    for x in game.logs:
-        x.clear()
+        active_logs.append(game.logs[l])
     context = {
             "mem": mem_dump,
             "log": active_logs
     }
     # TODO catch key error, possibly other errors
-    return json.dumps(context)
+    dump = json.dumps(context)
+    for x in game.logs:
+        x.clear()
+    return dump
 
 @app.route("/AJAX/logout", methods=['POST'])
 def end_game():
