@@ -113,7 +113,7 @@ def update():
     for x in sessions:
         if x.game_id == game_id:
             game = x.game
-            x.atime = now
+            x.atime = time.time()
     if game == None:
         return "no game found with the game_id", 400
     cycle = info["cycles"]
