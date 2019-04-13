@@ -103,11 +103,13 @@ def prepare():
 
 @app.route("/AJAX/update", methods=['POST'])
 def update():
+    timeout = time.time() + 500
     game = None
     play_info = request.data
     info = json.loads(play_info)
     game_id = info["game_id"]
-    now = time.time()
+    if game_id == None or game_id == "":
+        return "game_id is empty", 400
     for x in sessions:
         if x.game_id == game_id:
             game = x.game
@@ -115,13 +117,18 @@ def update():
     if game == None:
         return "no game found with the game_id", 400
     cycle = info["cycles"]
+    if cycle == None or cycle <= 0:
+        return "a wrong cycles number", 400
     if cycle > 500:
         return "maximum cycle allowed : 500", 400
-    # while i < range(cycle) doesn't mean anything, pay attention ;)
     for i in range(cycle):
+        if time.time() >= timeout:
+            return "time out.", 400
         game.update()
     mem_dump = game.mem_dump().hex()
     logs_nbr = info["active_logs"]
+    if logs_nbr == None or logs_nbr ==[]:
+        return "a bad active_logs.", 400
     active_logs = []
     for l in logs_nbr:
         active_logs.append(game.logs[l])
@@ -129,7 +136,6 @@ def update():
             "mem": mem_dump,
             "log": active_logs
     }
-    # TODO catch key error, possibly other errors
     dump = json.dumps(context)
     for x in game.logs:
         x.clear()
@@ -140,6 +146,8 @@ def end_game():
     game_info = request.data
     info = json.loads(game_info)
     game_id = info["game_id"]
+    if game_id == None or game_id == "":
+        return "game_id is empty", 400
     for x in sessions:
         if x.game_id == game_id:
             sessions.pop(sessions.index(x))
