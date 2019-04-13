@@ -61,36 +61,39 @@ def index():
 
 @app.route("/AJAX/game_start", methods=['POST'])
 def prepare():
-    game = libcore.CorewarGame()
-    game_id = create_game_id(200)
-    sd = SessionData(game, game_id)
-    gamedirname = '/' + game_id[:20] + '/'
+    try:
+        game = libcore.CorewarGame()
+        game_id = create_game_id(200)
+        sd = SessionData(game, game_id)
+        gamedirname = '/' + game_id[:20] + '/'
+    except:
+        return "cannot initialze a corewar game", 400
     try:
         os.mkdir("/tmp/corewar_server_" + server_id + "/"  + game_id[:20]);
     except:
         return "cannot make a game dir.", 400
-    file_list = request.files
-    if not file_list:
-        return "cannot get a list of files", 400
-    i = 0
-    while i < 4:
-        f = file_list.get("file" + str(i))
-        if f == None:
-            print("failed at " + str(i))
-            break;
-        if not f:
-            break;
-        if i == 0:
-            sd.p1 = f.filename
-        elif i == 1:
-            sd.p2 = f.filename
-        elif i == 2:
-            sd.p3 = f.filename
-        elif i == 3:
-            sd.p4 = f.filename
-        f.save("/tmp/corewar_server_" + server_id + gamedirname  + "p" + str(i + 1)+ ".cor")
-        game.champions.append("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i + 1)+ ".cor")
-        i += 1
+    try:
+        file_list = request.files
+        if not file_list:
+            return "cannot get a list of files", 400
+        i = 0
+        while i < 4:
+            f = file_list.get("file" + str(i))
+            if not f:
+                break;
+            if i == 0:
+                sd.p1 = f.filename
+            elif i == 1:
+                sd.p2 = f.filename
+            elif i == 2:
+                sd.p3 = f.filename
+            elif i == 3:
+                sd.p4 = f.filename
+            f.save("/tmp/corewar_server_" + server_id + gamedirname  + "p" + str(i + 1)+ ".cor")
+            game.champions.append("/tmp/corewar_server_" + server_id + gamedirname + "p" + str(i + 1)+ ".cor")
+            i += 1
+    except:
+        return "cannot save files", 400
     sessions.append(sd)
     try:
         game.prepare()
@@ -105,49 +108,61 @@ def prepare():
 def update():
     timeout = time.time() + 500
     game = None
-    play_info = request.data
-    info = json.loads(play_info)
-    game_id = info["game_id"]
-    if game_id == None or game_id == "":
+        try:
+            play_info = request.data
+            info = json.loads(play_info)
+            game_id = info["game_id"]
+        for x in sessions:
+            if x.game_id == game_id:
+                game = x.game
+                x.atime = time.time()
+        if game == None:
+            return "no game found with the game_id", 400
+    except:
         return "game_id is empty", 400
-    for x in sessions:
-        if x.game_id == game_id:
-            game = x.game
-            x.atime = time.time()
-    if game == None:
-        return "no game found with the game_id", 400
-    cycle = info["cycles"]
-    if cycle == None or cycle <= 0:
-        return "a wrong cycles number", 400
-    if cycle > 500:
-        return "maximum cycle allowed : 500", 400
-    for i in range(cycle):
-        if time.time() >= timeout:
-            return "time out.", 400
-        game.update()
-    mem_dump = game.mem_dump().hex()
-    logs_nbr = info["active_logs"]
-    if logs_nbr == None or logs_nbr ==[]:
-        return "a bad active_logs.", 400
-    active_logs = []
-    for l in logs_nbr:
-        active_logs.append(game.logs[l])
-    context = {
-            "mem": mem_dump,
-            "log": active_logs
-    }
-    dump = json.dumps(context)
-    for x in game.logs:
-        x.clear()
+    try:
+        cycle = info["cycles"]
+        if cycle > 500:
+            return "maximum cycle allowed : 500", 400
+    except:
+        return "a wrong cycles number.", 400
+    try:
+        for i in range(cycle):
+            if time.time() >= timeout:
+                return "time out.", 400
+            game.update()
+    except:
+        return "cannot update game", 400
+    try:
+        mem_dump = game.mem_dump().hex()
+    except:
+        return "cannot load mem_dump", 400
+    try:
+        logs_nbr = info["active_logs"]
+        if logs_nbr == None:
+            return "a bad active_logs.", 400
+        active_logs = []
+        for l in logs_nbr:
+            active_logs.append(game.logs[l])
+        context = {
+                "mem": mem_dump,
+                "log": active_logs
+        }
+        dump = json.dumps(context)
+        for x in game.logs:
+            x.clear()
+    except:
+        return "cannot load logs", 400
     return dump
 
 @app.route("/AJAX/logout", methods=['POST'])
 def end_game():
-    game_info = request.data
-    info = json.loads(game_info)
-    game_id = info["game_id"]
-    if game_id == None or game_id == "":
-        return "game_id is empty", 400
+    try:
+        game_info = request.data
+        info = json.loads(game_info)
+        game_id = info["game_id"]
+    except:
+        return "invalid game_id", 400
     for x in sessions:
         if x.game_id == game_id:
             sessions.pop(sessions.index(x))
