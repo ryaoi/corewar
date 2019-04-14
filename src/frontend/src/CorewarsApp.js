@@ -1,11 +1,11 @@
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import rootReducer from './redux/Reducers'
+import rootReducer, { initial_state } from './redux/Reducers'
 import PlayerUploadForm from './PlayerUploadForm'
 import GameComponent from './GameComponent'
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, initial_state)
 
 function handleErrors(response) {
 	if (!response.ok)

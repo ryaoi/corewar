@@ -20,13 +20,9 @@ class LogBar extends Component {
 	}
 }
 
-function doesLogMatch(line, config) {
-	return config.active_logs.includes(line.type)
-}
-
 function mapStateToProps(state) {
 	var new_log_contents = state.log_boxes.map((box) => ({
-		 logs: state.log_lines.filter((line) => doesLogMatch(line, box), state),
+		 logs: state.log_cache.filterLines(box.active_logs),
 		 config: box
 	}))
 	return {log_boxes: new_log_contents}

@@ -1,9 +1,10 @@
-import { combineReducers } from "redux"
+import { combineReducers } from 'redux'
 import uuid from 'uuid'
+import LogCache from './LogCache'
 
 const initial_state = {
 	log_boxes: [],
-	log_lines: []
+	log_cache: new LogCache(100)
 }
 
 const default_config = [0] /* TODO */
@@ -25,24 +26,11 @@ function logBoxReducer (state = [], action) {
 	return newState
 }
 
-function prepareLogs(channels) {
-	var merged = []
-	channels.forEach((channel, index) => {
-		channel.forEach((line) => merged.push({
-			text: line[0],
-			key: line[1],
-			cycle: line[2],
-			type: index
-		}))
-	})
-	return merged
-}
-
-function logLinesReducer(state = [], action) {
-	var newState = [...state]
+function logLinesReducer(state = new LogCache(), action) {
+	var newState = new LogCache(state.block_size, state)
 	switch (action.type) {
 		case 'ADD_LINES':
-			newState.push(...prepareLogs(action.input))
+			newState.pushLogs(action.input)
 			break;
 		/* TODO clean */
 		default:
@@ -52,7 +40,7 @@ function logLinesReducer(state = [], action) {
 
 const rootReducer = combineReducers({
 	log_boxes: logBoxReducer,
-	log_lines: logLinesReducer
+	log_cache: logLinesReducer
 })
 
 export default rootReducer
