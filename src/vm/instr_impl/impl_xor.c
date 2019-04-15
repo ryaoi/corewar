@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:41:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/15 18:09:56 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void					impl_xor(t_vm_state *state, size_t p_index,
 		ft_memcpy(&second_operand,
 			&ARG_DIR(instr, 1).content,
 			sizeof(t_bigend_buffer));
-	REGISTER(process, ARG_REG(instr, 2)).content
+	REGISTER(process, ARG_REG(instr, 2) - 1).content
 		= bitwise_or(first_operand, second_operand);
+	process->carry = buffer_is_zero(
+		REGISTER(process, ARG_REG(instr, 2) - 1).content);
 }

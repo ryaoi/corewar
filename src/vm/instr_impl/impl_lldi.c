@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/15 18:10:42 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	impl_lldi(t_vm_state *state, size_t p_index, t_instr *instr)
 	offset = process->program_counter + offset;
 	REGISTER(process, ARG_REG(instr, 2) - 1).content
 		= mem_load(state, offset, REG_SIZE);
+	process->carry = buffer_is_zero(
+		REGISTER(process, ARG_REG(instr, 2) - 1).content);
 	log_level(&state->log_info, e_log_load,
 		"Storing [%#.8zx] into r%d, val %#.8zx",
 		offset % MEM_SIZE,
