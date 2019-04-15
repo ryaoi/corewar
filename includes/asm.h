@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:46:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/15 17:43:41 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	get_bytecode_len(t_line *line);
 ** file_parse_tokenizer.c
 */
 int		line_tokenize(t_line *line);
-void	get_token(char *str, int *i, int *j);
+void	get_token(char *str, int *i, int *j, int token_id);
 int		add_token(t_line *line, int token_id, int start, int end);
 
 /*

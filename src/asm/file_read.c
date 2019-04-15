@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 15:39:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/15 19:04:26 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int		line_create(t_file *file, char *line, int line_type)
 		ft_putendl("ft_strtrim failed.");
 		return (LINE_CREATE_FAIL);
 	}
+	if (new_line.str && new_line.str[0] == '\0')
+		free(new_line.str);
 	new_line.nbr_params = 0;
 	new_line.id = file->nbr_line;
 	new_line.type = line_type;
@@ -85,7 +87,8 @@ int		handle_comment(t_file *file, char **line)
 		free(*line);
 		*line = tmp;
 	}
-	free(*line);
+	else
+		free(*line);
 	return (SUCCESS);
 }
 
@@ -101,10 +104,10 @@ int		file_read(t_file *file)
 			free(line);
 			continue ;
 		}
-		if (ft_strchr(line, COMMENT_CHAR))
+		if (line && ft_strchr(line, COMMENT_CHAR))
 			if (handle_comment(file, &line) < 0)
 				return (HANDLE_CMT_FAIL);
-		if (line && line_add(file, line, label_check(line)) < 0)
+		if (line && line_add(file, line, label_check(line)) < 0 )
 		{
 			free(line);
 			return (LINE_CREATE_FAIL);
@@ -112,6 +115,15 @@ int		file_read(t_file *file)
 		file->nbr_line++;
 	}
 	free(line);
+	int i = 0;
+	t_list *traverse;
+	traverse = file->lines;
+	while(traverse)
+	{
+		printf("line number[%d] : %s\n", i, LST_CONT(traverse, t_line).str);
+		traverse = traverse->next;
+		i++;
+	}
 	if (file->ret == -1 || file->nbr_line == 0)
 		return (read_error(file));
 	return (SUCCESS);
