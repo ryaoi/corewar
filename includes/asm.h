@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 17:43:41 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/15 19:39:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,6 @@ int		read_error(t_file *file);
 */
 int		file_parse(t_file *file);
 int		tokenize_line(t_line *line);
-int		add_token(t_line *line, int token_id, int start, int end);
 int		opcode_cmp(t_line *line);
 int		check_parameter(t_token *token, char *str);
 int		validate_opcode_params(t_line *line);
@@ -208,7 +207,7 @@ void	get_bytecode_len(t_line *line);
 */
 int		line_tokenize(t_line *line);
 void	get_token(char *str, int *i, int *j, int token_id);
-int		add_token(t_line *line, int token_id, int start, int end);
+int		add_token(t_line *line, int token_id, char *str);
 
 /*
 ** file_parse_header.c

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 18:30:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/15 19:43:45 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,15 @@ static char	*pullout_token(char *line, int start, int len)
 	return (ret);
 }
 
-int			add_token(t_line *line, int token_id, int start, int end)
+int			add_token(t_line *line, int token_id, char *str)
 {
 	t_token		token;
-	int			len;
 
-	len = end - start;
 	init_token(&token);
-	if (!(token.str = pullout_token(line->str, start, len)))
-		return (STRSUB_FAIL);
+	token.str = str;
 	token.id = token_id;
+	if (!token.str)
+		return (STRSUB_FAIL);
 	if (check_token_type(&token, token.str) < 0)
 		return (TOKEN_TYPE_FAIL);
 	if ((token.type == T_LABEL || token.type == T_DIRLAB
@@ -74,7 +73,7 @@ void		get_token(char *str, int *i, int *j, int token_id)
 
 int			line_tokenize(t_line *line)
 {
-	size_t	len;
+	char	*str;
 	int		i;
 	int		j;
 	int		token_id;
@@ -84,14 +83,18 @@ int			line_tokenize(t_line *line)
 	i = 0;
 	j = 0;
 	ret = 0;
-	len = ft_strlen(line->str);
+	str = NULL;
 	while (token_id < 7)
 	{
 		if (token_id > 5)
 			return (TOKEN_TOO_MANY);
 		get_token(line->str, &i, &j, token_id);
-		if ((ret = add_token(line, token_id, i, j)) < 0)
+		str = pullout_token(line->str, i, j - i);
+		if ((ret = add_token(line, token_id, str)) < 0)
+		{
+			free(str);
 			return (ret);
+		}
 		i = j + 1;
 		if (line->str[i - 1] == '\0')
 			break ;

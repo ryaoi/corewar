@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 18:26:05 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/15 20:42:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 int		check_token_type(t_token *token, char *str)
 {
 	size_t	len;
+
 	if (!(len = ft_strlen(str)))
-	{
-		printf("waht the fuck : %s\n", token->str);
 		return (TOKEN_TYPE_FAIL);
-	}
 	if (token->id == 0)
 	{
 		if (str[len - 1] == LABEL_CHAR)
@@ -38,10 +36,7 @@ int		check_token_type(t_token *token, char *str)
 	else if (is_str_digit(str))
 		token->type = T_INDIRECT;
 	else
-	{
-		printf("%s\n", token->str);
 		return (TOKEN_TYPE_FAIL);
-	}
 	return (SUCCESS);
 }
 
@@ -55,10 +50,7 @@ int		check_label_syntax(char *str)
 		if (!ft_strchr(LABEL_CHARS, str[index]) &&
 			!(index == 0 && str[index] == DIRECT_CHAR) &&
 				!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
-			{
-				printf("error line : %s\n", str);
 				return (TOKEN_LABEL_SYNTAX_FAIL);
-			}
 		index++;
 	}
 	return (SUCCESS);
@@ -87,5 +79,6 @@ int		check_instr(t_token *token, char *str)
 		}
 		index++;
 	}
+
 	return (TOKEN_INSTR_INVALID);
 }
