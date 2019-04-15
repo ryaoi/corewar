@@ -4,10 +4,10 @@ import LogCache from './LogCache'
 
 const initial_state = {
 	log_boxes: [],
-	log_cache: new LogCache(100)
+	log_cache: new LogCache()
 }
 
-const default_config = [0] /* TODO */
+const default_config = [0, 1, 2] /* TODO */
 
 function logBoxReducer (state = [], action) {
 	var newState = [...state]

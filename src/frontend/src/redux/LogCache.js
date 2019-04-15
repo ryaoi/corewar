@@ -24,26 +24,31 @@ class FilterMatch {
 	}
 }
 
+var perf = {
+	misses: 0,
+	matches: 0
+}
+
 class FilterCache {
 	constructor(size = 10) {
 		this.size = size
 		this.filters = []
 	}
 	doFiltering(blocks, filter) {
-		filter.matches.forEach((match) => {
-			match.hit = false
-		})
+		var new_matches = []
 		blocks.forEach((block) => {
 			var match = filter.matches.find((match) => match.matches(block))
 			if (!match) {
 				var result = block.filter((line) => filter.config.includes(line.type))
-				filter.matches.push(new FilterMatch(block, result))
+				new_matches.push(new FilterMatch(block, result))
+				perf.misses++;
 			}
 			else {
-				match.hit = true
+				new_matches.push(match)
+				perf.matches++;
 			}
 		})
-		filter.matches = filter.matches.filter((match) => match.hit)
+		filter.matches = new_matches
 		return (filter)
 	}
 	filter(blocks, config) {
@@ -68,7 +73,7 @@ class FilterCache {
 }
 
 class LogCache {
-	constructor(block_size = 500, other) {
+	constructor(block_size = 250, other) {
 		if (!other)
 		{
 			this.blocks = []
@@ -115,10 +120,8 @@ class LogCache {
 		this.blocks.slice(-1)[0].push(log)
 	}
 	pushLogs(channels) {
-		const initial_store_size = this.storeSize()
 		var new_logs = mergeChannels(channels)
 		new_logs.forEach((log, index) => {
-			log.key = initial_store_size + index
 			this.push(log)
 		})
 	}
