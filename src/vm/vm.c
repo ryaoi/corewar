@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/06 19:54:52 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/15 17:54:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		vm_exec_cycle(t_vm_state *state)
 
 	log_level(&state->log_info, e_log_cycles,
 		"Cycle %d", state->cycle_count + 1);
-	index = state->processes.length - 1;
+	index = state->processes.length;
 	while (index-- > 0)
 		process_exec_cycle(state, index);
 	state->cycle_count++;
