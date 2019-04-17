@@ -6,19 +6,17 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/17 17:19:38 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:44:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-static void	load_index(t_vm_state *state, size_t p_index, t_instr *instr)
+static void	load_index(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	load_buffer;
 	int32_t			offset;
-	t_process		*process;
 
-	process = &PROCESS(state, p_index);
 	load_buffer.buffer = 0;
 	offset = byte_order_swap(
 			ARG_IND(instr, 0).content).buffer;
@@ -34,12 +32,10 @@ static void	load_index(t_vm_state *state, size_t p_index, t_instr *instr)
 		REGISTER(process, ARG_REG(instr, 1) - 1).content);
 }
 
-void		load_direct(t_vm_state *state, size_t p_index, t_instr *instr)
+static void	load_direct(t_vm_state *state, t_process *process, t_instr *instr)
 {
 	t_bigend_buffer	load_buffer;
-	t_process		*process;
 
-	process = &PROCESS(state, p_index);
 	load_buffer.buffer = 0;
 	process->carry = buffer_is_zero(
 	ARG_DIR(instr, 0).content);
@@ -51,10 +47,13 @@ void		load_direct(t_vm_state *state, size_t p_index, t_instr *instr)
 		REGISTER(process, ARG_REG(instr, 1) - 1).content);
 }
 
-void	impl_ld(t_vm_state *state, size_t p_index, t_instr *instr)
+void		impl_ld(t_vm_state *state, size_t p_index, t_instr *instr)
 {
+	t_process		*process;
+
+	process = &PROCESS(state, p_index);
 	if (ARG_TYPE(instr, 0) == e_index)
-		load_index(state, p_index, instr);
+		load_index(state, process, instr);
 	else
-		load_direct(state, p_index, instr);
+		load_direct(state, process, instr);
 }

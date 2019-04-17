@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/17 17:25:18 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:36:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void		kill_lazy_processes(t_game_data *game)
 		game->checks_since_dec++;
 }
 
-static void	log_game_over(t_game_data *game)
+static void		log_game_over(t_game_data *game)
 {
 	size_t	index;
 	size_t	winner;

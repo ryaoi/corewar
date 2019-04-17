@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/31 21:53:05 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/15 17:21:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int		main(void)
 	t_player	sha2;
 	t_log_info	info;
 
-	if (vm_champion_load_file(&sha1, "resources/test_champ1.cor", 1) < 0
-		|| vm_champion_load_file(&sha2, "resources/test_champ2.cor", 2) < 0)
+	if (vm_champion_load_file(&sha1, "/Users/aamadori/Downloads/vm_champs/champs/Gagnant.cor", -1) < 0
+		|| vm_champion_load_file(&sha2, "/Users/aamadori/Downloads/vm_champs/champs/Octobre_Rouge_V4.2.cor", -2) < 0)
 		return (0);
 	array_init(&players, sizeof(t_player));
 	array_push_back(&players, &sha1);

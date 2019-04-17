@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 16:32:14 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/26 18:20:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:38:55 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ void	dump_memory(t_vm_state *state)
 	{
 		index = 0;
 		ft_printf("%6.4p : ", (void*)(line * (MEM_SIZE / line_size)));
-		while(index < line_size)
+		while (index < line_size)
 		{
-			ft_printf("%.2hhx ", state->memory[(line * (MEM_SIZE / line_size)) + index]);
+			ft_printf("%.2hhx ",
+				state->memory[(line * (MEM_SIZE / line_size)) + index]);
 			index++;
 		}
 		ft_printf("\n");

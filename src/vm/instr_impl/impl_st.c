@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/15 18:06:44 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:34:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ static void	st_index(t_vm_state *state, t_process *process, t_instr *instr)
 	mem_store(state, offset, REG_SIZE, load_buffer);
 	log_level(&state->log_info, e_log_store,
 		"Storing r%d into %#.8zx, val %#.8zx",
-		/* TODO don't subtract -1 from reg index */
-		ARG_REG(instr, 0) - 1, offset,
+		ARG_REG(instr, 0), offset,
 		REGISTER(process, ARG_REG(instr, 0) - 1).content);
 }
 

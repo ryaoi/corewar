@@ -6,14 +6,14 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/15 17:54:03 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:49:46 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "libft.h"
 
-int		vm_exec_cycle(t_vm_state *state)
+int			vm_exec_cycle(t_vm_state *state)
 {
 	size_t	index;
 
@@ -26,7 +26,7 @@ int		vm_exec_cycle(t_vm_state *state)
 	return (0);
 }
 
-void	vm_memory_prepare(t_vm_state *state)
+void		vm_memory_prepare(t_vm_state *state)
 {
 	size_t	address;
 	size_t	champion;
@@ -44,7 +44,7 @@ void	vm_memory_prepare(t_vm_state *state)
 	}
 }
 
-void	vm_state_init(t_vm_state *state)
+void		vm_state_init(t_vm_state *state)
 {
 	ft_bzero(state, sizeof(t_vm_state));
 	array_init(&state->players, sizeof(t_player));
@@ -53,14 +53,11 @@ void	vm_state_init(t_vm_state *state)
 
 static void	player_destroy(void *ptr)
 {
-	t_player *player;
-
-	player = ptr;
-	free(player->champion_code);
-	player->champion_code = NULL;
+	free(((t_player*)ptr)->champion_code);
+	((t_player*)ptr)->champion_code = NULL;
 }
 
-void	vm_state_clear(t_vm_state *state)
+void		vm_state_clear(t_vm_state *state)
 {
 	array_clear(&state->processes, NULL);
 	array_clear(&state->players, player_destroy);
