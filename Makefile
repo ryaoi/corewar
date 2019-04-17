@@ -1,10 +1,19 @@
 ASM_SRCS = asm/main.c \
-			asm/parse_lines.c \
-			asm/read_file.c \
-			asm/error.c \
+			asm/files_utils.c \
+			asm/file_parse.c \
+			asm/file_parse_utils.c \
+			asm/file_parse_check.c \
+			asm/file_parse_tokenizer.c \
+			asm/file_parse_header.c \
+			asm/bytecode_length.c \
+			asm/file_read.c \
+			asm/file_read_utils.c \
 			asm/file_conversion.c \
+			asm/file_conversion_traslate_bc.c \
 			asm/op.c \
-			asm/write_cor_file.c
+			asm/print_errors.c \
+			asm/write_cor_file.c \
+			asm/free_asm.c
 COREWAR_SRCS =
 INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
@@ -22,7 +31,7 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
+export CFLAGS := $(FLAGS) -Wall -Wextra -Werror #-std=c89
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
