@@ -6,14 +6,14 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/17 17:14:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 19:14:04 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
 static void		do_load(t_vm_state *state, t_process *process,
-					t_instr *instr, size_t offset)
+					t_instr *instr, int32_t offset)
 {
 	offset = process->program_counter + (offset % IDX_MOD);
 	REGISTER(process,
