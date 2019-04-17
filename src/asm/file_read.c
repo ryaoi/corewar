@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 20:41:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/17 19:04:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		line_create(t_file *file, char *line, int line_type)
 	if (new_line.str && new_line.str[0] == '\0')
 	{
 		free(new_line.str);
-		ft_putendl("ft_strtrim returned empty string!.");
+		ft_printf("at %s, ft_strtrim returned empty string!.\n\n", file->name_s);
 		return (LINE_CREATE_FAIL);
 	}
 	new_line.nbr_params = 0;
@@ -106,14 +106,14 @@ int		file_read(t_file *file)
 	line = NULL;
 	while ((file->ret = get_next_line(file->fd_s, &line)) > 0)
 	{
+		if (line && ft_strchr(line, COMMENT_CHAR))
+			if (handle_comment(file, &line) < 0)
+				return (HANDLE_CMT_FAIL);
 		if (line && (line[0] == '\0' || line_is_ws(line)))
 		{
 			free(line);
 			continue ;
 		}
-		if (line && ft_strchr(line, COMMENT_CHAR))
-			if (handle_comment(file, &line) < 0)
-				return (HANDLE_CMT_FAIL);
 		if (line && line_add(file, line, label_check(line)) < 0)
 		{
 			free(line);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 23:10:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/17 18:15:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	print_errmsg_file(int err_type, char *filename)
 		ft_putendl("ft_strndup failed.");
 	else if (err_type == STRJOIN_FAIL)
 		ft_putendl("ft_strjoin failed.");
+	write(1, "\n", 1);
 }
 
 void	print_errmsg_file_read(int err_type)
@@ -33,6 +34,7 @@ void	print_errmsg_file_read(int err_type)
 		ft_putendl("get_next_line() failed.");
 	else if (err_type == CONTENT_EMPTY)
 		ft_putendl("content of the file is empty.");
+	write(1, "\n", 1);
 }
 
 void	print_errmsg_tokenizer(int err_type, char *line)
@@ -51,6 +53,7 @@ void	print_errmsg_tokenizer(int err_type, char *line)
 		ft_printf("at '%s'\ntoken_type not found.\n", line);
 	else if (err_type == TOKEN_INSTR_INVALID)
 		ft_printf("at '%s'\nno opcode match found.\n", line);
+	write(1, "\n", 1);
 }
 
 void	print_errmsg_opcode_cmp(int err_type, char *line)
@@ -64,6 +67,7 @@ void	print_errmsg_opcode_cmp(int err_type, char *line)
 	else if (err_type == PARAM_NOT_VALID)
 		ft_printf(\
 		"at '%s'\nnot valid params according to the op_table.\n", line);
+	write(1, "\n", 1);
 }
 
 void	print_errmsg_conversion(int err_type, char *line)
@@ -74,4 +78,5 @@ void	print_errmsg_conversion(int err_type, char *line)
 		ft_printf("at '%s'\nparameter doesn't exist.\n", line);
 	else if (err_type == LABEL_NOT_EXIST)
 		ft_printf("at '%s'\nlabel doesn't exist.\n", line);
+	write(1, "\n", 1);
 }
