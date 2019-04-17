@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:25:44 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 		if (ARRAY_PTR(state->players, t_player)[index].id == parameter)
 		{
 			ARRAY_PTR(state->players, t_player)[index].live++;
-			break;
+			break ;
 		}
 		index++;
 	}

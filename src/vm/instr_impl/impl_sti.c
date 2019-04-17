@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/04/06 22:45:30 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:11:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void					impl_sti(t_vm_state *state, size_t p_index,
 	process = &PROCESS(state, p_index);
 	first_param = sti_first_p(state, process, instr);
 	second_param = sti_second_p(state, process, instr);
-	offset = (int64_t)byte_order_swap(
+	offset = (int32_t)byte_order_swap(
 		add_bigend(first_param, second_param, 0)).buffer;
 	offset = process->program_counter + (offset % IDX_MOD);
 	log_level(&state->log_info, e_log_store,

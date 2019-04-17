@@ -6,15 +6,15 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:48:21 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/17 17:25:18 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "game.h"
 
-void	prepare_game(t_game_data *game, t_array *players,
-			const t_log_info *log_opts)
+void			prepare_game(t_game_data *game, t_array *players,
+					const t_log_info *log_opts)
 {
 	int	index;
 
@@ -68,7 +68,7 @@ static t_array	measure_lives(t_game_data *game)
 	return (new_array);
 }
 
-static void	kill_lazy_processes(t_game_data *game)
+static void		kill_lazy_processes(t_game_data *game)
 {
 	t_array	new_array;
 
@@ -115,7 +115,7 @@ static void	log_game_over(t_game_data *game)
 		ARRAY_PTR(game->state.players, t_player)[winner].id);
 }
 
-int		advance_cycle(t_game_data *game)
+int				advance_cycle(t_game_data *game)
 {
 	if (game->cycles_to_die <= 0 || !game->state.processes.length)
 	{
