@@ -6,16 +6,15 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/18 01:58:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/18 14:31:56 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VISUALIZER_H
 # define VISUALIZER_H
 
-#include "ncurses.h"
+#include <ncurses.h>
 #include <unistd.h>
-#include <time.h>
 #include "libft.h"
 #include "op.h"
 
@@ -29,10 +28,12 @@
 # define COLOR_PINK_BG 26
 # define COLOR_GREEN_BG 27
 # define COLOR_BLUE_BG 28
+/* TODO more colors probably required */
 
-#define MEM_DUMP_WIDTH 197
-#define INFO_WIDTH 58
-#define SPACE 32
+# define MEM_DUMP_WIDTH 197
+# define INFO_WIDTH 58
+
+# define PRESS_KEY_SPACE 32 /* TODO pause and resume */
 
 typedef struct	s_visualizer_state
 {
@@ -47,5 +48,9 @@ typedef struct	s_window
 	WINDOW	*mem_dump;
 	WINDOW	*info;
 }				t_window;
+
+
+void	create_memory_dump(t_window *win);
+void			create_info(t_window *win);
 
 #endif

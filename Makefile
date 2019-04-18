@@ -15,7 +15,9 @@ ASM_SRCS = asm/main.c \
 			asm/write_cor_file.c \
 			asm/free_asm.c
 COREWAR_SRCS =
-VISUALIZER_SRCS = visualizer/visualizer.c
+VISUALIZER_SRCS = visualizer/visualizer.c \
+					visualizer/info.c \
+					visualizer/memory_dump.c
 INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
 		includes/op.h \
