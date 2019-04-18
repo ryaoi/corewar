@@ -15,15 +15,17 @@ ASM_SRCS = asm/main.c \
 			asm/write_cor_file.c \
 			asm/free_asm.c
 COREWAR_SRCS =
+VISUALIZER_SRCS = visualizer/visualizer.c
 INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
 		includes/op.h \
 		includes/asm.h \
+		includes/visualizer.h
 #		includes/cpu.h \
 		includes vm.h
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
-
+VISUALIZER_OBJS = $(patsubst %.c, obj/%.o, $(VISUALIZER_SRCS))
 TESTS_SRCS =
 TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
 TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
@@ -33,10 +35,11 @@ ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
 export CFLAGS := $(FLAGS) -Wall -Wextra -Werror #-std=c89
 endif
-INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
-LIBRARY_PATHS = -L. -Llibft -Lft_printf
+INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I /usr/local/opt/ncurses/include
+LIBRARY_PATHS = -L. -Llibft -Lft_printf -L /usr/local/opt/ncurses/lib
 ASM_NAME = asm
 COREWAR_NAME =
+VISUALIZER_NAME = vis
 
 .PHONY: clean fclean re all
 
@@ -54,10 +57,14 @@ $(ASM_NAME): $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
 $(COREWAR_NAME): $(COREWAR_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
 
+$(VISUALIZER_NAME): $(VISUALIZER_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(VISUALIZER_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft -lncurses
+
 obj:
 	mkdir -p obj
 	mkdir -p obj/asm
 	mkdir -p obj/corewar
+	mkdir -p obj/visualizer
 
 tests/%.test: tests/%.c $(NAME) $(LIBFT_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lft
@@ -68,11 +75,15 @@ obj/asm/%.o: src/asm/%.c $(INCLUDES) | obj
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
+obj/visualizer/%.o: src/visualizer/%.c $(INCLUDES) | obj
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
+
 clean:
 	rm -rf $(TESTS_DBG_FOLDERS)
 	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
+	rm -f $(VISUALIZER_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj
@@ -86,6 +97,8 @@ fclean: clean
 	rm -f $(COREWAR_NAME)
 	rm -rf $(ASM_NAME).dSYM/
 	rm -f $(ASM_NAME)
+	rm -f $(VISUALIZER_NAME)
+	rm -rf $(VISUALIZER_NAME).dSYM/
 
 re: fclean
 	$(MAKE) all
