@@ -2,6 +2,7 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	python_bindings/python_impl.c \
 	logging.c \
 	vm/vm.c \
+	vm/vm_memory.c \
 	vm/ocp.c \
 	vm/optable.c \
 	vm/load_store.c \

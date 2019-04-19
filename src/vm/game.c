@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 16:59:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/19 19:30:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,15 @@ static t_array	measure_lives(t_game_data *game)
 	array_init(&new_array, sizeof(t_process));
 	while (index < game->state.processes.length)
 	{
-		if (PROCESS(&game->state, index).live_executed
-			|| PROCESS(&game->state, index).birth_cycle
-				>= (game->state.cycle_count - game->cycles_to_die))
+		if (PROCESS(&game->state, index).live_executed)
 		{
 			game->live_since_dec += PROCESS(&game->state, index).live_executed;
 			PROCESS(&game->state, index).live_executed = 0;
 			array_push_back(&new_array, &PROCESS(&game->state, index));
 		}
 		else
-		{
-			game->state.memory_info[
-				PROCESS(&game->state, index).program_counter].pc_count--;
 			log_level(&game->state.log_info, e_log_deaths,
 				"Process %d smothered!", PROCESS(&game->state, index).id);
-		}
 		index++;
 	}
 	return (new_array);
