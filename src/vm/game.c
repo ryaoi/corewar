@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 18:58:58 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/19 19:30:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,8 @@ static t_array	measure_lives(t_game_data *game)
 			array_push_back(&new_array, &PROCESS(&game->state, index));
 		}
 		else
-		{
-			game->state.memory_info[
-				PROCESS(&game->state, index).program_counter].pc_count--;
 			log_level(&game->state.log_info, e_log_deaths,
 				"Process %d smothered!", PROCESS(&game->state, index).id);
-		}
 		index++;
 	}
 	return (new_array);
