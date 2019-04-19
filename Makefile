@@ -15,6 +15,9 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	vm/util.c \
 	vm/buffer_invert_bits.c \
 	vm/buffer_is_zero.c \
+	vm/visualizer/visualizer.c \
+	vm/visualizer/memory_dump.c \
+	vm/visualizer/info.c \
 	vm/instr_impl/impl_and.c \
 	vm/instr_impl/impl_or.c \
 	vm/instr_impl/impl_xor.c \
@@ -39,6 +42,7 @@ INCLUDES = libft/includes/libft.h \
 		ft_printf/includes/ft_printf.h \
 		includes/instr.h \
 		includes/vm.h \
+		includes/visualizer.h \
 		includes/python_bindings.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
@@ -53,11 +57,11 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
+export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
-INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
-LIBRARY_PATHS = -L. -Llibft -Lft_printf
+INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I ~/.brew/opt/ncurses/include
+LIBRARY_PATHS = -L. -Llibft -Lft_printf -L ~/.brew/opt/ncurses/lib
 ASM_NAME =
 COREWAR_NAME =
 CORELIB_NAME = libcore.so
@@ -73,7 +77,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
+	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs` -lncurses
 	cp $@ src/flask/$@
 
 src/flask/$(CORELIB_NAME): $(CORELIB_NAME)
@@ -83,19 +87,20 @@ $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcore -lncurses
 
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
 	mkdir -p obj/vm/instr_impl
+	mkdir -p obj/vm/visualizer
 	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<
 
 tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore -lncurses
 
 clean:
 	rm -rf $(TESTS_DBG_FOLDERS)
