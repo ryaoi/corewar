@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/18 23:01:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/19 18:37:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,10 @@
 # define DELAY 1000000
 # define COLOR_GREY 20
 # define COLOR_BRIGHT_WHITE 21
-# define COLOR_BROWN_1 22
-# define COLOR_PINK 23
-# define COLOR_BLUE_L 24
-# define COLOR_BROWN_BG 25
-# define COLOR_PINK_BG 26
-# define COLOR_GREEN_BG 27
-# define COLOR_BLUE_BG 28
+
+
+# define CHAMP_1_COLOR
+
 /* TODO more colors probably required */
 
 # define MEM_DUMP_WIDTH 197

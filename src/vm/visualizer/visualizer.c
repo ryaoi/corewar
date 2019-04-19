@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:42:40 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/18 23:01:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/19 19:19:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,15 @@ void	visualize_game(t_vm_state *vm)
 
 void	get_color_pairs()
 {
-	init_color(COLOR_GREY, 350, 350, 350);
+	init_color(COLOR_GREY, 400, 400, 400);
 	init_color(COLOR_BRIGHT_WHITE, 1000, 1000, 1000);
-	init_pair(1, COLOR_GREY, COLOR_GREY);
-	init_pair(2, COLOR_BRIGHT_WHITE, COLOR_BLACK);
-	init_pair(3, COLOR_GREY, COLOR_BLACK);
+	init_pair(1, COLOR_GREY, COLOR_GREY); //border
+	init_pair(2, COLOR_BRIGHT_WHITE, COLOR_BLACK); //white text
+	init_pair(3, COLOR_RED, COLOR_BLACK);
+	init_pair(4, COLOR_GREEN, COLOR_BLACK);
+	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(6, COLOR_BLUE, COLOR_BLACK);
+
 	/* TODO
 		needs 4 colors for Program Counter
 		4 colors for champios memory_dump
@@ -50,8 +54,8 @@ void	control_speed(int input, t_visualizer_state *vis_state)
 		(*vis_state).speed += 2;
 	if (input == KEY_LEFT)
 		(*vis_state).speed -= 2;
-	if ((*vis_state).speed > 1500)
-		(*vis_state).speed = 1500;
+	if ((*vis_state).speed > 2000)
+		(*vis_state).speed = 2000;
 	if ((*vis_state).speed < 1)
 		(*vis_state).speed = 1;
 }
