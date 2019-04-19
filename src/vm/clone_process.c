@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/04/19 16:33:34 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/19 17:03:32 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	ASSERT(search < state->players.length,
 		"Tried to init process with player id that does not exist.");
 	new_process.player = &ARRAY_PTR(state->players, t_player)[search];
-	new_process.program_counter = address;
+	new_process.program_counter = address % MEM_SIZE;
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
 	new_process.pending_operation = fetch_opcode(state,
@@ -54,7 +54,7 @@ void	vm_clone_process(t_vm_state *state, size_t address, t_process *original)
 	ft_bzero(&new_process, sizeof(t_process));
 	ft_memcpy(new_process.registers, original->registers,
 		sizeof(original->registers));
-	new_process.program_counter = address;
+	new_process.program_counter = address % MEM_SIZE;
 	new_process.carry = original->carry;
 	new_process.player = original->player;
 	new_process.has_jumped = 1;
