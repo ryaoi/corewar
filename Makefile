@@ -32,13 +32,17 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	vm/instr_impl/impl_lldi.c \
 	vm/instr_impl/impl_lfork.c
 ASM_SRCS =
-COREWAR_SRCS =
+COREWAR_SRCS = 	vm/visualizer/visualizer.c \
+	vm/visualizer/memory_dump.c \
+	vm/visualizer/info.c \
+	vm/visualizer/visualizer_backup.c
 INCLUDES = libft/includes/libft.h \
 		libft/includes/array.h \
 		libft/includes/ft_assert.h \
 		ft_printf/includes/ft_printf.h \
 		includes/instr.h \
 		includes/vm.h \
+		includes/visualizer.h \
 		includes/python_bindings.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
@@ -53,13 +57,13 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
+export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
-INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
-LIBRARY_PATHS = -L. -Llibft -Lft_printf
+INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I ~/.brew/opt/ncurses/include
+LIBRARY_PATHS = -L. -Llibft -Lft_printf -L ~/.brew/opt/ncurses/lib
 ASM_NAME =
-COREWAR_NAME =
+COREWAR_NAME = corewar
 CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
@@ -80,15 +84,16 @@ src/flask/$(CORELIB_NAME): $(CORELIB_NAME)
 	cp $(CORELIB_NAME) src/flask/$(CORELIB_NAME)
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore
 
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
 	mkdir -p obj/vm/instr_impl
+	mkdir -p obj/vm/visualizer
 	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
