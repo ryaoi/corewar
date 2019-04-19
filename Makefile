@@ -15,9 +15,6 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	vm/util.c \
 	vm/buffer_invert_bits.c \
 	vm/buffer_is_zero.c \
-	vm/visualizer/visualizer.c \
-	vm/visualizer/memory_dump.c \
-	vm/visualizer/info.c \
 	vm/instr_impl/impl_and.c \
 	vm/instr_impl/impl_or.c \
 	vm/instr_impl/impl_xor.c \
@@ -35,7 +32,10 @@ CORELIB_SRCS = python_bindings/python_bindings.c \
 	vm/instr_impl/impl_lldi.c \
 	vm/instr_impl/impl_lfork.c
 ASM_SRCS =
-COREWAR_SRCS =
+COREWAR_SRCS = 	vm/visualizer/visualizer.c \
+	vm/visualizer/memory_dump.c \
+	vm/visualizer/info.c \
+	vm/visualizer/visualizer_backup.c
 INCLUDES = libft/includes/libft.h \
 		libft/includes/array.h \
 		libft/includes/ft_assert.h \
@@ -63,7 +63,7 @@ endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I ~/.brew/opt/ncurses/include
 LIBRARY_PATHS = -L. -Llibft -Lft_printf -L ~/.brew/opt/ncurses/lib
 ASM_NAME =
-COREWAR_NAME =
+COREWAR_NAME = corewar
 CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
@@ -77,17 +77,17 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs` -lncurses
+	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
 	cp $@ src/flask/$@
 
 src/flask/$(CORELIB_NAME): $(CORELIB_NAME)
 	cp $(CORELIB_NAME) src/flask/$(CORELIB_NAME)
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(OBJS) -o $@ $(LIBRARY_PATHS) -lcore -lncurses
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore
 
 obj:
 	mkdir -p obj
@@ -100,7 +100,7 @@ obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<
 
 tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore -lncurses
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
 
 clean:
 	rm -rf $(TESTS_DBG_FOLDERS)
