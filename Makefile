@@ -60,15 +60,15 @@ export CFLAGS_WARNINGS = 1
 export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
-INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I ~/.brew/opt/ncurses/include
-LIBRARY_PATHS = -L. -Llibft -Lft_printf -L ~/.brew/opt/ncurses/lib
+INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
+LIBRARY_PATHS = -L. -Llibft -Lft_printf
 ASM_NAME =
 COREWAR_NAME = corewar
 CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
 
-all: src/flask/$(CORELIB_NAME) $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
+all: $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
 
 LIBFT_PREFIX = ../libft
 FTPRINTF_PREFIX = ft_printf
@@ -78,10 +78,6 @@ include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
 	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
-	cp $@ src/flask/$@
-
-src/flask/$(CORELIB_NAME): $(CORELIB_NAME)
-	cp $(CORELIB_NAME) src/flask/$(CORELIB_NAME)
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
@@ -120,7 +116,6 @@ fclean: clean
 	rm -rf $(COREWAR_NAME).dSYM/
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
-	rm -f src/flask/$(CORELIB_NAME)
 	rm -rf $(ASM_NAME).dSYM/
 	rm -f $(ASM_NAME)
 

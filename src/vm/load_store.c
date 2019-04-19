@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/17 17:45:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/19 16:53:51 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void			mem_store(t_vm_state *state, int64_t address, size_t size,
 	size_t			byte_address;
 	size_t			index;
 	size_t			msb;
+	int				player_id;
 
 	ASSERT(size <= REG_SIZE, "Tried to store size larger than REG_SIZE");
 	index = 0;
@@ -53,6 +54,9 @@ void			mem_store(t_vm_state *state, int64_t address, size_t size,
 	while (index < size)
 	{
 		byte_address = (address + index) % MEM_SIZE;
+		player_id = state->current_process->player->id;
+		state->memory_info[byte_address].written_player = player_id;
+		state->memory_info[byte_address].written_cycle = state->cycle_count;
 		state->memory[byte_address] = (
 			(const uint8_t*)&store.buffer)[index + msb];
 		index++;

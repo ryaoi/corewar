@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/18 19:08:17 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/19 16:43:22 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,13 +173,22 @@ typedef struct		s_process
 	enum e_instr	pending_operation;
 }					t_process;
 
+typedef struct		s_byte_info
+{
+	size_t	pc_count;
+	size_t	written_player;
+	size_t	written_cycle;
+}					t_byte_info;
+
 typedef struct		s_vm_state
 {
 	t_array		processes;
 	t_array		players;
+	t_process	*current_process;
 	size_t		process_count;
 	size_t		cycle_count;
 	uint8_t		memory[MEM_SIZE];
+	t_byte_info	memory_info[MEM_SIZE];
 	t_log_info	log_info;
 }					t_vm_state;
 
