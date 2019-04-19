@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 16:59:45 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/19 18:58:58 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ static t_array	measure_lives(t_game_data *game)
 	array_init(&new_array, sizeof(t_process));
 	while (index < game->state.processes.length)
 	{
-		if (PROCESS(&game->state, index).live_executed
-			|| PROCESS(&game->state, index).birth_cycle
-				>= (game->state.cycle_count - game->cycles_to_die))
+		if (PROCESS(&game->state, index).live_executed)
 		{
 			game->live_since_dec += PROCESS(&game->state, index).live_executed;
 			PROCESS(&game->state, index).live_executed = 0;
