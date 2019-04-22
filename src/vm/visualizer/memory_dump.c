@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/19 19:34:31 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/22 21:31:36 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	get_champion_color(size_t index, t_byte_info info, size_t cycle_count
 
 	(void)cycle_count;
 	(void)index;
+
 	if (info.written_player == -1)
 		color = 3;
 	else if (info.written_player == -2)
@@ -26,10 +27,12 @@ static int	get_champion_color(size_t index, t_byte_info info, size_t cycle_count
 		color = 5;
 	else if (info.written_player == -4)
 		color = 6;
-
 	else
 		color = 2;
-	/* TODO highlight */
+	if (cycle_count - info.written_cycle < HIGHLIGHT_CYCLE && info.written_cycle > 1)
+		color += 10;
+	if (info.pc_count == 1)
+		color += 20;
 	return (color);
 }
 
@@ -56,7 +59,7 @@ static void output_memory_dump(t_vm_state *vm)
 			row++;
 		}
 	}
-	wattroff(win.info, COLOR_PAIR(1));
+	wattroff(win.info, COLOR_PAIR(2));
 }
 
 void		create_memory_dump(t_vm_state *vm)

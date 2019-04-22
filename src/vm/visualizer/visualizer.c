@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:42:40 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/19 19:19:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/22 22:54:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,56 @@ void	visualize_game(t_vm_state *vm)
 
 void	get_color_pairs()
 {
-	init_color(COLOR_GREY, 400, 400, 400);
-	init_color(COLOR_BRIGHT_WHITE, 1000, 1000, 1000);
-	init_pair(1, COLOR_GREY, COLOR_GREY); //border
-	init_pair(2, COLOR_BRIGHT_WHITE, COLOR_BLACK); //white text
-	init_pair(3, COLOR_RED, COLOR_BLACK);
-	init_pair(4, COLOR_GREEN, COLOR_BLACK);
-	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(6, COLOR_BLUE, COLOR_BLACK);
+	init_color(FT_COLOR_GREY, 400, 400, 400);
+	init_color(FT_COLOR_BRIGHT_WHITE, 1000, 1000, 1000);
+	init_color(FT_COLOR_BLUE, 46 * COEFF, 134 * COEFF, 193 * COEFF);
+	init_color(FT_COLOR_PURPLE, 142 * COEFF, 68 * COEFF, 173 * COEFF);
+	init_color(FT_COLOR_GREEN, 39 * COEFF, 174 * COEFF, 96 * COEFF);
+	init_color(FT_COLOR_BROWN, 211 * COEFF, 84 * COEFF, 0 * COEFF);
 
-	/* TODO
-		needs 4 colors for Program Counter
-		4 colors for champios memory_dump
-		colors for the informational log
-		fuckin many colors
-	*/
+	init_color(FT_COLOR_LIGHT_BLUE, 133 * COEFF, 193 * COEFF, 233 * COEFF);
+	init_color(FT_COLOR_LIGHT_PURPLE, 187 * COEFF, 143 * COEFF, 206 * COEFF);
+	init_color(FT_COLOR_LIGHT_GREEN, 130 * COEFF, 224 * COEFF, 170 * COEFF);
+	init_color(FT_COLOR_LIGHT_BROWN, 229 * COEFF, 152 * COEFF, 102 * COEFF);
+
+//	init_color(CHAMP1_PC_COLOR);
+//	init_color(CHAMP2_PC_COLOR);
+//	init_color(CHAMP3_PC_COLOR);
+//	init_color(CHAMP4_PC_COLOR);
+
+	/* written memory */
+	init_pair(1, FT_COLOR_GREY, FT_COLOR_GREY); //border
+	init_pair(50, FT_COLOR_BRIGHT_WHITE, COLOR_BLACK); // info text
+
+	init_pair(2, FT_COLOR_GREY, COLOR_BLACK); //empty memdup
+	init_pair(3, FT_COLOR_BLUE, COLOR_BLACK);
+	init_pair(4, FT_COLOR_PURPLE, COLOR_BLACK);
+	init_pair(5, FT_COLOR_GREEN, COLOR_BLACK);
+	init_pair(6, FT_COLOR_BROWN, COLOR_BLACK);
+
+	/* most recent written memory */
+	init_pair(12, FT_COLOR_GREY, FT_COLOR_GREY); // PC at empty memdump
+	init_pair(13, FT_COLOR_LIGHT_BLUE, COLOR_BLACK);
+	init_pair(14, FT_COLOR_LIGHT_PURPLE, COLOR_BLACK);
+	init_pair(15, FT_COLOR_LIGHT_GREEN, COLOR_BLACK);
+	init_pair(16, FT_COLOR_LIGHT_BROWN, COLOR_BLACK);
+
+	/* program_counter position */
+	init_pair(22, FT_COLOR_GREY, FT_COLOR_GREY);
+	init_pair(23, COLOR_BLACK, FT_COLOR_BLUE);
+	init_pair(24, COLOR_BLACK, FT_COLOR_PURPLE);
+	init_pair(25, COLOR_BLACK, FT_COLOR_GREEN);
+	init_pair(26, COLOR_BLACK, FT_COLOR_BROWN);
+
+	/* program_counter position + HIGHLIGHT*/
+	init_pair(32, FT_COLOR_GREY, FT_COLOR_GREY);
+	init_pair(33, FT_COLOR_BRIGHT_WHITE, FT_COLOR_BLUE);
+	init_pair(34, FT_COLOR_BRIGHT_WHITE, FT_COLOR_PURPLE);
+	init_pair(35, FT_COLOR_BRIGHT_WHITE, FT_COLOR_GREEN);
+	init_pair(36, FT_COLOR_BRIGHT_WHITE, FT_COLOR_BROWN);
 }
 
+////////////////////////////////pthread..../////////////////////////////////////
 void	control_speed(int input, t_visualizer_state *vis_state)
 {
 	if (input == KEY_UP)
@@ -80,6 +113,7 @@ int		get_keyinput(t_visualizer_state *vis_state)
 	control_speed(input, vis_state);
 	return (0);
 }
+////////////////////////////////pthread..../////////////////////////////////////
 
 void	init_visualizer(void)
 {
@@ -104,19 +138,6 @@ int		visualizer(t_game_data *game)
 
 	if (game->state.cycle_count == 1)
 		init_visualizer();
-	//ft_bzero(&vis_state, sizeof(t_visualizer_state));
-	//initscr();
-	//cbreak();
-	//noecho();
-	//curs_set(0);
-	//start_color();
-	//get_color_pairs();
-//	nodelay(stdscr, TRUE);
-//	keypad(stdscr, TRUE); /* TODO hook keys to speed up & down the program */
-							/* the whole thing needs to be linked to the corewar */
-//	win.mem_dump = newwin(4 + (MEM_SIZE / 64), MEM_DUMP_WIDTH, 0, 0);
-//	win.info = newwin(4 + (MEM_SIZE / 64), INFO_WIDTH, 0, MEM_DUMP_WIDTH - 1);
-//	win.other = newwin(58, MEM_DUMP_WIDTH + INFO_WIDTH, 4 + (MEM_SIZE / 64) + 1, 0)
 	while (vis_state.pause)
 	{
 		key = get_keyinput(&vis_state);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 19:25:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/22 22:55:10 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,3 +65,79 @@ int		main(void)
 //	ft_printf("%d %d\n", ARRAY_PTR(game->state.players, t_player)[0].live, ARRAY_PTR(game->state.players, t_player)[1].live);
 	return (0);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+typedef struct		s_corewar_input
+{
+	char	*champions[4];
+	int		flags;
+}
+
+PARSE_FLAG_MEMDUMP		0b1
+PARSE_FLAG_CHAMP_NBR	0b10
+PARSE_FLAG_VISUALIZER	0b100
+PARSE_NBR_CYCLES		0b1000
+PARSE_CHAMP_NBR			0b10000
+PARSE_CHAMP_NAME		0b100000
+
+int		(*g_syntax_check[6])(char*) = {
+	flag_memdump,
+	parse_memdump_nbr,
+	flag_visualizer,
+	flag_champ_nbr,
+	parse_champ_nbr,
+	parse_champ_name
+};
+
+void	print_usage(void)
+{
+	ft_printf("Usage : $> ./corewar [-dump N | -v] [-n N champion1.cor] ...\n");
+	ft_printf("-dump N : dumps memory after N cycles\n");
+	ft_printf("-v : turn on visualizer\n");
+	ft_printf("-n N champion.cor : player N and name_of_champion.cor\n");
+}
+
+int		check_syntax(int argc, char *input, int flag)
+{
+	int	index;
+	int	ret;
+
+	index = 0;
+	while (index < 6)
+	{
+		if (flag >> index & 1 && g_syntax_check[index](input))
+			ret = parse_input(input);
+		return (ret);
+	}
+
+}
+
+int		main(int argc, char **argv)
+{
+	int		flags;
+	int		index;
+	int		ret;
+
+	flag = PARSE_FLAG_MEMDUMP | PARSE_FLAG_VISUALIZER
+			| PARSE_FLAG_CHAMP_NBR | PARSE_CHAMPS_INPUT;
+	index = 0;
+	if (argc < 2)
+		print_usage();
+	else
+	{
+		while (index < argc)
+		{
+			ret = check_syntax(argc, argv[index], flag);
+			flag = choose_flags(ret);
+		}
+	}
+}
+
+int		flag_memdump(char *str);
+int		parse_memdump_nbr(char *str);
+int		flag_visualizer(char *str);
+int		flag_champ_nbr(char *str);
+int		parse_champ_nbr(char *str);
+int		parse_champ_name(char *str);
+*/

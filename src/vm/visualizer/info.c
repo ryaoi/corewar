@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/19 17:01:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/22 17:48:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	output_info(t_vm_state *vm)
 {
 	(void)vm;
-	wattron(win.info, COLOR_PAIR(2));
+	wattron(win.info, COLOR_PAIR(50));
 	mvwprintw(win.info, 2, 3, "speed : %d cycles/second", vis_state.speed);
 	mvwprintw(win.info, 3, 3, "cycle : %zu", vm->cycle_count);
 	if (vis_state.pause == 0)
