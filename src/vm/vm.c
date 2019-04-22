@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/19 19:32:21 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/22 16:19:40 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	clear_pc_info(t_vm_state *state)
 	index = 0;
 	while (index < MEM_SIZE)
 	{
-		state->memory_info[index].pc_count = 0;
+		state->memory_info[index].pc_mark = 0;
 		index++;
 	}
 }

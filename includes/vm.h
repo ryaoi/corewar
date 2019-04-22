@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/19 17:20:52 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/22 16:22:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct		s_process
 
 typedef struct		s_byte_info
 {
-	size_t	pc_count;
+	size_t	pc_mark;
 	size_t	written_cycle;
 	int		written_player;
 }					t_byte_info;
