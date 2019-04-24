@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/22 21:31:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/23 13:39:57 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void output_memory_dump(t_vm_state *vm)
 			row++;
 		}
 	}
-	wattroff(win.info, COLOR_PAIR(2));
+	wattroff(win.info, COLOR_PAIR(color));
 }
 
 void		create_memory_dump(t_vm_state *vm)

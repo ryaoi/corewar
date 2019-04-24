@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/22 22:55:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/23 11:11:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		main(void)
 		sizeof(info.log_active));
 	game = malloc(sizeof(t_game_data));
 	prepare_game(game, &players, &info);
-	while (game->state.cycle_count < 14973)
+	while (game->state.cycle_count < 80000)
 	{
 		advance_cycle(game);
 	//	dump_memory(&game->state);
