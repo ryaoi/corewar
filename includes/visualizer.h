@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 18:27:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 18:30:17 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include "game.h"
 
 # define DELAY 1000000
+# define MEM_DUMP_WIDTH 197
+# define INFO_WIDTH 58
+# define PRESS_KEY_SPACE 32
 
 # define COEFF 4
 # define HIGHLIGHT_CYCLE 20
@@ -59,13 +62,8 @@
 # define WHITE_GREEN 35
 # define WHITE_RED 36
 
-# define MEM_DUMP_WIDTH 197
-# define INFO_WIDTH 58
-
 # define HIGHLIGHT 10
 # define PROGRAM_COUNTER_MARK 20
-
-# define PRESS_KEY_SPACE 32
 
 typedef struct	s_visualizer_state
 {

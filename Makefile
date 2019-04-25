@@ -37,11 +37,13 @@ COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
 	vm/visualizer/visualizer_backup.c \
-	vm/visualizer/logging.c \
+	vm/visualizer/colors.c \
+	vm/visualizer/key_inputs.c \
 	vm/prepare_game/parse_cmd.c \
 	vm/prepare_game/syntax_check_flags.c \
 	vm/prepare_game/syntax_check_inputs.c \
-	vm/prepare_game/get_champs_info.c \
+	vm/prepare_game/get_infos.c \
+	vm/prepare_game/parse_cmd_utils.c \
 	vm/prepare_game/flags_utils.c
 INCLUDES = libft/includes/libft.h \
 		libft/includes/array.h \
