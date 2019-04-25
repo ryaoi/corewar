@@ -6,20 +6,19 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:42:40 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/23 13:54:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 17:16:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visualizer.h"
 
-void	visualize_game(t_vm_state *vm)
+void	visualize_game(t_vm_state *vm, t_game_data *game)
 {
 	vis_state.delay = DELAY / vis_state.speed;
 	werase(win.mem_dump);
 	werase(win.info);
 	create_memory_dump(vm);
-	create_info(vm);
-	//create_others(win);
+	create_info(vm, game);
 	refresh();
 	wrefresh(win.mem_dump);
 	wrefresh(win.info);
@@ -32,17 +31,12 @@ void	get_color_pairs()
 	init_color(FT_COLOR_BLUE, 46 * COEFF, 134 * COEFF, 193 * COEFF);
 	init_color(FT_COLOR_PURPLE, 142 * COEFF, 68 * COEFF, 173 * COEFF);
 	init_color(FT_COLOR_GREEN, 39 * COEFF, 174 * COEFF, 96 * COEFF);
-	init_color(FT_COLOR_ORANGE, 211 * COEFF, 84 * COEFF, 0 * COEFF);
+	init_color(FT_COLOR_RED, 192 * COEFF, 57 * COEFF, 43 * COEFF);
 
 	init_color(FT_COLOR_LIGHT_BLUE, 133 * COEFF, 193 * COEFF, 233 * COEFF);
 	init_color(FT_COLOR_LIGHT_PURPLE, 187 * COEFF, 143 * COEFF, 206 * COEFF);
 	init_color(FT_COLOR_LIGHT_GREEN, 130 * COEFF, 224 * COEFF, 170 * COEFF);
-	init_color(FT_COLOR_LIGHT_ORANGE, 229 * COEFF, 152 * COEFF, 102 * COEFF);
-
-//	init_color(CHAMP1_PC_COLOR);
-//	init_color(CHAMP2_PC_COLOR);
-//	init_color(CHAMP3_PC_COLOR);
-//	init_color(CHAMP4_PC_COLOR);
+	init_color(FT_COLOR_LIGHT_RED, 245 * COEFF, 183 * COEFF, 177 * COEFF);
 
 	/* written memory */
 	init_pair(1, FT_COLOR_GREY, FT_COLOR_GREY); //border
@@ -52,28 +46,28 @@ void	get_color_pairs()
 	init_pair(3, FT_COLOR_BLUE, COLOR_BLACK);
 	init_pair(4, FT_COLOR_PURPLE, COLOR_BLACK);
 	init_pair(5, FT_COLOR_GREEN, COLOR_BLACK);
-	init_pair(6, FT_COLOR_ORANGE, COLOR_BLACK);
+	init_pair(6, FT_COLOR_RED, COLOR_BLACK);
 
 	/* most recent written memory */
 //	init_pair(12, FT_COLOR_GREY, FT_COLOR_GREY); // PC at empty memdump
 	init_pair(13, FT_COLOR_LIGHT_BLUE, COLOR_BLACK);
 	init_pair(14, FT_COLOR_LIGHT_PURPLE, COLOR_BLACK);
 	init_pair(15, FT_COLOR_LIGHT_GREEN, COLOR_BLACK);
-	init_pair(16, FT_COLOR_LIGHT_ORANGE, COLOR_BLACK);
+	init_pair(16, FT_COLOR_LIGHT_RED, COLOR_BLACK);
 
 	/* program_counter position */
 	init_pair(22, FT_COLOR_GREY, FT_COLOR_GREY);
 	init_pair(23, COLOR_BLACK, FT_COLOR_BLUE);
 	init_pair(24, COLOR_BLACK, FT_COLOR_PURPLE);
 	init_pair(25, COLOR_BLACK, FT_COLOR_GREEN);
-	init_pair(26, COLOR_BLACK, FT_COLOR_ORANGE);
+	init_pair(26, COLOR_BLACK, FT_COLOR_RED);
 
 	/* program_counter position + HIGHLIGHT*/
 	init_pair(32, FT_COLOR_GREY, FT_COLOR_GREY);
 	init_pair(33, FT_COLOR_BRIGHT_WHITE, FT_COLOR_BLUE);
 	init_pair(34, FT_COLOR_BRIGHT_WHITE, FT_COLOR_PURPLE);
 	init_pair(35, FT_COLOR_BRIGHT_WHITE, FT_COLOR_GREEN);
-	init_pair(36, FT_COLOR_BRIGHT_WHITE, FT_COLOR_ORANGE);
+	init_pair(36, FT_COLOR_BRIGHT_WHITE, FT_COLOR_RED);
 }
 
 ////////////////////////////////pthread..../////////////////////////////////////
@@ -141,13 +135,13 @@ int		visualizer(t_game_data *game)
 	while (vis_state.pause)
 	{
 		key = get_keyinput(&vis_state);
-		visualize_game(&game->state);
+		visualize_game(&game->state, game);
 		if (key == -1)
 			return (-1);
 		else if (key == 1)
 			return (0);
 	}
-	visualize_game(&game->state);
+	visualize_game(&game->state, game);
 	if (get_keyinput(&vis_state) == -1)
 		return (-1);
 	usleep(vis_state.delay);

@@ -36,7 +36,13 @@ ASM_SRCS =
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
-	vm/visualizer/visualizer_backup.c
+	vm/visualizer/visualizer_backup.c \
+	vm/visualizer/logging.c \
+	vm/prepare_game/parse_cmd.c \
+	vm/prepare_game/syntax_check_flags.c \
+	vm/prepare_game/syntax_check_inputs.c \
+	vm/prepare_game/get_champs_info.c \
+	vm/prepare_game/flags_utils.c
 INCLUDES = libft/includes/libft.h \
 		libft/includes/array.h \
 		libft/includes/ft_assert.h \
@@ -44,6 +50,7 @@ INCLUDES = libft/includes/libft.h \
 		includes/instr.h \
 		includes/vm.h \
 		includes/visualizer.h \
+		includes/cmd_line.h \
 		includes/python_bindings.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
@@ -84,13 +91,14 @@ $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore -lft
 
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
+	mkdir -p obj/vm/prepare_game
 	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj

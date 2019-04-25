@@ -6,20 +6,21 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/23 11:11:07 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 17:12:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 #include "game.h"
 #include "ft_printf.h"
+#include "cmd_line.h"
 #include "visualizer.h"
 
 void	close_ncurse(t_window *win)
 {
 	nodelay(stdscr, FALSE);
 	wattron((*win).info, COLOR_PAIR(2));
-	mvwprintw((*win).info, 10, 3, "GET THE FUCK OUT WITH ANY KEY!!");
+	mvwprintw((*win).info, 30, 3, "** GET THE FUCK OUT WITH ANY KEY!! **");
 	wrefresh((*win).info);
 	getch();
 	delwin((*win).mem_dump);
@@ -27,6 +28,78 @@ void	close_ncurse(t_window *win)
 	endwin();
 }
 
+void	start_game(t_game_data *game, t_corewar_input *cw_input)
+{
+	if (cw_input->exec_flags & FLAG_VISUALIZER)
+	{
+		while (game->state.cycle_count < cw_input->nbr_of_cycles)
+		{
+			if (advance_cycle(game) == 0)
+				break ;
+			if (visualizer(game) == -1)
+				break ;
+		}
+		close_ncurse(&win);
+	}
+	else
+	{
+		while (game->state.cycle_count < cw_input->nbr_of_cycles)
+			if (advance_cycle(game) == 0)
+				break ;
+		dump_memory(&game->state);
+	}
+}
+
+void	initialize_logging(t_log_info *info, t_corewar_input *cw_input)
+{
+	logs_init(info);
+	ft_memcpy(info->log_active,
+		cw_input->log_verbosity, sizeof(info->log_active));
+}
+
+int	load_champions(t_corewar_input *cw_input, t_array *players)
+{
+	t_player	player;
+	int			index;
+
+	array_init(players, sizeof(t_player));
+	index = 0;
+	while (index < MAX_CHAMP_NBR)
+	{
+		if (cw_input->champions[index] != NULL)
+		{
+			printf("champ[%d] : %s\n", index + 1, cw_input->champions[index]);
+			if (vm_champion_load_file(&player, cw_input->champions[index], -(index + 1)) < 0)
+				return (FT_FAIL);
+			array_push_back(players, &player);
+		}
+		index++;
+	}
+	return (FT_SUCCESS);
+}
+
+int main(int argc, char **argv)
+{
+	t_corewar_input	corewar_input;
+	t_game_data		*game;
+	t_array			players;
+	t_log_info		info;
+	int				ret;
+
+	ret = parse_cmd(argc, argv, &corewar_input);
+	if (ret == FT_SUCCESS)
+		ret = load_champions(&corewar_input, &players);
+	if (ret == FT_SUCCESS)
+	{
+		initialize_logging(&info, &corewar_input);
+		game = malloc(sizeof(t_game_data));
+		prepare_game(game, &players, &info);
+		start_game(game, &corewar_input);
+	}
+	return (0);
+}
+
+/*
 int		main(void)
 {
 	t_game_data	*game;
@@ -65,79 +138,4 @@ int		main(void)
 //	ft_printf("%d %d\n", ARRAY_PTR(game->state.players, t_player)[0].live, ARRAY_PTR(game->state.players, t_player)[1].live);
 	return (0);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-/*
-typedef struct		s_corewar_input
-{
-	char	*champions[4];
-	int		flags;
-}
-
-PARSE_FLAG_MEMDUMP		0b1
-PARSE_FLAG_CHAMP_NBR	0b10
-PARSE_FLAG_VISUALIZER	0b100
-PARSE_NBR_CYCLES		0b1000
-PARSE_CHAMP_NBR			0b10000
-PARSE_CHAMP_NAME		0b100000
-
-int		(*g_syntax_check[6])(char*) = {
-	flag_memdump,
-	parse_memdump_nbr,
-	flag_visualizer,
-	flag_champ_nbr,
-	parse_champ_nbr,
-	parse_champ_name
-};
-
-void	print_usage(void)
-{
-	ft_printf("Usage : $> ./corewar [-dump N | -v] [-n N champion1.cor] ...\n");
-	ft_printf("-dump N : dumps memory after N cycles\n");
-	ft_printf("-v : turn on visualizer\n");
-	ft_printf("-n N champion.cor : player N and name_of_champion.cor\n");
-}
-
-int		check_syntax(int argc, char *input, int flag)
-{
-	int	index;
-	int	ret;
-
-	index = 0;
-	while (index < 6)
-	{
-		if (flag >> index & 1 && g_syntax_check[index](input))
-			ret = parse_input(input);
-		return (ret);
-	}
-
-}
-
-int		main(int argc, char **argv)
-{
-	int		flags;
-	int		index;
-	int		ret;
-
-	flag = PARSE_FLAG_MEMDUMP | PARSE_FLAG_VISUALIZER
-			| PARSE_FLAG_CHAMP_NBR | PARSE_CHAMPS_INPUT;
-	index = 0;
-	if (argc < 2)
-		print_usage();
-	else
-	{
-		while (index < argc)
-		{
-			ret = check_syntax(argc, argv[index], flag);
-			flag = choose_flags(ret);
-		}
-	}
-}
-
-int		flag_memdump(char *str);
-int		parse_memdump_nbr(char *str);
-int		flag_visualizer(char *str);
-int		flag_champ_nbr(char *str);
-int		parse_champ_nbr(char *str);
-int		parse_champ_name(char *str);
 */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   impl_live.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/17 17:25:44 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/04/24 15:49:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 
 	process = &PROCESS(state, p_index);
 	process->live_executed++;
+	process->player->last_live_cycle = state->cycle_count;
 	parameter = byte_order_swap(
 		ARG_DIR(instr, 0).content).buffer;
 	index = 0;
