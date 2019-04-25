@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 17:50:01 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 16:41:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 18:10:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 
 #define EXTENSION_LENGTH 4
 #define MAX_CHAMP_NBR 4
-#define MAX_NBR_CYCLE 50000
+#define MAX_PROG_NAME_LENGTH_WITH_PATH 2047
 
 #define INVALID_SYNTAX -1
 #define INVALID_CYCLE_NBR -2
@@ -95,4 +95,7 @@ void	turn_on_flags(int *bit_field, int on_flags);
 int		get_champ_name(char *input, int index, t_corewar_input *cw_input);
 int		get_champ_nbr(char *input, int index, t_corewar_input *cw_input);
 int		get_log_verbosity(char *input, int index, t_corewar_input *cw_input);
+size_t	ft_a_to_sizet(const char *str);
+
+void	print_usage(void);
 #endif

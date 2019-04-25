@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 14:41:38 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 16:09:47 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 18:03:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int		is_cycles(char *str, t_corewar_input *cw_input)
 {
-	int	index;
-	int	cycles;
+	int		index;
 
 	(void)cw_input;
 	index = 0;
@@ -25,9 +24,6 @@ int		is_cycles(char *str, t_corewar_input *cw_input)
 			return (INVALID_SYNTAX);
 		index++;
 	}
-	cycles = ft_atoi(str);
-	if (cycles > MAX_NBR_CYCLE || cycles < 0)
-		return (INVALID_CYCLE_NBR);
 	return (1);
 }
 
@@ -58,7 +54,7 @@ int		is_champ_name(char *str, t_corewar_input *cw_input)
 	name_length = ft_strlen(str);
 	if (name_length < 5)
 		return (INVALID_CHAMP_NAMES_LENGTH);
-	if (name_length > PROG_NAME_LENGTH)
+	if (name_length > MAX_PROG_NAME_LENGTH_WITH_PATH)
 		return (INVALID_CHAMP_NAMES_LENGTH);
 	if ((str + name_length - EXTENSION_LENGTH)
 			&& !ft_strcmp(".cor", str + name_length - EXTENSION_LENGTH))

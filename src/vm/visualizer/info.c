@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/24 17:16:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 17:53:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ static void	output_info(t_vm_state *vm, t_game_data *game)
 {
 	wattron(win.info, COLOR_PAIR(50));
 	if (vis_state.pause == 0)
-		mvwprintw(win.info, 2, 3, "** PAUSE **");
-	else
 		mvwprintw(win.info, 2, 3, "** RUNNING **");
+	else
+		mvwprintw(win.info, 2, 3, "** PAUSE **");
 	mvwprintw(win.info, 5, 3, "SPEED : %d Cycles/second", vis_state.speed);
 	mvwprintw(win.info, 7, 3, "CYCLE : %zu", vm->cycle_count);
 	mvwprintw(win.info, 8, 3, "PROCCESSES : %d", vm->process_count);

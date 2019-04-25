@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 11:32:16 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 16:37:37 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 18:13:09 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,6 @@ int		(*g_syntax_check[8])(char*, t_corewar_input*) = {
 	is_verbosity
 };
 
-char *g_log_level_tab[10] = {
-"log_lives",
-"log_cycles",
-"log_instr",
-"log_store",
-"log_load",
-"log_jump",
-"log_fork",
-"log_game",
-"log_deaths",
-"log_memdump"
-};
-
-void	print_usage(void)
-{
-	int		index;
-	int		log_flag;
-
-	index = 0;
-	log_flag = 1;
-	ft_printf("Usage : $> ./corewar [-dump N | -v] [-n N champion1.cor | champion1.cor] ...\n");
-	ft_printf("\t\t-dump N : dumps memory after N cycles (N > 0)\n");
-	ft_printf("\t\t-visu : turn on visualizer\n");
-	ft_printf("\t\t-n N champion.cor : player N and name_of_champion.cor (0 < N < 5)\n");
-	ft_printf("\t\t-v N : turn on log / N : log level (0 < N < 1024)\n");
-	while (index < e_log_level_max)
-	{
-		ft_printf("\t\t\t%d : %s\n", log_flag, g_log_level_tab[index]);
-		log_flag *= 2;
-		index++;
-	}
-}
-
 int		parse_input(char *input, int index, t_corewar_input *cw_input)
 {
 
@@ -64,7 +31,7 @@ int		parse_input(char *input, int index, t_corewar_input *cw_input)
 	else if (index == 1)
 		cw_input->exec_flags |= FLAG_VISUALIZER;
 	else if (index == 3)
-		cw_input->nbr_of_cycles = ft_atoi(input);
+		cw_input->nbr_of_cycles = ft_a_to_sizet(input);
 	else if (index == 4)
 		index = get_champ_nbr(input, index, cw_input);
 	else if (index == 5)
@@ -145,17 +112,7 @@ int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input)
 			index++;
 		}
 	}
-	if (cw_input->nbr_of_cycles == 0)
-		cw_input->nbr_of_cycles = MAX_NBR_CYCLE;
-	printf("nbr of champs : %d\n", cw_input->nbr_of_champions);
-	printf("exec flags : %d\n", cw_input->exec_flags);
-	printf("nbr of cycles : %zu\n", cw_input->nbr_of_cycles);
-	printf("champ_flag : %d\n", cw_input->champ_flags);
-
-	// for (int i=0; i < MAX_CHAMP_NBR; i++)
-	// {
-	// 	if (cw_input->champions[i] != NULL)
-	// 		printf("champ[%d] : %s\n", i + 1, cw_input->champions[i]);
-	// }
+	if (!(cw_input->exec_flags & FLAG_MEMDUMP))
+		cw_input->nbr_of_cycles = SIZE_T_MAX;
 	return (FT_SUCCESS);
 }

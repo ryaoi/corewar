@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/25 17:12:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/25 18:14:10 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ void	start_game(t_game_data *game, t_corewar_input *cw_input)
 		while (game->state.cycle_count < cw_input->nbr_of_cycles)
 			if (advance_cycle(game) == 0)
 				break ;
-		dump_memory(&game->state);
 	}
+	if (cw_input->exec_flags & FLAG_MEMDUMP)
+		dump_memory(&game->state);
 }
 
 void	initialize_logging(t_log_info *info, t_corewar_input *cw_input)
 {
+	if (cw_input->exec_flags & FLAG_VISUALIZER)
+		ft_bzero(cw_input->log_verbosity, e_log_level_max);
 	logs_init(info);
 	ft_memcpy(info->log_active,
 		cw_input->log_verbosity, sizeof(info->log_active));
@@ -68,7 +71,7 @@ int	load_champions(t_corewar_input *cw_input, t_array *players)
 	{
 		if (cw_input->champions[index] != NULL)
 		{
-			printf("champ[%d] : %s\n", index + 1, cw_input->champions[index]);
+			ft_printf("champ[%d] : %s\n", index + 1, cw_input->champions[index]);
 			if (vm_champion_load_file(&player, cw_input->champions[index], -(index + 1)) < 0)
 				return (FT_FAIL);
 			array_push_back(players, &player);
