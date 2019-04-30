@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   impl_live.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/24 15:49:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 22:57:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 
 	process = &PROCESS(state, p_index);
 	process->live_executed++;
-	process->player->last_live_cycle = state->cycle_count;
 	parameter = byte_order_swap(
 		ARG_DIR(instr, 0).content).buffer;
 	index = 0;
@@ -31,6 +30,8 @@ void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 	{
 		if (ARRAY_PTR(state->players, t_player)[index].id == parameter)
 		{
+			ARRAY_PTR(state->players,
+				t_player)[index].last_live_cycle = state->cycle_count;
 			ARRAY_PTR(state->players, t_player)[index].live++;
 			break ;
 		}
