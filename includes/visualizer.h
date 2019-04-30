@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   visualizer.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 18:30:17 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 17:03:01 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VISUALIZER_H
 # define VISUALIZER_H
 
-#include "ncurses.h"
 #include <unistd.h>
+#include <pthread.h>
+#include "ncurses.h"
 #include "libft.h"
 #include "vm.h"
 #include "game.h"
@@ -65,12 +66,24 @@
 # define HIGHLIGHT 10
 # define PROGRAM_COUNTER_MARK 20
 
+#include "cmd_line.h"
+
+typedef struct	s_input_info
+{
+	int	quit;
+	int pause;
+	int speed;
+}				t_input_info;
+
 typedef struct	s_visualizer_state
 {
-	int		pause;
-	int		delay;
-	int		speed;
-	int		process;
+	int				delay;
+	int				process;
+	pthread_t		input_worker;
+	pthread_mutex_t	input_lock;
+	t_input_info	input_info;
+	int				game_over;
+	int				shutdown;
 }				t_visualizer_state;
 
 typedef struct	s_window
@@ -91,10 +104,11 @@ t_window			win;
 void	get_colors(void);
 int		get_keyinput(t_visualizer_state *vis_state);
 void	create_memory_dump(t_vm_state *vm);
-void	create_info(t_vm_state *vm, t_game_data *game);
+void	create_info(t_vm_state *vm, t_game_data *game,
+			t_input_info *input_info);
 void	create_logging(t_vm_state *vm, t_game_data *game);
-int		visualizer(t_game_data *game);
-
+int		visualizer(t_game_data *game, t_corewar_input *cw_input,
+			t_input_info *info_copy);
 
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 17:53:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 17:57:44 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,27 +67,29 @@ static void	draw_end(t_game_data *game)
 	mvwprintw(win.info, 32, 19 + champ_len, "!!!");
 }
 
-static void	output_info(t_vm_state *vm, t_game_data *game)
+static void	output_info(t_vm_state *vm, t_game_data *game,
+				t_input_info *input_info)
 {
 	wattron(win.info, COLOR_PAIR(50));
-	if (vis_state.pause == 0)
+	if (input_info->pause == 0)
 		mvwprintw(win.info, 2, 3, "** RUNNING **");
 	else
 		mvwprintw(win.info, 2, 3, "** PAUSE **");
-	mvwprintw(win.info, 5, 3, "SPEED : %d Cycles/second", vis_state.speed);
+	mvwprintw(win.info, 5, 3, "SPEED : %d Cycles/second", input_info->speed);
 	mvwprintw(win.info, 7, 3, "CYCLE : %zu", vm->cycle_count);
-	mvwprintw(win.info, 8, 3, "PROCCESSES : %d", vm->process_count);
+	mvwprintw(win.info, 8, 3, "PROCCESSES : %d", vm->processes.length);
 	mvwprintw(win.info, 10, 3, "CYCLE_TO_DIE : %d", game->cycles_to_die);
 	print_champions(vm, game);
-	if (game->cycles_to_die <= 0 || !game->state.processes.length)
+	if (vis_state.game_over)
 		draw_end(game);
 }
 
-void	create_info(t_vm_state *vm, t_game_data *game)
+void	create_info(t_vm_state *vm, t_game_data *game,
+			t_input_info *input_info)
 {
 	wattron(win.info, COLOR_PAIR(1));
 	box(win.info, '@', '@');
-	output_info(vm, game);
+	output_info(vm, game, input_info);
 	wattron(win.info, COLOR_PAIR(1));
 	box(win.info, '@', '@');
 }

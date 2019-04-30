@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   visualizer_backup.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/25 18:14:10 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 17:51:23 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,64 @@
 #include "cmd_line.h"
 #include "visualizer.h"
 
-void	close_ncurse(t_window *win)
+void	*input_loop(void *stub)
 {
-	nodelay(stdscr, FALSE);
-	wattron((*win).info, COLOR_PAIR(2));
-	mvwprintw((*win).info, 30, 3, "** GET THE FUCK OUT WITH ANY KEY!! **");
-	wrefresh((*win).info);
-	getch();
-	delwin((*win).mem_dump);
-	delwin((*win).info);
-	endwin();
+	int key;
+
+	(void)stub;
+	while (!vis_state.shutdown)
+	{
+		pthread_mutex_lock(&vis_state.input_lock);
+		key = 1;
+		while (key)
+			key = get_keyinput(&vis_state);
+		pthread_mutex_unlock(&vis_state.input_lock);
+		usleep(10000);
+	}
+	return (NULL);
+}
+
+void	init_visualizer(void)
+{
+	ft_bzero(&vis_state, sizeof(t_visualizer_state));
+	initscr();
+	cbreak();
+	noecho();
+	curs_set(0);
+	start_color();
+	get_colors();
+	nodelay(stdscr, TRUE);
+	keypad(stdscr, TRUE);
+	win.mem_dump = newwin(4 + (MEM_SIZE / 64), MEM_DUMP_WIDTH, 0, 0);
+	win.info = newwin(4 + (MEM_SIZE / 64), INFO_WIDTH, 0, MEM_DUMP_WIDTH - 1);
+	ft_bzero(&vis_state.input_info, sizeof(vis_state.input_info));
+	vis_state.input_info.speed = 1000;
+	vis_state.shutdown = 0;
+	vis_state.game_over = 0;
+	pthread_create(&vis_state.input_worker, NULL, input_loop, NULL);
+	pthread_mutex_init(&vis_state.input_lock, NULL);
 }
 
 void	start_game(t_game_data *game, t_corewar_input *cw_input)
 {
+	t_input_info	info_copy;
+
 	if (cw_input->exec_flags & FLAG_VISUALIZER)
 	{
-		while (game->state.cycle_count < cw_input->nbr_of_cycles)
+		init_visualizer();
+		info_copy.quit = 0;
+		while (!info_copy.quit)
 		{
-			if (advance_cycle(game) == 0)
-				break ;
-			if (visualizer(game) == -1)
-				break ;
+			pthread_mutex_lock(&vis_state.input_lock);
+			ft_memcpy(&info_copy, &vis_state.input_info, sizeof(info_copy));
+			pthread_mutex_unlock(&vis_state.input_lock);
+			visualizer(game, cw_input, &info_copy);
 		}
-		close_ncurse(&win);
+		vis_state.shutdown = 1;
+		pthread_join(vis_state.input_worker, NULL);
+		delwin(win.mem_dump);
+		delwin(win.info);
+		endwin();
 	}
 	else
 	{
