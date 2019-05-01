@@ -6,18 +6,20 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 21:05:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 22:08:14 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static char	*pullout_token(char *line, int start, int len)
+static char	*pullout_token(char *line, int *start, int end)
 {
 	char	*ret;
 	int		index;
+	int		len;
 
-	if (!(ret = ft_strsub(line, start, len)))
+	len = end - *start;
+	if (!(ret = ft_strsub(line, *start, len)))
 		return (NULL);
 	index = 0;
 	while (ret[index])
@@ -26,6 +28,7 @@ static char	*pullout_token(char *line, int start, int len)
 			ret[index] = '\0';
 		index++;
 	}
+	*start = end + 1;
 	return (ret);
 }
 
@@ -74,28 +77,26 @@ void		get_token(char *str, int *i, int *j, int token_id)
 int			line_tokenize(t_line *line)
 {
 	char	*str;
-	int		i;
-	int		j;
+	int		start;
+	int		end;
 	int		token_id;
 	int		ret;
 
 	token_id = 0;
-	i = 0;
-	j = 0;
-	ret = 0;
+	start = 0;
+	end = 0;
 	while (token_id < 7)
 	{
 		if (token_id > 5)
 			return (TOKEN_TOO_MANY);
-		get_token(line->str, &i, &j, token_id);
-		str = pullout_token(line->str, i, j - i);
+		get_token(line->str, &start, &end, token_id);
+		str = pullout_token(line->str, &start, end);
 		if ((ret = add_token(line, token_id, str)) < 0)
 		{
 			free(str);
 			return (ret);
 		}
-		i = j + 1;
-		if (line->str[i - 1] == '\0')
+		if (line->str[end] == '\0')
 			break ;
 		token_id++;
 	}
