@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/30 19:44:48 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 21:03:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		check_label_syntax(char *str)
 		if (!ft_strchr(LABEL_CHARS, str[index]) &&
 			!(index == 0 && str[index] == DIRECT_CHAR) &&
 				!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
-				return (TOKEN_LABEL_SYNTAX_FAIL);
+			return (TOKEN_LABEL_SYNTAX_FAIL);
 		index++;
 	}
 	return (SUCCESS);
@@ -79,6 +79,5 @@ int		check_instr(t_token *token, char *str)
 		}
 		index++;
 	}
-
 	return (TOKEN_INSTR_INVALID);
 }

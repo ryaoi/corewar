@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 19:43:45 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 21:05:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int			line_tokenize(t_line *line)
 	i = 0;
 	j = 0;
 	ret = 0;
-	str = NULL;
 	while (token_id < 7)
 	{
 		if (token_id > 5)
