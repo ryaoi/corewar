@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 17:50:01 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 18:10:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 20:49:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include "ft_printf.h"
 # include "vm.h"
 # include "logging.h"
-
-# include <stdio.h> /*TODO erase */
 
 #define FT_SUCCESS 1
 #define FT_FAIL 0
@@ -35,15 +33,6 @@
 #define PARSE_CHAMP_NAME		0b100000
 #define PARSE_FLAG_VERBOSITY	0b1000000
 #define PARSE_VERBOSITY			0b10000000
-
-/*
-#define PARSE_FLAG_MEMDUMP_SUCCESS		0
-#define PARSE_FLAG_VISUALIZER_SUCCESS	1
-#define PARSE_FLAG_CHAMP_NBR_SUCCESS	2
-#define PARSE_NBR_CYCLES_SUCCESS		3
-#define PARSE_CHAMP_NBR_SUCCESS			4
-#define PARSE_CHAMP_NAME_SUCCESS		5
-*/
 
 #define CHAMP_1		0b1
 #define CHAMP_2		0b10

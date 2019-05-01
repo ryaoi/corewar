@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   visualizer.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/30 17:03:01 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/01 20:48:52 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "libft.h"
 #include "vm.h"
 #include "game.h"
+#include "cmd_line.h"
 
 # define DELAY 1000000
 # define MEM_DUMP_WIDTH 197
@@ -66,8 +67,6 @@
 # define HIGHLIGHT 10
 # define PROGRAM_COUNTER_MARK 20
 
-#include "cmd_line.h"
-
 typedef struct	s_input_info
 {
 	int	quit;
@@ -92,12 +91,6 @@ typedef struct	s_window
 	WINDOW	*info;
 }				t_window;
 
-// typedef struct s_visualizer
-// {
-// 	t_visualizer_state	vis_state;
-// 	t_window			win;
-// }				t_visualizer;
-
 t_visualizer_state	vis_state;
 t_window			win;
 
@@ -109,29 +102,5 @@ void	create_info(t_vm_state *vm, t_game_data *game,
 void	create_logging(t_vm_state *vm, t_game_data *game);
 int		visualizer(t_game_data *game, t_corewar_input *cw_input,
 			t_input_info *info_copy);
-
-
-
-/*parsing input */
-
-// int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input);
-
-// int		is_flag_memdump(char *str, t_corewar_input *cw_input);
-// int		is_cycles(char *str, t_corewar_input *cw_input);
-// int		is_flag_visualizer(char *str, t_corewar_input *cw_input);
-// int		is_flag_champ_nbr(char *str, t_corewar_input *cw_input);
-// int		is_champ_nbr(char *str, t_corewar_input *cw_input);
-// int		is_champ_name(char *str, t_corewar_input *cw_input);
-
-// void	init_corewar_input(t_corewar_input *cw_input);
-// int		check_syntax(char *input, int flags, t_corewar_input *cw_input);
-// int		parse_input(char *input, size_t index, t_corewar_input *cw_input);
-// void	print_usage(void);
-
-// int		choose_flags(int prev_input);
-// void	turn_on_flags(int *bit_field, int on_flags);
-
-// int		get_champ_name(char *input, size_t index, t_corewar_input *cw_input);
-// int		get_champ_nbr(char *input, size_t index, t_corewar_input *cw_input);
 
 #endif

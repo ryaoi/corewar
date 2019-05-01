@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/30 17:51:23 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/01 18:40:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	init_visualizer(void)
 	win.info = newwin(4 + (MEM_SIZE / 64), INFO_WIDTH, 0, MEM_DUMP_WIDTH - 1);
 	ft_bzero(&vis_state.input_info, sizeof(vis_state.input_info));
 	vis_state.input_info.speed = 1000;
+	vis_state.input_info.pause = 1;
 	vis_state.shutdown = 0;
 	vis_state.game_over = 0;
 	pthread_create(&vis_state.input_worker, NULL, input_loop, NULL);
