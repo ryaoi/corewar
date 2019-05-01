@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/17 19:05:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 14:19:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int			file_parse(t_file *file)
 	}
 	if (file->prework_flag != PREWORK_FLAG_ON)
 	{
-		ft_printf("header is missing in %s.\n\n", file->name_s);
+		ft_printf("check the header syntax in %s.\n\n", file->name_s);
 		return (HEADER_NOT_FOUND);
 	}
 	return (SUCCESS);

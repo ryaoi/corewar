@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:52:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 14:19:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 void		set_header_index(char *tmp, int *start, int *end)
 {
-	while (tmp && tmp[*start] && tmp[*start] != '"')
+	while (tmp && tmp[*start] && tmp[*start] != '"'
+			&& tmp[*start] != COMMENT_CHAR)
 		(*start)++;
+	if (tmp[*start] == COMMENT_CHAR)
+		return ;
 	*end = ++(*start);
 	while (tmp && tmp[*end] && tmp[*end] != '"')
 		(*end)++;
@@ -37,7 +40,7 @@ static void	set_progname(t_file *file, t_line *line)
 	{
 		start = ft_strlen(NAME_CMD_STRING);
 		set_header_index(tmp, &start, &end);
-		if (end > start)
+		if (end > start + 1 && line->str[end] == '"')
 		{
 			ft_memcpy(file->header.prog_name, line->str + start, end - start);
 			file->prework_flag |= 2;
@@ -62,7 +65,7 @@ static void	set_how(t_file *file, t_line *line)
 	{
 		start = ft_strlen(COMMENT_CMD_STRING);
 		set_header_index(tmp, &start, &end);
-		if (end > start)
+		if (end > start + 1 && line->str[end] == '"')
 		{
 			ft_memcpy(file->header.how, line->str + start, end - start);
 			file->prework_flag |= 1;

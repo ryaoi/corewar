@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/17 19:04:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 14:16:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		line_create(t_file *file, char *line, int line_type)
 	if (new_line.str && new_line.str[0] == '\0')
 	{
 		free(new_line.str);
-		ft_printf("at %s, ft_strtrim returned empty string!.\n\n", file->name_s);
+		ft_printf("at %s, ft_strtrim returned empty string!.\n", file->name_s);
 		return (LINE_CREATE_FAIL);
 	}
 	new_line.nbr_params = 0;
@@ -67,36 +67,55 @@ int		line_add(t_file *file, char *line, size_t label_pos)
 	return (SUCCESS);
 }
 
-int		handle_comment(t_file *file, char **line)
+void		handle_comment(t_file *file, char *line)
 {
 	int		index;
 	char	*tmp;
 
+
+	(void)file;
 	index = 0;
-	while (*line && (*line)[index] != COMMENT_CHAR)
+	while (line[index] && ft_isspace(line[index]))
 		index++;
-	if (line_create(file, &((*line)[index]), T_COMMENT) < 0)
-	{
-		free(*line);
-		return (LINE_CREATE_FAIL);
-	}
-	if (index > 0)
-	{
-		file->nbr_line++;
-		if (!(tmp = ft_strsub(*line, 0, index)))
-		{
-			ft_putendl("ft_strsub() failed.");
-			return (HANDLE_CMT_FAIL);
-		}
-		free(*line);
-		*line = tmp;
-	}
+	tmp = line + index;
+	if (ft_strncmp(NAME_CMD_STRING, tmp, ft_strlen(NAME_CMD_STRING))
+		|| ft_strncmp(COMMENT_CMD_STRING, tmp, ft_strlen(COMMENT_CMD_STRING)))
+		return ;
 	else
 	{
-		free(*line);
-		*line = NULL;
+		index = 0;
+		while (line[index] && line[index] != COMMENT_CHAR)
+			index++;
+		line[index] = '\0';
 	}
-	return (SUCCESS);
+	// int		index;
+	// char	*tmp;
+
+	// index = 0;
+	// while (*line && (*line)[index] != COMMENT_CHAR)
+	// 	index++;
+	// if (line_create(file, &((*line)[index]), T_COMMENT) < 0)
+	// {
+	// 	free(*line);
+	// 	return (LINE_CREATE_FAIL);
+	// }
+	// if (index > 0)
+	// {
+	// 	file->nbr_line++;
+	// 	if (!(tmp = ft_strsub(*line, 0, index)))
+	// 	{
+	// 		ft_putendl("ft_strsub() failed.");
+	// 		return (HANDLE_CMT_FAIL);
+	// 	}
+	// 	free(*line);
+	// 	*line = tmp;
+	// }
+	// else
+	// {
+	// 	free(*line);
+	// 	*line = NULL;
+	// }
+	// return (SUCCESS);
 }
 
 int		file_read(t_file *file)
@@ -107,8 +126,7 @@ int		file_read(t_file *file)
 	while ((file->ret = get_next_line(file->fd_s, &line)) > 0)
 	{
 		if (line && ft_strchr(line, COMMENT_CHAR))
-			if (handle_comment(file, &line) < 0)
-				return (HANDLE_CMT_FAIL);
+			handle_comment(file, line);
 		if (line && (line[0] == '\0' || line_is_ws(line)))
 		{
 			free(line);

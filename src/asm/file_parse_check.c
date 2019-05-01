@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/15 20:42:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 19:44:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		check_label_syntax(char *str)
 
 int		check_register(char *str)
 {
-	if (ft_atoi(str + 1) > REG_NUMBER)
+	if (ft_atoi(str + 1) > REG_NUMBER || ft_atoi(str + 1) < 1)
 		return (TOKEN_REGISTER_FAIL);
 	return (SUCCESS);
 }

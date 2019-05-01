@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 11:54:11 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/17 18:15:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/04/30 19:38:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	print_errmsg_tokenizer(int err_type, char *line)
 	else if (err_type == TOKEN_LABEL_SYNTAX_FAIL)
 		ft_printf("at '%s'\nlabel syntax error.\n", line);
 	else if (err_type == TOKEN_REGISTER_FAIL)
-		ft_printf("at '%s'\nregister number too high.\n", line);
+		ft_printf("at '%s'\ncheck register number!.\n", line);
 	else if (err_type == TOKEN_TYPE_UNKNOWN)
 		ft_printf("at '%s'\ntoken_type not found.\n", line);
 	else if (err_type == TOKEN_INSTR_INVALID)
