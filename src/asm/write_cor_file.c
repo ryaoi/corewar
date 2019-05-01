@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:52:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 21:00:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ int						write_cor_file(t_file *file)
 	t_list *traverse;
 
 	traverse = file->lines;
-	if (!(file->fd_cor = open(file->name_cor, O_CREAT | O_WRONLY | O_TRUNC,
-								0644)))
+	if ((file->fd_cor = open(file->name_cor, O_CREAT | O_WRONLY | O_TRUNC,
+								0644)) == -1)
 	{
 		ft_putendl("failed to create file.");
 		return (CREATE_FILE_FAIL);

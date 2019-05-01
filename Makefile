@@ -35,10 +35,10 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(FLAGS) -Wall -Wextra -Werror #-std=c89
+export CFLAGS := $(FLAGS) -Wall -Wextra -Werror -std=c89
 endif
-INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes -I /usr/local/opt/ncurses/include
-LIBRARY_PATHS = -L. -Llibft -Lft_printf -L /usr/local/opt/ncurses/lib
+INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
+LIBRARY_PATHS = -L. -Llibft -Lft_printf
 ASM_NAME = asm
 COREWAR_NAME =
 VISUALIZER_NAME = vis

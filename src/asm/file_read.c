@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_read.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 16:12:48 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/01 20:53:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,34 +85,6 @@ void		handle_comment(t_file *file, char *line)
 			index++;
 		line[index] = '\0';
 	}
-	// int		index;
-	// char	*tmp;
-
-	// index = 0;
-	// while (*line && (*line)[index] != COMMENT_CHAR)
-	// 	index++;
-	// if (line_create(file, &((*line)[index]), T_COMMENT) < 0)
-	// {
-	// 	free(*line);
-	// 	return (LINE_CREATE_FAIL);
-	// }
-	// if (index > 0)
-	// {
-	// 	file->nbr_line++;
-	// 	if (!(tmp = ft_strsub(*line, 0, index)))
-	// 	{
-	// 		ft_putendl("ft_strsub() failed.");
-	// 		return (HANDLE_CMT_FAIL);
-	// 	}
-	// 	free(*line);
-	// 	*line = tmp;
-	// }
-	// else
-	// {
-	// 	free(*line);
-	// 	*line = NULL;
-	// }
-	// return (SUCCESS);
 }
 
 int		file_read(t_file *file)
