@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_read.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 14:16:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 16:12:48 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,8 @@ int		line_add(t_file *file, char *line, size_t label_pos)
 				return (LINE_CREATE_FAIL);
 		}
 	}
-	else
-	{
-		if (line_create(file, line, T_UNKNOWN) < 0)
-			return (LINE_CREATE_FAIL);
-	}
+	else if (line_create(file, line, T_UNKNOWN) < 0)
+		return (LINE_CREATE_FAIL);
 	free(line);
 	return (SUCCESS);
 }

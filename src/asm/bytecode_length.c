@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bytecode_length.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 16:28:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 16:47:49 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ static unsigned int	param_size(int type, int relative)
 {
 	if (type == T_REGISTER)
 		return (REG_INDEX_SIZE);
-	else if (type == T_DIRECT && !relative)
-		return (DIR_D4_SIZE);
-	else if (type == T_DIRLAB || (type == T_DIRECT && relative))
-		return (DIR_D2_SIZE);
+	else if (type == T_DIRLAB || type == T_DIRECT)
+		return (relative ? DIR_D2_SIZE : DIR_D4_SIZE);
 	else if (type == T_INDIRECT || type == T_INDIRLAB)
 		return (INDIR_SIZE);
 	return (0);

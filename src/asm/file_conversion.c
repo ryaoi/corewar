@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_conversion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 23:07:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 17:16:47 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 		type = LST_CONT(traverse, t_token).type;
 		if (type == T_INDIRECT || type == T_INDIRLAB)
 			param_trans(&bc[1 + op->ocp + i], INDIR_SIZE, &i, value);
-		else if (type == T_DIRLAB || (type == T_DIRECT && op->relative))
-			param_trans(&bc[1 + op->ocp + i], DIR_D2_SIZE, &i, value);
-		else if (type == T_DIRECT && !(op->relative))
-			param_trans(&bc[1 + op->ocp + i], DIR_D4_SIZE, &i, value);
+		else if (type == T_DIRLAB || type == T_DIRECT)
+			param_trans(&bc[1 + op->ocp + i],
+				op->relative ? DIR_D2_SIZE : DIR_D4_SIZE, &i, value);
 		else if (type == T_REGISTER)
 			param_trans(&bc[1 + op->ocp + i], REG_INDEX_SIZE, &i, value);
 		traverse = traverse->next;
