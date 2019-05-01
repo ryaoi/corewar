@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 22:08:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/01 22:30:40 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			line_tokenize(t_line *line)
 	token_id = 0;
 	start = 0;
 	end = 0;
-	while (token_id < 7)
+	while (token_id < 7 && line->str[end] != '\0')
 	{
 		if (token_id > 5)
 			return (TOKEN_TOO_MANY);
@@ -96,10 +96,8 @@ int			line_tokenize(t_line *line)
 			free(str);
 			return (ret);
 		}
-		if (line->str[end] == '\0')
-			break ;
 		token_id++;
 	}
-	line->nbr_params = token_id;
+	line->nbr_params = token_id - 1;
 	return (SUCCESS);
 }
