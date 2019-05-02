@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 14:16:55 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/02 14:52:53 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void	file_next(t_list **files, t_file *file);
 ** file_read.c
 */
 int		file_read(t_file *file);
-void	handle_comment(t_file *file, char *line);
+void	handle_comment(char *line);
 int		line_add(t_file *file, char *line, size_t label_pos);
 int		line_create(t_file *file, char *line, int line_type);
 

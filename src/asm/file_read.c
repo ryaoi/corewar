@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 20:53:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/02 14:52:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,11 @@ int		line_add(t_file *file, char *line, size_t label_pos)
 	return (SUCCESS);
 }
 
-void		handle_comment(t_file *file, char *line)
+void	handle_comment(char *line)
 {
 	int		index;
 	char	*tmp;
 
-
-	(void)file;
 	index = 0;
 	while (line[index] && ft_isspace(line[index]))
 		index++;
@@ -95,7 +93,7 @@ int		file_read(t_file *file)
 	while ((file->ret = get_next_line(file->fd_s, &line)) > 0)
 	{
 		if (line && ft_strchr(line, COMMENT_CHAR))
-			handle_comment(file, line);
+			handle_comment(line);
 		if (line && (line[0] == '\0' || line_is_ws(line)))
 		{
 			free(line);
