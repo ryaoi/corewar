@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 20:48:52 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/05 17:23:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@
 typedef struct	s_input_info
 {
 	int	quit;
-	int pause;
-	int speed;
+	int	pause;
+	int	speed;
+	int	resize;
 }				t_input_info;
 
 typedef struct	s_visualizer_state
@@ -100,7 +101,6 @@ void	create_memory_dump(t_vm_state *vm);
 void	create_info(t_vm_state *vm, t_game_data *game,
 			t_input_info *input_info);
 void	create_logging(t_vm_state *vm, t_game_data *game);
-int		visualizer(t_game_data *game, t_corewar_input *cw_input,
-			t_input_info *info_copy);
+int		visualizer(t_game_data *game, t_corewar_input *cw_input);//,t_input_info *info_copy);
 
 #endif
