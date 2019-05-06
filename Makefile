@@ -36,7 +36,7 @@ ASM_SRCS =
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
-	vm/visualizer/visualizer_backup.c \
+	vm/visualizer/main.c \
 	vm/visualizer/colors.c \
 	vm/visualizer/key_inputs.c \
 	vm/prepare_game/parse_cmd.c \
@@ -67,7 +67,7 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
+export CFLAGS := $(CFLAGS) #-Wall -Wextra -Werror #-std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes

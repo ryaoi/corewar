@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_inputs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:21:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/30 16:58:00 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/06 12:15:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int			get_keyinput(t_visualizer_state *vis_state)
 	}
 	if (input == 'q' || input == 'Q')
 		vis_state->input_info.quit = 1;
+	if (input == KEY_RESIZE)
+		vis_state->input_info.resize = 1;
 	control_speed(input, vis_state);
 	return (0);
 }
