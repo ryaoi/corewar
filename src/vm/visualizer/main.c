@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/07 19:36:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 20:33:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 #include "cmd_line.h"
 #include "visualizer.h"
 
-static void	copy_input_info(t_input_info *info_copy)
+static void	play_game(t_game_data *game, t_corewar_input *cw_input)
 {
-	pthread_mutex_lock(&vis_state.input_lock);
-	ft_memcpy(info_copy, &vis_state.input_info, sizeof(info_copy));
-	vis_state.input_info.resize = 0;
-	pthread_mutex_unlock(&vis_state.input_lock);
+	while (game->state.cycle_count < cw_input->nbr_of_cycles)
+	{
+		if (advance_cycle(game) == 0)
+		{
+			print_ending(&game->state);
+			break ;
+		}
+	}
 }
 
-void	start_game(t_game_data *game, t_corewar_input *cw_input)
+void		start_game(t_game_data *game, t_corewar_input *cw_input)
 {
 	t_input_info	info_copy;
 
@@ -33,7 +37,6 @@ void	start_game(t_game_data *game, t_corewar_input *cw_input)
 		info_copy.quit = 0;
 		while (!vis_state.input_info.quit)
 		{
-			//copy_input_info(&info_copy);
 			pthread_mutex_lock(&vis_state.input_lock);
 			ft_memcpy(&info_copy, &vis_state.input_info, sizeof(info_copy));
 			vis_state.input_info.resize = 0;
@@ -45,17 +48,12 @@ void	start_game(t_game_data *game, t_corewar_input *cw_input)
 		close_ncurses();
 	}
 	else
-		while (game->state.cycle_count < cw_input->nbr_of_cycles)
-			if (advance_cycle(game) == 0)
-			{
-				print_ending(&game->state);
-				break ;
-			}
+		play_game(game, cw_input);
 	if (cw_input->exec_flags & FLAG_MEMDUMP)
 		dump_memory(&game->state);
 }
 
-void	initialize_logging(t_log_info *info, t_corewar_input *cw_input)
+void		initialize_logging(t_log_info *info, t_corewar_input *cw_input)
 {
 	if (cw_input->exec_flags & FLAG_VISUALIZER)
 		ft_bzero(cw_input->log_verbosity, e_log_level_max);
@@ -64,7 +62,7 @@ void	initialize_logging(t_log_info *info, t_corewar_input *cw_input)
 		cw_input->log_verbosity, sizeof(info->log_active));
 }
 
-int		load_champions(t_corewar_input *cw_input, t_array *players)
+int			load_champions(t_corewar_input *cw_input, t_array *players)
 {
 	t_player	player;
 	int			index;
@@ -85,7 +83,7 @@ int		load_champions(t_corewar_input *cw_input, t_array *players)
 	return (FT_SUCCESS);
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_corewar_input	corewar_input;
 	t_game_data		*game;
