@@ -6,18 +6,17 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 15:58:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 19:11:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visualizer.h"
 
-static void	print_champions(t_vm_state *vm, t_game_data *game)
+static void	print_champions(t_vm_state *vm)
 {
 	size_t	i;
 
 	i = 0;
-	(void)game; /*TODO erase */
 	while (i < vm->players.length)
 	{
 		wattron(win.info, COLOR_PAIR(50));
@@ -34,17 +33,17 @@ static void	print_champions(t_vm_state *vm, t_game_data *game)
 	}
 }
 
-static int	get_winner(t_game_data *game)
+size_t		get_winner(t_vm_state *state)
 {
 	size_t	winner;
 	size_t	index;
 
 	index = 1;
 	winner = 0;
-	while (index < game->state.players.length)
+	while (index < state->players.length)
 	{
-		if (((t_player*)game->state.players.ptr)[index].live >
-			((t_player*)game->state.players.ptr)[winner].live)
+		if (((t_player*)state->players.ptr)[index].live >
+			((t_player*)state->players.ptr)[winner].live)
 			winner = index;
 		index++;
 	}
@@ -56,7 +55,7 @@ static void	draw_end(t_game_data *game)
 	size_t	winner;
 	size_t	champ_len;
 
-	winner = get_winner(game);
+	winner = get_winner(&game->state);
 	champ_len = ft_strlen(((t_player*)game->state.players.ptr)\
 					[winner].header.prog_name);
 	mvwprintw(win.info, 32, 3, "THE WINNER IS : ");
@@ -79,14 +78,16 @@ static void	output_info(t_vm_state *vm, t_game_data *game,
 	mvwprintw(win.info, 7, 3, "CYCLE : %zu", vm->cycle_count);
 	mvwprintw(win.info, 8, 3, "PROCCESSES : %d", vm->processes.length);
 	mvwprintw(win.info, 10, 3, "CYCLE_TO_DIE : %d", game->cycles_to_die);
-	print_champions(vm, game);
+	print_champions(vm);
 	if (vis_state.game_over)
 		draw_end(game);
 }
 
-void	create_info(t_vm_state *vm, t_game_data *game,
-			t_input_info *input_info)
+void		create_info(t_vm_state *vm, t_game_data *game,
+				t_input_info *input_info)
 {
+	wattron(win.info, COLOR_PAIR(1));
+	box(win.info, '@', '@');
 	output_info(vm, game, input_info);
 	wattron(win.info, COLOR_PAIR(1));
 	box(win.info, '@', '@');

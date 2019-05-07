@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 11:32:16 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/06 15:11:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 16:26:26 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_line.h"
 
-int		(*g_syntax_check[8])(char*, t_corewar_input*) = {
+int		(*const g_syntax_check[8])(char*, t_corewar_input*) = {
 	is_flag_memdump,
 	is_flag_visualizer,
 	is_flag_champ_nbr,
@@ -25,7 +25,6 @@ int		(*g_syntax_check[8])(char*, t_corewar_input*) = {
 
 int		parse_input(char *input, int index, t_corewar_input *cw_input)
 {
-
 	if (index == 0)
 		cw_input->exec_flags |= FLAG_MEMDUMP;
 	else if (index == 1)
@@ -100,17 +99,14 @@ int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input)
 		print_usage();
 		return (-1);
 	}
-	else
+	while (index < argc)
 	{
-		while (index < argc)
-		{
-			ret = check_syntax(argv[index], flags, cw_input);
-			if (ret > -1)
-				flags = choose_flags(ret);
-			else
-				return (-1);
-			index++;
-		}
+		ret = check_syntax(argv[index], flags, cw_input);
+		if (ret > -1)
+			flags = choose_flags(ret);
+		else
+			return (-1);
+		index++;
 	}
 	if (!(cw_input->exec_flags & FLAG_MEMDUMP))
 		cw_input->nbr_of_cycles = SIZE_T_MAX;
