@@ -116,7 +116,7 @@ clean:
 	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
-	rm -f  $(core_OBJS)
+	rm -f $(core_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj
@@ -130,6 +130,7 @@ fclean: clean
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
 	rm -rf $(ASM_NAME).dSYM/
+	rm -rf $(CORELIB_NAME).dSYM/
 	rm -f $(ASM_NAME)
 
 re: fclean
