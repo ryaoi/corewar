@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/22 16:22:28 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/07 21:26:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,5 +271,7 @@ void				dump_memory(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];
+
+/*TODO please free everything after programe finishes! ^ 0^ */
 
 #endif
