@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:21:32 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 19:33:49 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 20:34:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			get_keyinput(t_visualizer_state *vis_state)
 	return (0);
 }
 
-void	*input_loop(void *stub)
+void		*input_loop(void *stub)
 {
 	int key;
 
