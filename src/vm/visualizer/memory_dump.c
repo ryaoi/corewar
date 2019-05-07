@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/06 14:29:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 15:58:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ static void output_memory_dump(t_vm_state *vm)
 
 void		create_memory_dump(t_vm_state *vm)
 {
-	wattron(win.mem_dump, COLOR_PAIR(1));
-	box(win.mem_dump, '@', '@');
 	output_memory_dump(vm);
 	wattron(win.mem_dump, COLOR_PAIR(1));
 	box(win.mem_dump, '@', '@');

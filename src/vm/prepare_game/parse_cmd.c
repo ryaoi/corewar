@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 11:32:16 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 18:13:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/06 15:11:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	init_corewar_input(t_corewar_input *cw_input)
 	cw_input->champions[1] = NULL;
 	cw_input->champions[2] = NULL;
 	cw_input->champions[3] = NULL;
-	cw_input->incoming_champion = -1;
+	cw_input->champ_id = -1;
 	i = 0;
 	while (i < e_log_level_max)
 	{

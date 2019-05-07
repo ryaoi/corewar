@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/06 14:29:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 15:58:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ static void	output_info(t_vm_state *vm, t_game_data *game,
 void	create_info(t_vm_state *vm, t_game_data *game,
 			t_input_info *input_info)
 {
-	wattron(win.info, COLOR_PAIR(1));
-	box(win.info, '@', '@');
 	output_info(vm, game, input_info);
 	wattron(win.info, COLOR_PAIR(1));
 	box(win.info, '@', '@');

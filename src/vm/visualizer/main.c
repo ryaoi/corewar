@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/06 14:30:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 16:02:32 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*input_loop(void *stub)
 		while (key)
 			key = get_keyinput(&vis_state);
 		pthread_mutex_unlock(&vis_state.input_lock);
-		usleep(10000);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -61,8 +61,6 @@ void	init_visualizer(void)
 	ft_bzero(&vis_state.input_info, sizeof(vis_state.input_info));
 	vis_state.input_info.speed = 500;
 	vis_state.input_info.pause = 1;
-	vis_state.input_info.resize = 0;
-	vis_state.input_info.quit = 0;
 	vis_state.shutdown = 0;
 	vis_state.game_over = 0;
 	pthread_create(&vis_state.input_worker, NULL, input_loop, NULL);
@@ -81,11 +79,8 @@ void	start_game(t_game_data *game, t_corewar_input *cw_input)
 		{
 			pthread_mutex_lock(&vis_state.input_lock);
 			ft_memcpy(&info_copy, &vis_state.input_info, sizeof(info_copy));
-			vis_state.input_info.resize = 0;
 			pthread_mutex_unlock(&vis_state.input_lock);
-			pthread_mutex_lock(&vis_state.input_lock);
 			visualizer(game, cw_input, &info_copy);
-			pthread_mutex_unlock(&vis_state.input_lock);
 		}
 		vis_state.shutdown = 1;
 		pthread_join(vis_state.input_worker, NULL);

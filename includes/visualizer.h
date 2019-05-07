@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/06 12:14:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 15:59:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,10 @@ typedef struct	s_input_info
 	int	quit;
 	int pause;
 	int speed;
-	int resize;
 }				t_input_info;
 
 typedef struct	s_visualizer_state
 {
-	int				delay;
-	int				process;
 	pthread_t		input_worker;
 	pthread_mutex_t	input_lock;
 	t_input_info	input_info;

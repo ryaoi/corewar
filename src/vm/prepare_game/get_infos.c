@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_champs_info.c                                  :+:      :+:    :+:   */
+/*   get_infos.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 15:25:02 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/25 16:15:32 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/06 15:11:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		get_champ_nbr(char *input, int index, t_corewar_input *cw_input)
 	else
 	{
 		cw_input->champ_flags |= (1 << (champ_nbr - 1));
-		cw_input->incoming_champion = champ_nbr;
+		cw_input->champ_id = champ_nbr;
 	}
 	return (index);
 }
@@ -37,7 +37,7 @@ int		get_champ_name(char *input, int index, t_corewar_input *cw_input)
 		ft_printf("Too many champions!!\n");
 		return (TOO_MANY_PLAYERS);
 	}
-	if (cw_input->incoming_champion == -1)
+	if (cw_input->champ_id == -1)
 	{
 		while (cw_input->champions[i])
 			i++;
@@ -48,10 +48,10 @@ int		get_champ_name(char *input, int index, t_corewar_input *cw_input)
 	}
 	else
 	{
-		if (!(cw_input->champions[cw_input->incoming_champion - 1] = ft_strdup(input)))
+		if (!(cw_input->champions[cw_input->champ_id - 1] = ft_strdup(input)))
 			return (MALLOC_FAIL);
 		cw_input->nbr_of_champions++;
-		cw_input->incoming_champion = -1;
+		cw_input->champ_id = -1;
 	}
 	return (index);
 }
@@ -65,7 +65,7 @@ int		get_log_verbosity(char *input, int index, t_corewar_input *cw_input)
 	verbosity = ft_atoi(input);
 	while (i < e_log_level_max)
 	{
-		if (verbosity & 1 << i)
+		if (verbosity & (1 << i))
 			cw_input->log_verbosity[i] = 1;
 		i++;
 	}
