@@ -3,37 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   memory_dump.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/19 19:34:31 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 14:43:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visualizer.h"
 
-static int	get_champion_color(size_t index, t_byte_info info, size_t cycle_count)
+static int	get_champion_color(t_byte_info info, size_t cycle_count)
 {
 	int	color;
 
-	(void)cycle_count;
-	(void)index;
 	if (info.written_player == -1)
-		color = 3;
+		color = BLUE_BLACK;
 	else if (info.written_player == -2)
-		color = 4;
+		color = PURPLE_BLACK;
 	else if (info.written_player == -3)
-		color = 5;
+		color = GREEN_BLACK;
 	else if (info.written_player == -4)
-		color = 6;
-
+		color = RED_BLACK;
 	else
-		color = 2;
-	/* TODO highlight */
+		color = GREY_BLACK;
+	if (cycle_count - info.written_cycle < HIGHLIGHT_CYCLE
+			&& info.written_cycle > 1)
+		color += HIGHLIGHT;
+	if (info.pc_mark == 1)
+		color += PROGRAM_COUNTER_MARK;
 	return (color);
 }
 
-static void output_memory_dump(t_vm_state *vm)
+static void	output_memory_dump(t_vm_state *vm)
 {
 	size_t	index;
 	size_t	col;
@@ -45,9 +46,10 @@ static void output_memory_dump(t_vm_state *vm)
 	row = 0;
 	while (index < MEM_SIZE)
 	{
-		color = get_champion_color(index, vm->memory_info[index], vm->cycle_count);
+		color = get_champion_color(vm->memory_info[index], vm->cycle_count);
 		wattron(win.mem_dump, COLOR_PAIR(color));
-		mvwprintw(win.mem_dump, (2 + row), 3 + (col * 3), "%02X", vm->memory[index]);
+		mvwprintw(win.mem_dump, (2 + row), 3 + (col * 3),
+					"%02X", vm->memory[index]);
 		col++;
 		index++;
 		if (col == 64)
@@ -56,7 +58,7 @@ static void output_memory_dump(t_vm_state *vm)
 			row++;
 		}
 	}
-	wattroff(win.info, COLOR_PAIR(1));
+	wattroff(win.info, COLOR_PAIR(color));
 }
 
 void		create_memory_dump(t_vm_state *vm)

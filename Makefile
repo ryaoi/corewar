@@ -36,7 +36,17 @@ ASM_SRCS =
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
-	vm/visualizer/visualizer_backup.c
+	vm/visualizer/main.c \
+	vm/visualizer/colors.c \
+	vm/visualizer/key_inputs.c \
+	vm/visualizer/visualizer_utils.c \
+	vm/prepare_game/parse_cmd.c \
+	vm/prepare_game/syntax_check_flags.c \
+	vm/prepare_game/syntax_check_inputs.c \
+	vm/prepare_game/get_infos.c \
+	vm/prepare_game/parse_cmd_utils.c \
+	vm/prepare_game/flags_utils.c \
+	vm/stdout_messages.c
 INCLUDES = libft/includes/libft.h \
 		libft/includes/array.h \
 		libft/includes/ft_assert.h \
@@ -44,6 +54,7 @@ INCLUDES = libft/includes/libft.h \
 		includes/instr.h \
 		includes/vm.h \
 		includes/visualizer.h \
+		includes/cmd_line.h \
 		includes/python_bindings.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
@@ -58,7 +69,7 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror #-std=c89
+export CFLAGS := $(CFLAGS) #-Wall -Wextra -Werror #-std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
@@ -84,13 +95,14 @@ $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore
+	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore -lft
 
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
+	mkdir -p obj/vm/prepare_game
 	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
@@ -104,7 +116,7 @@ clean:
 	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
-	rm -f  $(core_OBJS)
+	rm -f $(core_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj
@@ -118,6 +130,7 @@ fclean: clean
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
 	rm -rf $(ASM_NAME).dSYM/
+	rm -rf $(CORELIB_NAME).dSYM/
 	rm -f $(ASM_NAME)
 
 re: fclean

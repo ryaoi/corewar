@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/07 21:26:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 14:42:02 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define COMMENT_CMD_STRING		".comment"
 
 # define CYCLE_TO_DIE			1536
-# define CYCLE_DELTA			50
+# define CYCLE_DELTA			500
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 
@@ -116,6 +116,7 @@ typedef struct		s_player
 	uint8_t		*champion_code;
 	int			id;
 	int			live;
+	size_t		last_live_cycle;
 }					t_player;
 
 typedef struct		s_bigend_buffer
@@ -268,6 +269,8 @@ void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
 void				process_exec_cycle(t_vm_state *state, size_t process);
 void				dump_memory(t_vm_state *state);
+void				print_prelude(t_vm_state *state);
+void				print_ending(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];

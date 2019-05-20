@@ -6,129 +6,63 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:42:40 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/19 19:19:44 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/07 20:25:45 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <curses.h>
 #include "visualizer.h"
+#include "cmd_line.h"
 
-void	visualize_game(t_vm_state *vm)
+static void	visualize_game(t_vm_state *vm, t_game_data *game,
+			t_input_info *input_info)
 {
-	vis_state.delay = DELAY / vis_state.speed;
 	werase(win.mem_dump);
 	werase(win.info);
 	create_memory_dump(vm);
-	create_info(vm);
-	//create_others(win);
+	create_info(vm, game, input_info);
+	pthread_mutex_lock(&vis_state.input_lock);
 	refresh();
-	wrefresh(win.mem_dump);
-	wrefresh(win.info);
+	wnoutrefresh(win.mem_dump);
+	wnoutrefresh(win.info);
+	doupdate();
+	pthread_mutex_unlock(&vis_state.input_lock);
 }
 
-void	get_color_pairs()
+static void	reset_ncurses(void)
 {
-	init_color(COLOR_GREY, 400, 400, 400);
-	init_color(COLOR_BRIGHT_WHITE, 1000, 1000, 1000);
-	init_pair(1, COLOR_GREY, COLOR_GREY); //border
-	init_pair(2, COLOR_BRIGHT_WHITE, COLOR_BLACK); //white text
-	init_pair(3, COLOR_RED, COLOR_BLACK);
-	init_pair(4, COLOR_GREEN, COLOR_BLACK);
-	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(6, COLOR_BLUE, COLOR_BLACK);
-
-	/* TODO
-		needs 4 colors for Program Counter
-		4 colors for champios memory_dump
-		colors for the informational log
-		fuckin many colors
-	*/
-}
-
-void	control_speed(int input, t_visualizer_state *vis_state)
-{
-	if (input == KEY_UP)
-		(*vis_state).speed += 10;
-	if (input == KEY_DOWN)
-		(*vis_state).speed -= 10;
-	if (input == KEY_RIGHT)
-		(*vis_state).speed += 2;
-	if (input == KEY_LEFT)
-		(*vis_state).speed -= 2;
-	if ((*vis_state).speed > 2000)
-		(*vis_state).speed = 2000;
-	if ((*vis_state).speed < 1)
-		(*vis_state).speed = 1;
-}
-
-int		get_keyinput(t_visualizer_state *vis_state)
-{
-	int		input;
-
-	input = getch();
-
-	if (input == PRESS_KEY_SPACE)
-	{
-		if ((*vis_state).pause == 0)
-			(*vis_state).pause = 1;
-		else if ((*vis_state).pause == 1)
-			(*vis_state).pause = 0;
-	}
-	if (input == 'q' || input == 'Q')
-		return (-1);
-	if (input == 's' || input == 'S')
-		return (1);
-	control_speed(input, vis_state);
-	return (0);
-}
-
-void	init_visualizer(void)
-{
-	ft_bzero(&vis_state, sizeof(t_visualizer_state));
+	delwin(win.mem_dump);
+	delwin(win.info);
+	endwin();
 	initscr();
 	cbreak();
 	noecho();
 	curs_set(0);
 	start_color();
-	get_color_pairs();
+	get_colors();
 	nodelay(stdscr, TRUE);
 	keypad(stdscr, TRUE);
 	win.mem_dump = newwin(4 + (MEM_SIZE / 64), MEM_DUMP_WIDTH, 0, 0);
 	win.info = newwin(4 + (MEM_SIZE / 64), INFO_WIDTH, 0, MEM_DUMP_WIDTH - 1);
-	vis_state.speed = 1000;
-	vis_state.pause = 1;
 }
 
-int		visualizer(t_game_data *game)
+int			visualizer(t_game_data *game, t_corewar_input *cw_input,
+				t_input_info *info_copy)
 {
-	int					key;
-
-	if (game->state.cycle_count == 1)
-		init_visualizer();
-	//ft_bzero(&vis_state, sizeof(t_visualizer_state));
-	//initscr();
-	//cbreak();
-	//noecho();
-	//curs_set(0);
-	//start_color();
-	//get_color_pairs();
-//	nodelay(stdscr, TRUE);
-//	keypad(stdscr, TRUE); /* TODO hook keys to speed up & down the program */
-							/* the whole thing needs to be linked to the corewar */
-//	win.mem_dump = newwin(4 + (MEM_SIZE / 64), MEM_DUMP_WIDTH, 0, 0);
-//	win.info = newwin(4 + (MEM_SIZE / 64), INFO_WIDTH, 0, MEM_DUMP_WIDTH - 1);
-//	win.other = newwin(58, MEM_DUMP_WIDTH + INFO_WIDTH, 4 + (MEM_SIZE / 64) + 1, 0)
-	while (vis_state.pause)
+	if (vis_state.game_over
+		|| game->state.cycle_count >= cw_input->nbr_of_cycles)
+		vis_state.game_over = 1;
+	else if (!info_copy->pause)
 	{
-		key = get_keyinput(&vis_state);
-		visualize_game(&game->state);
-		if (key == -1)
-			return (-1);
-		else if (key == 1)
-			return (0);
+		if (advance_cycle(game) == 0)
+			vis_state.game_over = 1;
 	}
-	visualize_game(&game->state);
-	if (get_keyinput(&vis_state) == -1)
-		return (-1);
-	usleep(vis_state.delay);
+	if (info_copy->resize == 1)
+	{
+		reset_ncurses();
+		return (0);
+	}
+	visualize_game(&game->state, game, info_copy);
+	usleep(DELAY / info_copy->speed);
 	return (0);
 }

@@ -1,2 +1,0 @@
- export LDFLAGS="-L/usr/local/opt/ncurses/lib"
-  export CPPFLAGS="-I/usr/local/opt/ncurses/include"
