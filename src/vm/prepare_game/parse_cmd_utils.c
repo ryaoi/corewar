@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:06:15 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 16:19:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 18:09:51 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ const char	*g_log_level_tab[10] = {
 	"log_fork",
 	"log_game",
 	"log_deaths",
+	/* at least this one doesn't do anything */
 	"log_memdump"
 };
 
