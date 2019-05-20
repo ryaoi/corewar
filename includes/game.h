@@ -6,14 +6,14 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:56:58 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:01:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:31:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _GAME_H
 # define _GAME_H
 
-#include "vm.h"
+# include "vm.h"
 
 typedef struct	s_game_data
 {

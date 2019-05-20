@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   visualizer.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 19:14:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 15:37:34 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VISUALIZER_H
 # define VISUALIZER_H
 
-#include <unistd.h>
-#include <pthread.h>
-#include "ncurses.h"
-#include "libft.h"
-#include "vm.h"
-#include "game.h"
-#include "cmd_line.h"
+# include <unistd.h>
+# include <pthread.h>
+# include "ncurses.h"
+# include "libft.h"
+# include "vm.h"
+# include "game.h"
+# include "cmd_line.h"
 
 # define DELAY 1000000
 # define MEM_DUMP_WIDTH 197
@@ -90,21 +90,21 @@ typedef struct	s_window
 	WINDOW	*info;
 }				t_window;
 
+/* TODO unjustified global variables are against the norm!!! */
 t_visualizer_state	vis_state;
 t_window			win;
 
-
-void	init_visualizer(void);
-void	close_ncurses(void);
-void	*input_loop(void *stub);
-void	get_colors(void);
-int		get_keyinput(t_visualizer_state *vis_state);
-void	create_memory_dump(t_vm_state *vm);
-void	create_info(t_vm_state *vm, t_game_data *game,
-			t_input_info *input_info);
-void	create_logging(t_vm_state *vm, t_game_data *game);
-int		visualizer(t_game_data *game, t_corewar_input *cw_input,
-			t_input_info *info_copy);
-size_t	get_winner(t_vm_state *state);
+void			init_visualizer(void);
+void			close_ncurses(void);
+void			*input_loop(void *stub);
+void			get_colors(void);
+int				get_keyinput(t_visualizer_state *g_vis_state);
+void			create_memory_dump(t_vm_state *vm);
+void			create_info(t_vm_state *vm, t_game_data *game,
+					t_input_info *input_info);
+void			create_logging(t_vm_state *vm, t_game_data *game);
+int				visualizer(t_game_data *game, t_corewar_input *cw_input,
+					t_input_info *info_copy);
+size_t			get_winner(t_vm_state *state);
 
 #endif
