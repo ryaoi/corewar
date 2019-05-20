@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logging.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 15:50:46 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/24 19:42:36 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 15:04:03 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct		s_log_info
 	uint8_t				log_active[e_log_level_max];
 }					t_log_info;
 
+void	log_save(t_log_info *info, uint64_t type,
+			const char *format, va_list *ap);
 void	log_level_va(t_log_info *info, uint64_t type, const char *format,
 			va_list *ap);
 void	log_level(t_log_info *info, uint64_t type, const char *format, ...);

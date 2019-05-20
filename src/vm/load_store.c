@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 16:53:51 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 14:58:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size)
 	size_t			msb;
 	size_t			index;
 
-	/* TODO compile-time ASSERT if REG_SIZE is too big */
 	ASSERT(size <= REG_SIZE, "Tried to load size larger than REG_SIZE");
 	index = 0;
 	ret.buffer = 0;
