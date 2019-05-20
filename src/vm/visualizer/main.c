@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/07 20:33:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/20 17:36:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "game.h"
 #include "cmd_line.h"
 #include "visualizer.h"
+#include "ft_assert.h"
 
 static void	play_game(t_game_data *game, t_corewar_input *cw_input)
 {
@@ -67,7 +68,6 @@ int			load_champions(t_corewar_input *cw_input, t_array *players)
 	t_player	player;
 	int			index;
 
-	array_init(players, sizeof(t_player));
 	index = 0;
 	while (index < MAX_CHAMP_NBR)
 	{
@@ -83,6 +83,7 @@ int			load_champions(t_corewar_input *cw_input, t_array *players)
 	return (FT_SUCCESS);
 }
 
+/* TODO function shouldn't be in visualizer folder */
 int			main(int argc, char **argv)
 {
 	t_corewar_input	corewar_input;
@@ -91,16 +92,25 @@ int			main(int argc, char **argv)
 	t_log_info		info;
 	int				ret;
 
+	/* TODO this function leaks */
 	ret = parse_cmd(argc, argv, &corewar_input);
 	if (ret == FT_SUCCESS)
-		ret = load_champions(&corewar_input, &players);
-	if (ret == FT_SUCCESS)
 	{
-		initialize_logging(&info, &corewar_input);
-		game = malloc(sizeof(t_game_data));
-		prepare_game(game, &players, &info);
-		print_prelude(&game->state);
-		start_game(game, &corewar_input);
+		array_init(&players, sizeof(t_player));
+		if (load_champions(&corewar_input, &players))
+		{
+			initialize_logging(&info, &corewar_input);
+			game = malloc(sizeof(t_game_data));
+			/* TODO call this everytime you malloc */
+			MALLOC_ASSERT(game);
+			prepare_game(game, &players, &info);
+			print_prelude(&game->state);
+			start_game(game, &corewar_input);
+			vm_state_clear(&game->state);
+			free(game);
+			game = NULL;
+		}
+		array_clear(&players, NULL);
 	}
 	return (0);
 }

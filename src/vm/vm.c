@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/04/22 16:19:40 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 17:27:26 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		vm_state_init(t_vm_state *state)
 	array_init(&state->processes, sizeof(t_process));
 }
 
-static void	player_destroy(void *ptr)
+void		player_destroy(void *ptr)
 {
 	free(((t_player*)ptr)->champion_code);
 	((t_player*)ptr)->champion_code = NULL;

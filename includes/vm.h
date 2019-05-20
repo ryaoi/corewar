@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/20 15:44:39 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 17:31:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,7 @@ int					vm_champion_load_file(t_player *player,
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
+void				player_destroy(void *ptr);
 void				process_exec_cycle(t_vm_state *state, size_t process);
 void				dump_memory(t_vm_state *state);
 void				print_prelude(t_vm_state *state);
