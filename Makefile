@@ -1,6 +1,4 @@
-CORELIB_SRCS = python_bindings/python_bindings.c \
-	python_bindings/python_impl.c \
-	logging.c \
+CORELIB_SRCS = logging.c \
 	logging_save.c \
 	vm/vm.c \
 	vm/vm_memory.c \
@@ -55,8 +53,7 @@ INCLUDES = libft/includes/libft.h \
 		includes/instr.h \
 		includes/vm.h \
 		includes/visualizer.h \
-		includes/cmd_line.h \
-		includes/python_bindings.h
+		includes/cmd_line.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
@@ -70,7 +67,7 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) #-Wall -Wextra -Werror #-std=c89
+CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
@@ -90,7 +87,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
+	gcc $(LDFLAGS) -shared -o $@ $^
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
@@ -104,10 +101,9 @@ obj:
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
 	mkdir -p obj/vm/prepare_game
-	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
-	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<
+	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
 tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
 	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
