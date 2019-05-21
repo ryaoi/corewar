@@ -6,30 +6,31 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 21:49:15 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:26:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-/* categorize the line type
-.name = T_NAME
-.comment = T_CMD_COMMENT
-
-different tokens
-	- T_LABEL = string + :
-
-	- T_INSTR
-		- 1 params instructions
-		- 2 params instructions
-		- 3 params instructions
-	- T_COMMENT
-	- parameters
-		- T_REGISTRY = r + INTEGER
-		- T_DIRECT = % + INTEGER
-		- T_DIRLAB = % + : + LABEL
-		- T_INDIRECT = INTEGER error ?
-		- T_INDIRLAB = : + LABEL
+/*
+**	categorize the line type
+**	.name = T_NAME
+**	.comment = T_CMD_COMMENT
+**
+**	different tokens
+**	- T_LABEL = string + :
+**
+**	- T_INSTR
+**		- 1 params instructions
+**		- 2 params instructions
+**		- 3 params instructions
+**	- T_COMMENT
+**	- parameters
+**		- T_REGISTRY = r + INTEGER
+**		- T_DIRECT = % + INTEGER
+**		- T_DIRLAB = % + : + LABEL
+**		- T_INDIRECT = INTEGER error ?
+**		- T_INDIRLAB = : + LABEL
 */
 
 static int	validate_parameters(t_token *token, t_op opcode,
@@ -125,4 +126,3 @@ int			file_parse(t_file *file)
 	}
 	return (SUCCESS);
 }
-

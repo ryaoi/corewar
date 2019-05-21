@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   file_conversion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 17:16:47 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/21 17:24:41 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-/* for handling labels in direct and indirect params
-	length of the bytecode is necessary
-	bytecode_len :
-		register = 1
-		direct = 4
-		direct_label = 2
-		indirect = 2
-ocp :
-01 Register, followed by a byte (the register number)
-10 Direct, followed by DIR_SIZE bytes (the direct value)
-11 Indirect, followed by IND_SIZE bytes (the value of the indirection) */
+/*
+**	bytecode_len :
+**		register = 1
+**		direct = 2 or 4
+**		indirect = 2
+**	ocp :
+**		01 Register, followed by a byte (the register number)
+**		10 Direct, followed by DIR_SIZE bytes (the direct value)
+**		11 Indirect, followed by IND_SIZE bytes (the value of the indirection)
+*/
 
 int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 								t_op *op)
