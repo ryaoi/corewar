@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 17:05:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:22:01 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,41 +67,41 @@
 # define HIGHLIGHT 10
 # define PROGRAM_COUNTER_MARK 20
 
-typedef struct	s_input_info
+typedef struct		s_input_info
 {
 	int	quit;
 	int	pause;
 	int	speed;
 	int	resize;
-}				t_input_info;
+}					t_input_info;
 
-typedef struct	s_visualizer_state
+typedef struct		s_visualizer_state
 {
 	pthread_t		input_worker;
 	pthread_mutex_t	input_lock;
 	t_input_info	input_info;
 	int				game_over;
 	int				shutdown;
-}				t_visualizer_state;
+}					t_visualizer_state;
 
-typedef struct	s_window
+typedef struct		s_window
 {
 	WINDOW	*mem_dump;
 	WINDOW	*info;
-}				t_window;
+}					t_window;
 
 t_visualizer_state	g_vis_state;
 
-void	init_visualizer(t_window *win);
-void	close_ncurses(t_window *win);
-void	*input_loop(void *stub);
-void	get_colors(void);
-void	create_memory_dump(t_vm_state *vm, t_window *win);
-void	create_info(t_vm_state *vm, t_game_data *game,
-			t_input_info *input_info, t_window *win);
-void	create_logging(t_vm_state *vm, t_game_data *game);
-int		visualizer(t_game_data *game, t_corewar_input *cw_input,
-			t_input_info *info_copy, t_window *win);
-size_t	get_winner(t_vm_state *state);
+void				init_visualizer(t_window *win);
+void				close_ncurses(t_window *win);
+void				*input_loop(void *stub);
+void				get_colors(void);
+void				create_memory_dump(t_vm_state *vm, t_window *win);
+void				create_info(t_vm_state *vm, t_game_data *game,
+						t_input_info *input_info, t_window *win);
+void				create_logging(t_vm_state *vm, t_game_data *game);
+int					visualizer(t_game_data *game, t_corewar_input *cw_input,
+						t_input_info *info_copy, t_window *win);
+size_t				get_winner(t_vm_state *state);
 
 #endif

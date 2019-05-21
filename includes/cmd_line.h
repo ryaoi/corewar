@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 17:50:01 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 17:17:33 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:21:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,33 @@ typedef struct		s_corewar_input
 	int		champ_id;
 }					t_corewar_input;
 
-extern const int		g_flags_match[8];
-extern const char		*g_log_level_tab[10];
+extern const int	g_flags_match[8];
+extern const char	*g_log_level_tab[10];
 
-int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input);
-int		is_flag_memdump(char *str, t_corewar_input *cw_input);
-int		is_cycles(char *str, t_corewar_input *cw_input);
-int		is_flag_visualizer(char *str, t_corewar_input *cw_input);
-int		is_flag_champ_nbr(char *str, t_corewar_input *cw_input);
-int		is_champ_nbr(char *str, t_corewar_input *cw_input);
-int		is_champ_name(char *str, t_corewar_input *cw_input);
-int		is_flag_verbosity(char *str, t_corewar_input *cw_input);
-int		is_verbosity(char *str, t_corewar_input *cw_input);
-void	init_corewar_input(t_corewar_input *cw_input);
-int		check_syntax(char *input, int flags, t_corewar_input *cw_input);
-int		parse_input(char *input, int index, t_corewar_input *cw_input);
-void	print_usage(void);
-int		choose_flags(int prev_input);
-void	turn_on_flags(int *bit_field, int on_flags);
-int		get_champ_name(char *input, int index, t_corewar_input *cw_input);
-int		get_champ_nbr(char *input, int index, t_corewar_input *cw_input);
-int		get_log_verbosity(char *input, int index, t_corewar_input *cw_input);
-size_t	ft_a_to_sizet(const char *str);
-void	print_usage(void);
+int					parse_cmd(int argc, char **argv, t_corewar_input *cw_input);
+int					is_flag_memdump(char *str, t_corewar_input *cw_input);
+int					is_cycles(char *str, t_corewar_input *cw_input);
+int					is_flag_visualizer(char *str, t_corewar_input *cw_input);
+int					is_flag_champ_nbr(char *str, t_corewar_input *cw_input);
+int					is_champ_nbr(char *str, t_corewar_input *cw_input);
+int					is_champ_name(char *str, t_corewar_input *cw_input);
+int					is_flag_verbosity(char *str, t_corewar_input *cw_input);
+int					is_verbosity(char *str, t_corewar_input *cw_input);
+void				init_corewar_input(t_corewar_input *cw_input);
+int					check_syntax(char *input, int flags,
+						t_corewar_input *cw_input);
+int					parse_input(char *input, int index,
+						t_corewar_input *cw_input);
+void				print_usage(void);
+int					choose_flags(int prev_input);
+void				turn_on_flags(int *bit_field, int on_flags);
+int					get_champ_name(char *input, int index,
+						t_corewar_input *cw_input);
+int					get_champ_nbr(char *input, int index,
+						t_corewar_input *cw_input);
+int					get_log_verbosity(char *input, int index,
+						t_corewar_input *cw_input);
+size_t				ft_a_to_sizet(const char *str);
+void				print_usage(void);
 
 #endif
