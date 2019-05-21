@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:06:15 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 16:19:09 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 15:27:57 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void			print_usage(void)
 
 	index = 0;
 	log_flag = 1;
-	ft_printf("Usage : $> ./corewar [-dump N | -v] ");
+	ft_printf("Usage : $> ./corewar [-dump N | -v N] ");
 	ft_printf("[-n N champion1.cor | champion1.cor] ...\n");
 	ft_printf("\t\t-dump N : dumps memory after N cycles ");
 	ft_printf("(0 < N < SIZE_T_MAX)\n");

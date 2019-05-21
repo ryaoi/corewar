@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/07 20:33:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 15:27:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ int			load_champions(t_corewar_input *cw_input, t_array *players)
 	t_player	player;
 	int			index;
 
+	if (cw_input->nbr_of_champions < 1)
+	{
+		print_usage();
+		return (FT_FAIL);
+	}
 	array_init(players, sizeof(t_player));
 	index = 0;
 	while (index < MAX_CHAMP_NBR)
