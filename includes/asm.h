@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/02 14:52:53 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:43:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,7 @@
 # define SUCCESS 1
 # define FAIL 0
 # define FILE_ERROR 0
-/*
-# define FAIL 0
-# define FILE_ERROR 0
-# define ASM_FAIL 0
-# define LINE_FAIL 0
-# define TOKEN_FAIL 0
-# define PARAM_CHECK_FAIL 0
-# define INSTR_FAIL 0
-# define PARAM_FAIL 0
-# define OPCODE_CMP_FAIL 0
-# define GETVALUE_FAIL -1
-# define CONVERSION_FAIL 0
-*/
+
 # define ON 1
 # define OFF 0
 # define REGISTER_CHAR 'r'
@@ -48,23 +36,22 @@ extern t_op	g_op_tab[17];
 
 typedef enum e_token_types
 {
-	T_NAME_CMD, /* .name WHITE_SPACES "strings"*/
-	T_COMMENT_CMD, /* .comment WHITE_SPACES "strings"*/
-	T_COMMENT, /* # + string */
-	T_LABEL, /* string + ':' */
-	T_ASMCODE, /* instructions + params must relates to a T_LABEL */
-	T_INSTR, /* instructions */
-	T_REGISTER = 11, /* 'r' + T_INTEGER */
-	T_DIRECT = 12, /* '%' + T_INTEGER */
-	T_INDIRECT = 14, /* T_INTEGER */
-	T_DIRLAB = 15, /* '%:' + T_LABEL */
-	T_INDIRLAB = 16, /* ':' + T_LABEL */
-	T_UNKNOWN /* added to handle other than labels later */
+	T_NAME_CMD,
+	T_COMMENT_CMD,
+	T_COMMENT,
+	T_LABEL,
+	T_ASMCODE,
+	T_INSTR,
+	T_REGISTER = 11,
+	T_DIRECT = 12,
+	T_INDIRECT = 14,
+	T_DIRLAB = 15,
+	T_INDIRLAB = 16,
+	T_UNKNOWN
 }			t_token_types;
 
 typedef enum	e_err_types
 {
-	/* libft / malloc fail */
 	STRDUP_FAIL = -50,
 	STRNDUP_FAIL,
 	STRJOIN_FAIL,
@@ -72,7 +59,7 @@ typedef enum	e_err_types
 	MALLOC_FAIL,
 	STRSUB_FAIL,
 	GNL_FAIL,
-/* file error */
+
 	DOT_S_ERROR,
 	OPEN_FILE_ERROR,
 /* main error */
@@ -132,12 +119,12 @@ typedef struct	s_line
 
 typedef struct	s_file
 {
-	t_list		*lines; /* maybe t_array is better? */
+	t_list		*lines;
 	size_t		nbr_line;
 	char		*name_s;
 	char		*name_cor;
 	int			prework_flag;
-	header_t	header; /* TODO initialize header!! */
+	header_t	header;
 	int			fd_cor;
 	int			fd_s;
 	int			ret;
