@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 17:24:41 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 			return (LABEL_NOT_EXIST);
 		value = LST_CONT(traverse, t_token).value;
 		type = LST_CONT(traverse, t_token).type;
-		if (type == T_INDIRECT || type == T_INDIRLAB)
+		if (type == e_indirect || type == e_indirlab)
 			param_trans(&bc[1 + op->ocp + i], INDIR_SIZE, &i, value);
-		else if (type == T_DIRLAB || type == T_DIRECT)
+		else if (type == e_dirlab || type == e_direct)
 			param_trans(&bc[1 + op->ocp + i],
 				op->relative ? DIR_D2_SIZE : DIR_D4_SIZE, &i, value);
-		else if (type == T_REGISTER)
+		else if (type == e_register)
 			param_trans(&bc[1 + op->ocp + i], REG_INDEX_SIZE, &i, value);
 		traverse = traverse->next;
 	}
@@ -62,13 +62,13 @@ static void		ocp_set(t_list *tokens, unsigned char *bytecode)
 	traverse = tokens;
 	while (traverse)
 	{
-		if (LST_CONT(traverse, t_token).type == T_REGISTER)
+		if (LST_CONT(traverse, t_token).type == e_register)
 			ocp |= 1 << (6 - index);
-		else if (LST_CONT(traverse, t_token).type == T_DIRECT ||
-				LST_CONT(traverse, t_token).type == T_DIRLAB)
+		else if (LST_CONT(traverse, t_token).type == e_direct ||
+				LST_CONT(traverse, t_token).type == e_dirlab)
 			ocp |= 2 << (6 - index);
-		else if (LST_CONT(traverse, t_token).type == T_INDIRECT ||
-					LST_CONT(traverse, t_token).type == T_INDIRLAB)
+		else if (LST_CONT(traverse, t_token).type == e_indirect ||
+					LST_CONT(traverse, t_token).type == e_indirlab)
 			ocp |= 3 << (6 - index);
 		traverse = traverse->next;
 		index += 2;
@@ -126,7 +126,7 @@ int				file_conversion(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
+		if (LST_CONT(traverse, t_line).type == e_asmcode &&
 			LST_CONT(traverse, t_line).tokens)
 		{
 			if (conversion(file, &LST_CONT(traverse, t_line)) < 0)

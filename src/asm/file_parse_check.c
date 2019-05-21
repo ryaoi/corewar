@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 21:03:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:49:06 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ int		check_token_type(t_token *token, char *str)
 	if (token->id == 0)
 	{
 		if (str[len - 1] == LABEL_CHAR)
-			token->type = T_LABEL;
+			token->type = e_label;
 		else
-			token->type = T_INSTR;
+			token->type = e_instr;
 	}
 	else if (len > 2 && str[0] == DIRECT_CHAR && str[1] == LABEL_CHAR)
-		token->type = T_DIRLAB;
+		token->type = e_dirlab;
 	else if (len > 1 && str[0] == DIRECT_CHAR && is_str_digit(str + 1))
-		token->type = T_DIRECT;
+		token->type = e_direct;
 	else if (len > 1 && str[0] == REGISTER_CHAR && is_str_digit(str + 1))
-		token->type = T_REGISTER;
+		token->type = e_register;
 	else if (str[0] == LABEL_CHAR)
-		token->type = T_INDIRLAB;
+		token->type = e_indirlab;
 	else if (is_str_digit(str))
-		token->type = T_INDIRECT;
+		token->type = e_indirect;
 	else
 		return (TOKEN_TYPE_FAIL);
 	return (SUCCESS);
@@ -73,7 +73,7 @@ int		check_instr(t_token *token, char *str)
 		if (!ft_strcmp(str, g_op_tab[index].name))
 		{
 			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
-				return (MALLOC_FAIL);
+				return (e_malloc_fail);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
 			return (SUCCESS);
 		}

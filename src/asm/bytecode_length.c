@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bytecode_length.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 16:47:49 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 static unsigned int	token_type_valid(int token_type)
 {
-	if (token_type == T_NAME_CMD || token_type == T_COMMENT_CMD ||
-		token_type == T_COMMENT)
+	if (token_type == e_name_cmd || token_type == e_comment_cmd ||
+		token_type == e_comment)
 		return (0);
 	return (1);
 }
 
 static unsigned int	param_size(int type, int relative)
 {
-	if (type == T_REGISTER)
+	if (type == e_register)
 		return (REG_INDEX_SIZE);
-	else if (type == T_DIRLAB || type == T_DIRECT)
+	else if (type == e_dirlab || type == e_direct)
 		return (relative ? DIR_D2_SIZE : DIR_D4_SIZE);
-	else if (type == T_INDIRECT || type == T_INDIRLAB)
+	else if (type == e_indirect || type == e_indirlab)
 		return (INDIR_SIZE);
 	return (0);
 }

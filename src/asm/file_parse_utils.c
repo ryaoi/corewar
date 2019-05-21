@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 15:18:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:34 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	init_token(t_token *token)
 	token->id = -1;
 	token->str = NULL;
 	token->op = NULL;
-	token->type = T_UNKNOWN;
+	token->type = e_unknown;
 	token->value = -1;
 }
 

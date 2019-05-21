@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 22:30:40 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:49:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,18 @@ int			add_token(t_line *line, int token_id, char *str)
 	token.str = str;
 	token.id = token_id;
 	if (!token.str)
-		return (STRSUB_FAIL);
+		return (e_strsub_fail);
 	if (check_token_type(&token, token.str) < 0)
 		return (TOKEN_TYPE_FAIL);
-	if ((token.type == T_LABEL || token.type == T_DIRLAB
-		|| token.type == T_INDIRLAB)
+	if ((token.type == e_label || token.type == e_dirlab
+		|| token.type == e_indirlab)
 			&& check_label_syntax(token.str) < 0)
 		return (TOKEN_LABEL_SYNTAX_FAIL);
-	if (token.type == T_REGISTER && check_register(token.str) < 0)
+	if (token.type == e_register && check_register(token.str) < 0)
 		return (TOKEN_REGISTER_FAIL);
-	if (token.type == T_UNKNOWN)
+	if (token.type == e_unknown)
 		return (TOKEN_TYPE_UNKNOWN);
-	if (token.type == T_INSTR && check_instr(&token, token.str) < 0)
+	if (token.type == e_instr && check_instr(&token, token.str) < 0)
 		return (TOKEN_INSTR_INVALID);
 	list_append(&(line->tokens), list_new(&token, sizeof(token)));
 	return (SUCCESS);

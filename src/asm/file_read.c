@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/02 14:52:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:34 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@ int		line_add(t_file *file, char *line, size_t label_pos)
 	if (label_pos)
 	{
 		line[label_pos + 1] = '\0';
-		if (line_create(file, line, T_LABEL) < 0)
+		if (line_create(file, line, e_label) < 0)
 			return (LINE_CREATE_FAIL);
 		line[label_pos + 1] = ' ';
 		if (len > label_pos + 1 && !line_is_ws((&line[label_pos + 2])))
 		{
 			file->nbr_line++;
-			if (line_create(file, line + label_pos + 2, T_UNKNOWN) < 0)
+			if (line_create(file, line + label_pos + 2, e_unknown) < 0)
 				return (LINE_CREATE_FAIL);
 		}
 	}
-	else if (line_create(file, line, T_UNKNOWN) < 0)
+	else if (line_create(file, line, e_unknown) < 0)
 		return (LINE_CREATE_FAIL);
 	free(line);
 	return (SUCCESS);

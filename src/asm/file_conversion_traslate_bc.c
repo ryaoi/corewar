@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:16:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,17 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 	char	*label;
 	t_list	*traverse;
 
-	if (token->type == T_DIRECT || token->type == T_REGISTER)
+	if (token->type == e_direct || token->type == e_register)
 		token->value = ft_atoi(token->str + 1);
-	else if (token->type == T_INDIRECT)
+	else if (token->type == e_indirect)
 		token->value = ft_atoi(token->str);
-	else if (token->type == T_DIRLAB || token->type == T_INDIRLAB)
+	else if (token->type == e_dirlab || token->type == e_indirlab)
 	{
-		label = token->type == T_DIRLAB ? token->str + 2 : token->str + 1;
+		label = token->type == e_dirlab ? token->str + 2 : token->str + 1;
 		traverse = lines;
 		while (traverse)
 		{
-			if (LST_CONT(traverse, t_line).type == T_LABEL &&
+			if (LST_CONT(traverse, t_line).type == e_label &&
 				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
 			{
 				token->value = label_value(line, &LST_CONT(traverse, t_line),

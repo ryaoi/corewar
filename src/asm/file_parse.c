@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 17:26:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:47:34 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 **	.comment = T_CMD_COMMENT
 **
 **	different tokens
-**	- T_LABEL = string + :
+**	- e_label = string + :
 **
-**	- T_INSTR
+**	- e_instr
 **		- 1 params instructions
 **		- 2 params instructions
 **		- 3 params instructions
-**	- T_COMMENT
+**	- e_comment
 **	- parameters
 **		- T_REGISTRY = r + INTEGER
-**		- T_DIRECT = % + INTEGER
-**		- T_DIRLAB = % + : + LABEL
-**		- T_INDIRECT = INTEGER error ?
-**		- T_INDIRLAB = : + LABEL
+**		- e_direct = % + INTEGER
+**		- e_dirlab = % + : + LABEL
+**		- e_indirect = INTEGER error ?
+**		- e_indirlab = : + LABEL
 */
 
 static int	validate_parameters(t_token *token, t_op opcode,
@@ -39,11 +39,11 @@ static int	validate_parameters(t_token *token, t_op opcode,
 	int converted_type;
 
 	converted_type = -1;
-	if (token->type == T_DIRLAB)
+	if (token->type == e_dirlab)
 		converted_type = T_DIR;
 	else
 		converted_type = token->type - 10;
-	if (converted_type == T_INDIRLAB - 10)
+	if (converted_type == e_indirlab - 10)
 		converted_type = T_IND;
 	if ((converted_type & ~opcode.param_types[param_id]) > 0)
 		return (FAIL);
@@ -93,7 +93,7 @@ static int	tokenizer(t_line *line)
 		print_errmsg_opcode_cmp(ret_valid, line->str);
 		return (FILE_PARSE_FAIL);
 	}
-	if (line->type == T_ASMCODE)
+	if (line->type == e_asmcode)
 		get_bytecode_len(line);
 	return (SUCCESS);
 }
@@ -109,12 +109,12 @@ int			file_parse(t_file *file)
 		{
 			if (file->prework_flag != PREWORK_FLAG_ON)
 				set_header(file, &LST_CONT(traverse, t_line));
-			else if (LST_CONT(traverse, t_line).type == T_UNKNOWN)
-				LST_CONT(traverse, t_line).type = T_ASMCODE;
-			if (LST_CONT(traverse, t_line).type == T_ASMCODE &&
+			else if (LST_CONT(traverse, t_line).type == e_unknown)
+				LST_CONT(traverse, t_line).type = e_asmcode;
+			if (LST_CONT(traverse, t_line).type == e_asmcode &&
 					(tokenizer(&(LST_CONT(traverse, t_line))) < 0))
 				return (FILE_PARSE_FAIL);
-			if (LST_CONT(traverse, t_line).type == T_LABEL)
+			if (LST_CONT(traverse, t_line).type == e_label)
 				remove_label_char(LST_CONT(traverse, t_line).str);
 		}
 		traverse = traverse->next;

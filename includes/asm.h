@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 17:43:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:56:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,32 @@ extern t_op	g_op_tab[17];
 
 typedef enum e_token_types
 {
-	T_NAME_CMD,
-	T_COMMENT_CMD,
-	T_COMMENT,
-	T_LABEL,
-	T_ASMCODE,
-	T_INSTR,
-	T_REGISTER = 11,
-	T_DIRECT = 12,
-	T_INDIRECT = 14,
-	T_DIRLAB = 15,
-	T_INDIRLAB = 16,
-	T_UNKNOWN
+	e_name_cmd,
+	e_comment_cmd,
+	e_comment,
+	e_label,
+	e_asmcode,
+	e_instr,
+	e_register = 11,
+	e_direct = 12,
+	e_indirect = 14,
+	e_dirlab = 15,
+	e_indirlab = 16,
+	e_unknown
 }			t_token_types;
 
 typedef enum	e_err_types
 {
-	STRDUP_FAIL = -50,
-	STRNDUP_FAIL,
-	STRJOIN_FAIL,
-	STRTRIM_FAIL,
-	MALLOC_FAIL,
-	STRSUB_FAIL,
-	GNL_FAIL,
+	e_strdup_fail = -50,
+	e_strndup_fail,
+	e_strjoin_fail,
+	e_strtrim_fail,
+	e_malloc_fail,
+	e_strsub_fail,
+	e_gnl_fail,
 
-	DOT_S_ERROR,
-	OPEN_FILE_ERROR,
+	e_dot_s_error,
+	e_open_file_error,
 /* main error */
 	FILE_READ_FAIL,
 	FILE_PARSE_FAIL,

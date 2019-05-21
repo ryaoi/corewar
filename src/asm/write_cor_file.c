@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/01 21:00:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:45:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void				write_bytecode(int fd, t_list *traverse)
 	write(fd, buf4, 4);
 	while (traverse)
 	{
-		if (((t_line*)traverse->content)->type == T_ASMCODE)
+		if (((t_line*)traverse->content)->type == e_asmcode)
 			write(fd, ((t_line*)traverse->content)->bytecode,
 				((t_line*)traverse->content)->bytecode_len);
 		traverse = traverse->next;

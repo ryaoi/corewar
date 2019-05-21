@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 12:12:52 by jaelee            #+#    #+#             */
-/*   Updated: 2019/04/08 22:46:02 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:51:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ int		file_name_check(const char *filename, t_file *file)
 
 	len = ft_strlen(filename);
 	if (len < 3 || filename[len - 2] != '.' || filename[len - 1] != 's')
-		return (DOT_S_ERROR);
+		return (e_dot_s_error);
 	if ((file->fd_s = open(filename, O_RDONLY)) == -1)
-		return (OPEN_FILE_ERROR);
+		return (e_open_file_error);
 	if (!(file->name_s = ft_strdup(filename)))
-		return (STRDUP_FAIL);
+		return (e_strdup_fail);
 	if (!(tmp = (char*)ft_strsub(filename, 0, len - 2)))
-		return (STRNDUP_FAIL);
+		return (e_strndup_fail);
 	if (!(file->name_cor = ft_strjoin(tmp, ".cor")))
 	{
 		free(tmp);
-		return (STRJOIN_FAIL);
+		return (e_strjoin_fail);
 	}
 	free(tmp);
 	return (SUCCESS);
