@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/07 18:59:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:01:58 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define COMMENT_CMD_STRING		".comment"
 
 # define CYCLE_TO_DIE			1536
-# define CYCLE_DELTA			500
+# define CYCLE_DELTA			50
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 19:14:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 16:57:03 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,18 @@ typedef struct	s_window
 	WINDOW	*info;
 }				t_window;
 
-t_visualizer_state	vis_state;
-t_window			win;
+t_visualizer_state	g_vis_state;
 
-
-void	init_visualizer(void);
-void	close_ncurses(void);
+void	init_visualizer(t_window *win);
+void	close_ncurses(t_window *win);
 void	*input_loop(void *stub);
 void	get_colors(void);
-int		get_keyinput(t_visualizer_state *vis_state);
-void	create_memory_dump(t_vm_state *vm);
+void	create_memory_dump(t_vm_state *vm, t_window *win);
 void	create_info(t_vm_state *vm, t_game_data *game,
-			t_input_info *input_info);
+			t_input_info *input_info, t_window *win);
 void	create_logging(t_vm_state *vm, t_game_data *game);
 int		visualizer(t_game_data *game, t_corewar_input *cw_input,
-			t_input_info *info_copy);
+			t_input_info *info_copy, t_window *win);
 size_t	get_winner(t_vm_state *state);
 
 #endif
