@@ -1,6 +1,5 @@
-CORELIB_SRCS = python_bindings/python_bindings.c \
-	python_bindings/python_impl.c \
-	logging.c \
+CORELIB_SRCS = logging.c \
+	logging_save.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
@@ -36,7 +35,7 @@ ASM_SRCS =
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
-	vm/visualizer/main.c \
+	vm/main.c \
 	vm/visualizer/colors.c \
 	vm/visualizer/key_inputs.c \
 	vm/visualizer/visualizer_utils.c \
@@ -54,17 +53,10 @@ INCLUDES = libft/includes/libft.h \
 		includes/instr.h \
 		includes/vm.h \
 		includes/visualizer.h \
-		includes/cmd_line.h \
-		includes/python_bindings.h
+		includes/cmd_line.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
-
-TESTS_SRCS = short_game.c \
-	complete_game.c \
-	invalid_champ.c
-TESTS = $(patsubst %.c,tests/%.test,$(TESTS_SRCS))
-TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 
 CC = gcc
 ifndef CFLAGS_WARNINGS
@@ -80,7 +72,7 @@ CORELIB_NAME = libcore.so
 
 .PHONY: clean fclean re all
 
-all: $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME) $(TESTS)
+all: $(CORELIB_NAME) $(COREWAR_NAME) $(ASM_NAME)
 
 LIBFT_PREFIX = ../libft
 FTPRINTF_PREFIX = ft_printf
@@ -89,7 +81,7 @@ LIBFT_PREFIX = libft
 include libft/Makefile.mk
 
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
-	gcc $(LDFLAGS) -shared -o $@ $^ `pkg-config python3 --libs`
+	gcc $(LDFLAGS) -shared -o $@ $^
 
 $(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
@@ -103,17 +95,11 @@ obj:
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
 	mkdir -p obj/vm/prepare_game
-	mkdir -p obj/python_bindings
 
 obj/%.o: src/%.c $(INCLUDES) | obj
-	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) `pkg-config python3 --cflags` -o $@ -c $<
-
-tests/%.test: tests/%.c $(CORELIB_NAME) $(LIBFT_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(LIBRARY_PATHS) -o $@ $< -lcore
+	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
 clean:
-	rm -rf $(TESTS_DBG_FOLDERS)
-	rm -f $(TESTS)
 	rm -f $(COREWAR_OBJS)
 	rm -f $(ASM_OBJS)
 	rm -f $(core_OBJS)
@@ -126,11 +112,8 @@ clean:
 fclean: clean
 	rm -f $(LIBFT_NAME)
 	rm -f $(FTPRINTF_NAME)
-	rm -rf $(COREWAR_NAME).dSYM/
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
-	rm -rf $(ASM_NAME).dSYM/
-	rm -rf $(CORELIB_NAME).dSYM/
 	rm -f $(ASM_NAME)
 
 re: fclean

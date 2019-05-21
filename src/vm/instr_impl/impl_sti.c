@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/04/17 17:11:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:01:18 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static t_bigend_buffer	sti_first_p(t_vm_state *state,
 		offset = byte_order_swap(
 			ARG_IND(instr, 1).content).buffer;
 		offset = process->program_counter + (offset % IDX_MOD);
-		/* TODO what size to load? */
 		first_param = mem_load(state, offset, IND_SIZE);
 	}
 	else

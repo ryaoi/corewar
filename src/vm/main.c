@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/21 18:29:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:27:59 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "game.h"
 #include "cmd_line.h"
 #include "visualizer.h"
+#include "ft_assert.h"
 
 static void	play_game(t_game_data *game, t_corewar_input *cw_input)
 {
@@ -95,18 +96,25 @@ int			main(int argc, char **argv)
 	t_game_data		*game;
 	t_array			players;
 	t_log_info		info;
-	int				ret;
 
-	ret = parse_cmd(argc, argv, &corewar_input);
-	if (ret == FT_SUCCESS)
-		ret = load_champions(&corewar_input, &players);
-	if (ret == FT_SUCCESS)
+	if (parse_cmd(argc, argv, &corewar_input) == FT_SUCCESS)
 	{
-		initialize_logging(&info, &corewar_input);
-		game = malloc(sizeof(t_game_data));
-		prepare_game(game, &players, &info);
-		print_prelude(&game->state);
-		start_game(game, &corewar_input);
+		array_init(&players, sizeof(t_player));
+		if (load_champions(&corewar_input, &players))
+		{
+			initialize_logging(&info, &corewar_input);
+			game = malloc(sizeof(t_game_data));
+			/* TODO call this everytime you malloc */
+			MALLOC_ASSERT(game);
+			prepare_game(game, &players, &info);
+			print_prelude(&game->state);
+			start_game(game, &corewar_input);
+			vm_state_clear(&game->state);
+			free(game);
+			game = NULL;
+		}
+		array_clear(&players, NULL);
 	}
+	free_input(&corewar_input);
 	return (0);
 }

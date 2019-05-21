@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 18:16:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:07:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	get_champion_color(t_byte_info info, size_t cycle_count)
 	if (cycle_count - info.written_cycle < HIGHLIGHT_CYCLE
 			&& info.written_cycle > 1)
 		color += HIGHLIGHT;
-	if (info.pc_count == 1)
+	if (info.pc_mark == 1)
 		color += PROGRAM_COUNTER_MARK;
 	return (color);
 }

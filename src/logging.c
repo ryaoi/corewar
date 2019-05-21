@@ -6,26 +6,12 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 16:22:00 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/02 16:06:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:06:35 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "logging.h"
 #include "ft_assert.h"
-
-static void	log_save(t_log_info *info, uint64_t type,
-				const char *format, va_list *ap)
-{
-	t_log_string	log;
-
-	if (type >= e_log_level_max)
-		return ;
-	log.string = malloc(1024);
-	MALLOC_ASSERT(log.string);
-	ft_snprintf_va(log.string, 1024, format, ap);
-	log.id = info->logs_num;
-	array_push_back(&info->logs[type], &log);
-}
 
 void	log_level_va(t_log_info *info, uint64_t type,
 			const char *format, va_list *ap)
@@ -83,7 +69,7 @@ void	log_string_destroy(void *ptr)
 
 void	logs_destroy(t_log_info *info)
 {
-		size_t	index;
+	size_t	index;
 
 	index = 0;
 	while (index < e_log_level_max)

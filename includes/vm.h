@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/21 17:08:19 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 19:12:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,13 @@ typedef struct		s_index
 	t_bigend_buffer	content;
 }					t_index;
 
+typedef union		u_arg_union
+{
+	uint8_t		reg_index;
+	t_index		index;
+	t_direct	direct;
+}					t_arg_union;
+
 typedef struct		s_instr_arg
 {
 	enum e_instr_arg_type	arg_type;
@@ -176,7 +183,7 @@ typedef struct		s_process
 
 typedef struct		s_byte_info
 {
-	size_t	pc_count;
+	size_t	pc_mark;
 	size_t	written_cycle;
 	int		written_player;
 }					t_byte_info;
@@ -272,6 +279,7 @@ int					vm_champion_load_file(t_player *player,
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
+void				player_destroy(void *ptr);
 void				process_exec_cycle(t_vm_state *state, size_t process);
 void				dump_memory(t_vm_state *state);
 void				print_prelude(t_vm_state *state);
@@ -279,5 +287,7 @@ void				print_ending(t_vm_state *state);
 
 extern const t_op			g_opcode_table[17];
 extern const t_instr_impl	g_impl_table[17];
+
+/*TODO please free everything after programe finishes! ^ 0^ */
 
 #endif

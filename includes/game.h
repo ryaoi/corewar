@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   game.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:56:58 by aamadori          #+#    #+#             */
-/*   Updated: 2019/03/28 15:01:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/21 19:10:57 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _GAME_H
 # define _GAME_H
 
-#include "vm.h"
+# include "vm.h"
+# include "array.h"
 
 typedef struct	s_game_data
 {
