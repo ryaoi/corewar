@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 			{
 				token->value = label_value(line, &LST_CONT(traverse, t_line),
 											traverse);
-				return (SUCCESS);
+				return (FT_SUCCESS);
 			}
 			traverse = traverse->next;
 		}
-		return (LABEL_NOT_EXIST);
+		return (e_label_not_exist);
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 void		param_trans(unsigned char *bytecode, int size,

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:56:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:45:02 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@
 # include "op.h"
 # include "ft_printf.h"
 
-# define SUCCESS 1
-# define FAIL 0
-# define FILE_ERROR 0
+# define FT_SUCCESS 1
+# define FT_FAIL 0
 
 # define ON 1
 # define OFF 0
@@ -36,7 +35,7 @@ extern t_op	g_op_tab[17];
 
 typedef enum e_token_types
 {
-	e_name_cmd,
+	e_name_cmd = 0,
 	e_comment_cmd,
 	e_comment,
 	e_label,
@@ -45,54 +44,48 @@ typedef enum e_token_types
 	e_register = 11,
 	e_direct = 12,
 	e_indirect = 14,
-	e_dirlab = 15,
-	e_indirlab = 16,
+	e_dirlab,
+	e_indirlab,
 	e_unknown
 }			t_token_types;
 
 typedef enum	e_err_types
 {
-	e_strdup_fail = -50,
+	e_strdup_fail = -30,
 	e_strndup_fail,
 	e_strjoin_fail,
 	e_strtrim_fail,
 	e_malloc_fail,
 	e_strsub_fail,
 	e_gnl_fail,
-
+	e_cmd_line_error,
 	e_dot_s_error,
 	e_open_file_error,
 /* main error */
-	FILE_READ_FAIL,
-	FILE_PARSE_FAIL,
-	FILE_UNKNOWN_HEADER,
-	FILE_CONVERSION_FAIL,
+	e_file_parse_fail,
+	e_file_conversion_fail,
 /* file read error */
-	CONTENT_EMPTY,
-	LINE_CREATE_FAIL,
-	HANDLE_CMT_FAIL,
+	e_content_empty,
+	e_line_create_fail,
 /* file parse error */
-	TOKENIZER_FAIL,
-	OPCOMDE_CMP_FAIL,
-	HEADER_NOT_FOUND,
+	e_header_not_found,
 /* token error */
-	TOKEN_TOO_MANY,
-	TOKEN_TYPE_FAIL,
-	TOKEN_LABEL_SYNTAX_FAIL,
-	TOKEN_REGISTER_FAIL,
-	TOKEN_TYPE_UNKNOWN,
-	TOKEN_INSTR_INVALID,
+	e_token_too_many,
+	e_token_type_fail,
+	e_token_label_syntax_fail,
+	e_token_register_fail,
+	e_token_type_unknwon,
+	e_token_instr_invalid,
 /* opcode compare error */
-	PARAM_OP_NOT_EXIST,
-	PARAM_NBR_FAIL,
-	PARAM_NOT_EXIST,
-	PARAM_NOT_VALID,
+	e_param_op_not_exist,
+	e_param_nbr_fail,
+	e_param_not_exist,
+	e_param_not_valid,
 /* file_conversion error */
-	OPERATION_NOT_EXIST,
-	PARAMS_NOT_EXIST,
-	LABEL_NOT_EXIST,
-
-	CREATE_FILE_FAIL,
+	e_operation_not_exist,
+	e_conv_params_not_exist,
+	e_label_not_exist,
+	e_create_file_fail,
 }				t_err_types;
 
 typedef struct	s_token

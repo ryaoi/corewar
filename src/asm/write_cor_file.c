@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:45:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int						write_cor_file(t_file *file)
 								0644)) == -1)
 	{
 		ft_putendl("failed to create file.");
-		return (CREATE_FILE_FAIL);
+		return (e_create_file_fail);
 	}
 	write_header_comment(file->fd_cor, file);
 	write_bytecode(file->fd_cor, traverse);
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }

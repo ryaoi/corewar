@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:47:34 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:43:35 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int		line_create(t_file *file, char *line, int line_type)
 	if (!(new_line.str = ft_strtrim(line)))
 	{
 		ft_putendl("ft_strtrim failed.");
-		return (LINE_CREATE_FAIL);
+		return (e_line_create_fail);
 	}
 	if (new_line.str && new_line.str[0] == '\0')
 	{
 		free(new_line.str);
 		ft_printf("at %s, ft_strtrim returned empty string!.\n", file->name_s);
-		return (LINE_CREATE_FAIL);
+		return (e_line_create_fail);
 	}
 	new_line.nbr_params = 0;
 	new_line.id = file->nbr_line;
@@ -37,7 +37,7 @@ int		line_create(t_file *file, char *line, int line_type)
 	new_line.bytecode_len = 0;
 	if (new_line.str && *(new_line.str))
 		list_append(&(file->lines), list_new(&new_line, sizeof(new_line)));
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 int		line_add(t_file *file, char *line, size_t label_pos)
@@ -49,19 +49,19 @@ int		line_add(t_file *file, char *line, size_t label_pos)
 	{
 		line[label_pos + 1] = '\0';
 		if (line_create(file, line, e_label) < 0)
-			return (LINE_CREATE_FAIL);
+			return (e_line_create_fail);
 		line[label_pos + 1] = ' ';
 		if (len > label_pos + 1 && !line_is_ws((&line[label_pos + 2])))
 		{
 			file->nbr_line++;
 			if (line_create(file, line + label_pos + 2, e_unknown) < 0)
-				return (LINE_CREATE_FAIL);
+				return (e_line_create_fail);
 		}
 	}
 	else if (line_create(file, line, e_unknown) < 0)
-		return (LINE_CREATE_FAIL);
+		return (e_line_create_fail);
 	free(line);
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 void	handle_comment(char *line)
@@ -102,12 +102,12 @@ int		file_read(t_file *file)
 		if (line && line_add(file, line, label_check(line)) < 0)
 		{
 			free(line);
-			return (LINE_CREATE_FAIL);
+			return (e_line_create_fail);
 		}
 		file->nbr_line++;
 	}
 	free(line);
 	if (file->ret == -1 || file->nbr_line == 0)
 		return (read_error(file));
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }

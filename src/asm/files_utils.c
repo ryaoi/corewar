@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 12:12:52 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:51:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		file_name_check(const char *filename, t_file *file)
 		return (e_strjoin_fail);
 	}
 	free(tmp);
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 int		argv_check(int argc)
@@ -56,9 +56,9 @@ int		argv_check(int argc)
 	{
 		ft_putendl("no file identified.");
 		ft_putendl("Usage: ./asm [filename_A.s] [filename_B.s] ...");
-		return (FILE_ERROR);
+		return (e_cmd_line_error);
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 void	file_next(t_list **files, t_file *file)

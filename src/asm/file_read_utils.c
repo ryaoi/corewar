@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:33:08 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:49:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:43:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int		read_error(t_file *file)
 	if (file->ret == -1)
 		return (e_gnl_fail);
 	if (file->nbr_line == 0)
-		return (CONTENT_EMPTY);
-	return (SUCCESS);
+		return (e_content_empty);
+	return (FT_SUCCESS);
 }

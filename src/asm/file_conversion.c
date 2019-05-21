@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 	while (traverse)
 	{
 		if (param_getvalue(file->lines, line, &LST_CONT(traverse, t_token)) < 0)
-			return (LABEL_NOT_EXIST);
+			return (e_label_not_exist);
 		value = LST_CONT(traverse, t_token).value;
 		type = LST_CONT(traverse, t_token).type;
 		if (type == e_indirect || type == e_indirlab)
@@ -48,7 +48,7 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 			param_trans(&bc[1 + op->ocp + i], REG_INDEX_SIZE, &i, value);
 		traverse = traverse->next;
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 static void		ocp_set(t_list *tokens, unsigned char *bytecode)
@@ -103,20 +103,20 @@ static int		conversion(t_file *file, t_line *line)
 
 	if (!(op = operation_set(line)))
 	{
-		print_errmsg_conversion(OPERATION_NOT_EXIST, line->str);
-		return (FILE_CONVERSION_FAIL);
+		print_errmsg_conversion(e_operation_not_exist, line->str);
+		return (e_file_conversion_fail);
 	}
 	if (!line->tokens->next)
 	{
-		print_errmsg_conversion(PARAMS_NOT_EXIST, line->str);
-		return (FILE_CONVERSION_FAIL);
+		print_errmsg_conversion(e_conv_params_not_exist, line->str);
+		return (e_file_conversion_fail);
 	}
 	if ((ret_conv = bc_translation(file, line, line->tokens->next, op)) < 0)
 	{
-		print_errmsg_conversion(LABEL_NOT_EXIST, line->str);
-		return (FILE_CONVERSION_FAIL);
+		print_errmsg_conversion(e_label_not_exist, line->str);
+		return (e_file_conversion_fail);
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 int				file_conversion(t_file *file)
@@ -130,9 +130,9 @@ int				file_conversion(t_file *file)
 			LST_CONT(traverse, t_line).tokens)
 		{
 			if (conversion(file, &LST_CONT(traverse, t_line)) < 0)
-				return (FILE_CONVERSION_FAIL);
+				return (e_file_conversion_fail);
 		}
 		traverse = traverse->next;
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }

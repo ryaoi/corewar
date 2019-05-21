@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/02 14:51:25 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:26:22 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	assemble_file(t_list *traverse)
 
 	while (traverse)
 	{
-		ft_printf("compiling '%s'...\n", LST_CONT(traverse, t_file).name_s);
+		ft_printf("'%s' compiling ...\n", LST_CONT(traverse, t_file).name_s);
 		if ((ret = file_read((t_file*)traverse->content)) >= 0)
 		{
 			if (file_parse(&LST_CONT(traverse, t_file)) >= 0 &&
@@ -52,7 +52,7 @@ int		main(int argc, char **argv)
 	int		index;
 
 	inputs = NULL;
-	if (argv_check(argc) == FILE_ERROR)
+	if (argv_check(argc) == e_cmd_line_error)
 		return (0);
 	index = 1;
 	while (index < argc)

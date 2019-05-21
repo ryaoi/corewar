@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:49:06 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		check_token_type(t_token *token, char *str)
 	size_t	len;
 
 	if (!(len = ft_strlen(str)))
-		return (TOKEN_TYPE_FAIL);
+		return (e_token_type_fail);
 	if (token->id == 0)
 	{
 		if (str[len - 1] == LABEL_CHAR)
@@ -36,8 +36,8 @@ int		check_token_type(t_token *token, char *str)
 	else if (is_str_digit(str))
 		token->type = e_indirect;
 	else
-		return (TOKEN_TYPE_FAIL);
-	return (SUCCESS);
+		return (e_token_type_fail);
+	return (FT_SUCCESS);
 }
 
 int		check_label_syntax(char *str)
@@ -50,17 +50,17 @@ int		check_label_syntax(char *str)
 		if (!ft_strchr(LABEL_CHARS, str[index]) &&
 			!(index == 0 && str[index] == DIRECT_CHAR) &&
 				!((index == 0 | index == 1) && str[index] == LABEL_CHAR))
-			return (TOKEN_LABEL_SYNTAX_FAIL);
+			return (e_token_label_syntax_fail);
 		index++;
 	}
-	return (SUCCESS);
+	return (FT_SUCCESS);
 }
 
 int		check_register(char *str)
 {
 	if (ft_atoi(str + 1) > REG_NUMBER || ft_atoi(str + 1) < 1)
-		return (TOKEN_REGISTER_FAIL);
-	return (SUCCESS);
+		return (e_token_register_fail);
+	return (FT_SUCCESS);
 }
 
 int		check_instr(t_token *token, char *str)
@@ -75,9 +75,9 @@ int		check_instr(t_token *token, char *str)
 			if (!(token->op = (t_op*)malloc(sizeof(t_op))))
 				return (e_malloc_fail);
 			ft_memcpy(token->op, &g_op_tab[index], sizeof(t_op));
-			return (SUCCESS);
+			return (FT_SUCCESS);
 		}
 		index++;
 	}
-	return (TOKEN_INSTR_INVALID);
+	return (e_token_instr_invalid);
 }
