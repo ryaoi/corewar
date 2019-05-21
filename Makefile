@@ -69,7 +69,7 @@ TESTS_DBG_FOLDERS = $(TESTS:.test=.test.dSYM)
 CC = gcc
 ifndef CFLAGS_WARNINGS
 export CFLAGS_WARNINGS = 1
-export CFLAGS := $(CFLAGS) #-Wall -Wextra -Werror #-std=c89
+export CFLAGS := $(CFLAGS) -Wall -Wextra -Werror -std=c89
 export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
