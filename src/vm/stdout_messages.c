@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 18:39:17 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 19:05:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 15:32:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	print_prelude(t_vm_state *state)
 {
-	int		i;
+	size_t	i;
 	t_array	players;
 
 	players = state->players;
