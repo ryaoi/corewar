@@ -6,20 +6,20 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 16:57:03 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:05:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VISUALIZER_H
 # define VISUALIZER_H
 
-#include <unistd.h>
-#include <pthread.h>
-#include "ncurses.h"
-#include "libft.h"
-#include "vm.h"
-#include "game.h"
-#include "cmd_line.h"
+# include <unistd.h>
+# include <pthread.h>
+# include "ncurses.h"
+# include "libft.h"
+# include "vm.h"
+# include "game.h"
+# include "cmd_line.h"
 
 # define DELAY 1000000
 # define MEM_DUMP_WIDTH 197

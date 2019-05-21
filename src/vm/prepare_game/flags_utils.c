@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 14:45:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 16:19:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:17:15 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_line.h"
 
-const int		g_flags_match[8] = {
+const int	g_flags_match[8] = {
 	PARSE_NBR_CYCLES,
 	PARSE_FLAG_MEMDUMP | PARSE_FLAG_VISUALIZER | PARSE_FLAG_CHAMP_NBR
 	| PARSE_CHAMP_NAME | PARSE_FLAG_VERBOSITY,

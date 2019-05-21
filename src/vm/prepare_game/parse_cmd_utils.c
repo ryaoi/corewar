@@ -6,13 +6,13 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:06:15 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 15:27:57 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:17:14 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_line.h"
 
-const char	*g_log_level_tab[10] = {
+const char		*g_log_level_tab[10] = {
 	"log_lives",
 	"log_cycles",
 	"log_instr",

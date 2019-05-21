@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/21 17:01:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/21 17:08:19 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 
-#define T_REG					1
-#define T_DIR					2
-#define T_IND					4
-#define T_LAB					8
+# define T_REG					1
+# define T_DIR					2
+# define T_IND					4
+# define T_LAB					8
 
 # define PROG_NAME_LENGTH		(128)
 # define COMMENT_LENGTH			(2048)
@@ -105,7 +105,7 @@ enum	e_instr
 typedef struct		s_header
 {
 	uint32_t		magic;
-  	char			prog_name[PROG_NAME_LENGTH + 1];
+	char			prog_name[PROG_NAME_LENGTH + 1];
 	uint32_t		prog_size;
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
@@ -148,10 +148,10 @@ typedef struct		s_instr_arg
 		uint8_t		reg_index;
 		t_index		index;
 		t_direct	direct;
-	}							arg;
+	}						arg;
 }					t_instr_arg;
 
-typedef struct 		s_instr
+typedef struct		s_instr
 {
 	enum e_instr	opcode;
 	t_instr_arg		instr_args[3];
@@ -162,15 +162,15 @@ typedef struct 		s_instr
 
 typedef struct		s_process
 {
-	t_register	registers[REG_NUMBER];
-	t_player	*player;
-	uint32_t	program_counter;
-	size_t		live_executed;
-	size_t		id;
-	size_t		birth_cycle;
-	int32_t		busy;
-	uint8_t		carry;
-	uint8_t		has_jumped;
+	t_register		registers[REG_NUMBER];
+	t_player		*player;
+	uint32_t		program_counter;
+	size_t			live_executed;
+	size_t			id;
+	size_t			birth_cycle;
+	int32_t			busy;
+	uint8_t			carry;
+	uint8_t			has_jumped;
 	enum e_instr	pending_operation;
 }					t_process;
 
@@ -246,7 +246,8 @@ void				impl_aff(t_vm_state *state,
 
 void				arg_types_ocp(t_instr *instr, t_ocp ocp);
 void				arg_types_non_ocp(t_instr *instr);
-t_instr				fetch_arguments(t_vm_state *state, enum e_instr opcode, size_t address);
+t_instr				fetch_arguments(t_vm_state *state, enum e_instr opcode,
+						size_t address);
 enum e_instr		fetch_opcode(t_vm_state *state, size_t address);
 void				parse_arguments(t_vm_state *state, t_instr *instr,
 						size_t address);
@@ -254,16 +255,20 @@ t_ocp				parse_ocp(uint8_t byte);
 void				instr_init(t_instr *instr);
 int					buffer_is_zero(t_bigend_buffer buffer);
 t_bigend_buffer		buffer_invert_bits(t_bigend_buffer input);
-t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry);
+t_bigend_buffer		add_bigend(t_bigend_buffer f, t_bigend_buffer s,
+						uint8_t carry);
 t_bigend_buffer		mem_load(t_vm_state *state, int64_t address, size_t size);
 void				mem_store(t_vm_state *state, int64_t address, size_t size,
 						const t_bigend_buffer store);
 t_bigend_buffer		byte_order_swap(t_bigend_buffer input);
-void				vm_clone_process(t_vm_state *state, size_t address, t_process *original);
-void				vm_init_process(t_vm_state *state, int player_id, size_t address);
+void				vm_clone_process(t_vm_state *state, size_t address,
+						t_process *original);
+void				vm_init_process(t_vm_state *state, int player_id,
+						size_t address);
 void				vm_state_init(t_vm_state *state);
 void				vm_state_clear(t_vm_state *state);
-int					vm_champion_load_file(t_player *player, const char *filename, int id);
+int					vm_champion_load_file(t_player *player,
+						const char *filename, int id);
 int					vm_champion_load(t_player *player, int fd, int id);
 void				vm_memory_prepare(t_vm_state *state);
 int					vm_exec_cycle(t_vm_state *state);
