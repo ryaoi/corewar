@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:42:51 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/22 18:35:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int			file_parse(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (!(is_comment(&LST_CONT(traverse, t_line))))
+		if (!(is_comment(&LST_CONT(traverse, t_line)))) /*TODO maybe useless */
 		{
 			if (file->prework_flag != PREWORK_FLAG_ON)
 				set_header(file, &LST_CONT(traverse, t_line));
