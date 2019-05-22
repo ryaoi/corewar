@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/22 17:02:21 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static unsigned char	*get_progsize(t_file *file)
 		prog_size += LST_CONT(traverse, t_line).bytecode_len;
 		traverse = traverse->next;
 	}
-	ret = (unsigned char*)malloc(sizeof(unsigned char) * 4);
+	if (!(ret = (unsigned char*)malloc(sizeof(unsigned char) * 4)))
+		return (NULL);
 	ret[0] = prog_size >> 24;
 	ret[1] = (prog_size << 8) >> 24;
 	ret[2] = (prog_size << 16) >> 24;
