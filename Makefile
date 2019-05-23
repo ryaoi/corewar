@@ -1,9 +1,9 @@
 CORELIB_SRCS = logging.c \
 	logging_save.c \
+	optable.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
-	optable.c \
 	vm/load_store.c \
 	vm/instr_init.c \
 	vm/control_unit.c \
@@ -31,7 +31,22 @@ CORELIB_SRCS = logging.c \
 	vm/instr_impl/impl_lld.c \
 	vm/instr_impl/impl_lldi.c \
 	vm/instr_impl/impl_lfork.c
-ASM_SRCS =
+ASM_SRCS = optable.c \
+	asm/main.c \
+	asm/files_utils.c \
+	asm/file_parse.c \
+	asm/file_parse_utils.c \
+	asm/file_parse_check.c \
+	asm/file_parse_tokenizer.c \
+	asm/file_parse_header.c \
+	asm/bytecode_length.c \
+	asm/file_read.c \
+	asm/file_read_utils.c \
+	asm/file_conversion.c \
+	asm/file_conversion_traslate_bc.c \
+	asm/print_errors.c \
+	asm/write_cor_file.c \
+	asm/free_asm.c
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \
 	vm/visualizer/info.c \
@@ -53,7 +68,8 @@ INCLUDES = libft/includes/libft.h \
 		includes/instr.h \
 		includes/vm.h \
 		includes/visualizer.h \
-		includes/cmd_line.h
+		includes/cmd_line.h \
+		includes/asm.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
@@ -66,7 +82,7 @@ export LDFLAGS := $(LDFLAGS)
 endif
 INCLUDE_FOLDERS = -Iincludes/ -Ilibft/includes -Ift_printf/includes
 LIBRARY_PATHS = -L. -Llibft -Lft_printf
-ASM_NAME =
+ASM_NAME = asm
 COREWAR_NAME = corewar
 CORELIB_NAME = libcore.so
 
@@ -84,7 +100,7 @@ $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
 	gcc $(LDFLAGS) -shared -o $@ $^
 
 $(ASM_NAME): $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft -lcore
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore -lft
@@ -92,6 +108,7 @@ $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
 obj:
 	mkdir -p obj
 	mkdir -p obj/vm
+	mkdir -p obj/asm
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
 	mkdir -p obj/vm/prepare_game
