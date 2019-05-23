@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/20 17:57:09 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/23 14:00:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ int			load_champions(t_corewar_input *cw_input, t_array *players)
 	return (FT_SUCCESS);
 }
 
-/* TODO function shouldn't be in visualizer folder */
-/* TODO don't play when there are 0 players (?) */
 int			main(int argc, char **argv)
 {
 	t_corewar_input	corewar_input;
@@ -93,7 +91,6 @@ int			main(int argc, char **argv)
 	t_log_info		info;
 	int				ret;
 
-	/* TODO this function leaks */
 	ret = parse_cmd(argc, argv, &corewar_input);
 	if (ret == FT_SUCCESS)
 	{
