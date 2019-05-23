@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   control_unit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/13 19:02:56 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/23 17:15:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static size_t	parse_argument(t_vm_state *state, t_instr *instr,
 	else if (ARG_TYPE(instr, argument) == e_direct)
 	{
 		load_arg = mem_load(state, address + instr->size,
-			g_opcode_table[instr->opcode].relative ? IND_SIZE : DIR_SIZE);
+			g_op_tab[instr->opcode].relative ? IND_SIZE : DIR_SIZE);
 		ARG_DIR(instr, argument).content = load_arg;
-		return (g_opcode_table[instr->opcode].relative ? 2 : 4);
+		return (g_op_tab[instr->opcode].relative ? 2 : 4);
 	}
 	return (0);
 }
@@ -49,7 +49,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	t_ocp			ocp;
 	t_bigend_buffer	load_buffer;
 
-	if (g_opcode_table[instr->opcode].has_ocp)
+	if (g_op_tab[instr->opcode].has_ocp)
 	{
 		load_buffer = mem_load(state, address + instr->size, 1);
 		ocp = parse_ocp(INDEX_BUFF(load_buffer, L_BUFF_SIZE - 1));
@@ -59,7 +59,7 @@ static void		parse_instruction(t_vm_state *state, t_instr *instr,
 	else
 		arg_types_non_ocp(instr);
 	arg_index = 0;
-	while (arg_index < g_opcode_table[instr->opcode].arg_num)
+	while (arg_index < g_op_tab[instr->opcode].arg_num)
 	{
 		instr->size += parse_argument(state, instr, arg_index, address);
 		arg_index++;
@@ -75,7 +75,7 @@ t_instr			fetch_arguments(t_vm_state *state, enum e_instr opcode,
 	if (opcode < e_invalid)
 	{
 		instr.opcode = opcode;
-		instr.cost = g_opcode_table[instr.opcode].cycles;
+		instr.cost = g_op_tab[instr.opcode].cycles;
 		instr.size = 1;
 		parse_instruction(state, &instr, address);
 	}

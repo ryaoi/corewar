@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/23 16:57:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/23 17:15:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,7 @@ void				dump_memory(t_vm_state *state);
 void				print_prelude(t_vm_state *state);
 void				print_ending(t_vm_state *state);
 
-extern const t_op			g_opcode_table[17];
+extern const t_op			g_op_tab[17];
 extern const t_instr_impl	g_impl_table[17];
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 18:39:17 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/23 16:56:01 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/23 17:16:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_prelude(t_vm_state *state)
 	players = state->players;
 	i = 0;
 	ft_printf("Introducing the contestants...\n");
-	while (i < (int)state->players.length)
+	while (i < state->players.length)
 	{
 		ft_printf("PLAYER %d, weighing %u bytes, ",
 			i + 1, ((t_player*)players.ptr)[i].header.prog_size);

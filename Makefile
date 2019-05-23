@@ -3,7 +3,7 @@ CORELIB_SRCS = logging.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
-	vm/optable.c \
+	optable.c \
 	vm/load_store.c \
 	vm/instr_init.c \
 	vm/control_unit.c \
@@ -83,8 +83,8 @@ include libft/Makefile.mk
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
 	gcc $(LDFLAGS) -shared -o $@ $^
 
-$(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS)
-	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS)  -lcore
+$(ASM_NAME): $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore -lft
@@ -115,6 +115,8 @@ fclean: clean
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
 	rm -f $(ASM_NAME)
+	rm -f $(VISUALIZER_NAME)
+	rm -rf $(VISUALIZER_NAME).dSYM/
 
 re: fclean
 	$(MAKE) all

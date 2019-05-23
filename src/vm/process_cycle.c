@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_cycle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:48:39 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/22 16:19:52 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/23 17:15:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	fetch_new(t_vm_state *state, size_t p_index)
 	process = &PROCESS(state, p_index);
 	process->pending_operation = fetch_opcode(state, process->program_counter);
 	if (process->pending_operation < e_invalid)
-		process->busy = g_opcode_table[process->pending_operation].cycles;
+		process->busy = g_op_tab[process->pending_operation].cycles;
 	else
 		process->busy = 1;
 }
@@ -37,7 +37,7 @@ static void	do_execute(t_vm_state *state, size_t p_index)
 	{
 		log_level(&state->log_info, e_log_instr,
 			"Process %d executing %s",
-			process->id, g_opcode_table[instr.opcode].name);
+			process->id, g_op_tab[instr.opcode].name);
 		(g_impl_table[process->pending_operation])(state, p_index, &instr);
 		process = &PROCESS(state, p_index);
 	}
