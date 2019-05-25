@@ -1,6 +1,7 @@
 CORELIB_SRCS = logging.c \
 	logging_save.c \
 	optable.c \
+	op_impl_table.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
@@ -99,8 +100,8 @@ include libft/Makefile.mk
 $(CORELIB_NAME): $(CORELIB_OBJS) $(FTPRINTF_NAME) $(LIBFT_NAME)
 	gcc $(LDFLAGS) -shared -o $@ $^
 
-$(ASM_NAME): $(CORELIB_NAME) $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
-	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft -lcore
+$(ASM_NAME): $(ASM_OBJS) $(LIBFT_NAME) $(FTPRINTF_NAME)
+	$(CC) $(CFLAGS) $(INCLUDE_FOLDERS) $(ASM_OBJS) -o $@ $(LIBRARY_PATHS) -lftprintf -lft
 
 $(COREWAR_NAME): $(CORELIB_NAME) $(COREWAR_OBJS)
 	gcc $(CFLAGS) $(INCLUDE_FOLDERS) $(COREWAR_OBJS) -o $@ $(LIBRARY_PATHS) -lncurses -lcore -lft
