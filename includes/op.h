@@ -6,9 +6,12 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 18:14:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/25 11:23:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 11:55:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef _OP_H
+# define _OP_H
 
 #define IND_SIZE 2
 #define REG_SIZE 4
@@ -66,10 +69,12 @@ typedef struct	s_op
 	int		relative;
 }				t_op;
 
-typedef struct	header_s
+typedef struct	s_header
 {
 	unsigned int magic;
 	char prog_name [PROG_NAME_LENGTH + 1];
 	unsigned int prog_size;
 	char how [COMMENT_LENGTH + 1];
-}				header_t;
+}				t_header;
+
+#endif

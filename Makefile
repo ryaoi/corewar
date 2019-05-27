@@ -1,7 +1,6 @@
 CORELIB_SRCS = logging.c \
 	logging_save.c \
 	optable.c \
-	op_impl_table.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
@@ -31,8 +30,9 @@ CORELIB_SRCS = logging.c \
 	vm/instr_impl/impl_fork.c \
 	vm/instr_impl/impl_lld.c \
 	vm/instr_impl/impl_lldi.c \
-	vm/instr_impl/impl_lfork.c
-ASM_SRCS = optable.c \
+	vm/instr_impl/impl_lfork.c \
+	vm/instr_impl/op_impl_table.c
+ASM_SRCS = asm/optable_asm.c \
 	asm/main.c \
 	asm/files_utils.c \
 	asm/file_parse.c \
@@ -70,7 +70,8 @@ INCLUDES = libft/includes/libft.h \
 		includes/vm.h \
 		includes/visualizer.h \
 		includes/cmd_line.h \
-		includes/asm.h
+		includes/asm.h \
+		includes/op.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))

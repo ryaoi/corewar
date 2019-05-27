@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/25 11:30:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 12:15:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef struct	s_file
 	char		*name_s;
 	char		*name_cor;
 	int			prework_flag;
-	header_t	header;
+	t_header	header;
 	int			fd_cor;
 	int			fd_s;
 	int			ret;
