@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:06:15 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:25:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:21:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ size_t			ft_a_to_sizet(const char *str)
 	}
 	return (result);
 }
+
 void			free_input(t_corewar_input *cw_input)
 {
 	int	index;
