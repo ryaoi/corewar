@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 15:26:12 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:06:27 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	set_how(t_file *file, t_line *line)
 	{
 		start = ft_strlen(COMMENT_CMD_STRING);
 		set_header_index(tmp, &start, &end);
-		if (end > start + 1 && line->str[end] == '"')
+		if ((end > start + 1) && line->str[end] == '"')
 		{
 			ft_memcpy(file->header.comment, line->str + start, end - start);
 			file->prework_flag |= 1;

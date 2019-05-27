@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:33:08 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:43:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:08:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ size_t	label_check(char *line)
 	index = 0;
 	while (line[index] && ft_isspace(line[index]))
 		index++;
-	while (line[index] && !ft_isspace(line[index]) &&
-			line[index] != SEPARATOR_CHAR)
+	while (line[index] && !ft_isspace(line[index])
+	&& line[index] != SEPARATOR_CHAR)
 		index++;
 	index -= 1;
 	if (line[index] == LABEL_CHAR)

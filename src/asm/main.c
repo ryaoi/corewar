@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:15:51 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:54:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:09:07 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	assemble_file(t_list *traverse)
 		ft_printf("'%s' compiling ...\n", ((t_file*)traverse->content)->name_s);
 		if ((ret = file_read((t_file*)traverse->content)) >= 0)
 		{
-			if (file_parse(((t_file*)traverse->content)) >= 0 &&
-				file_conversion(((t_file*)traverse->content)) >= 0)
+			if (file_parse(((t_file*)traverse->content)) >= 0
+				&& file_conversion(((t_file*)traverse->content)) >= 0)
 				if (write_cor_file(((t_file*)traverse->content)) >= 0)
 					ft_printf("'%s' assembled!\n\n",
 								((t_file*)traverse->content)->name_cor);

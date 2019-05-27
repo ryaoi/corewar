@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 15:28:48 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:03:23 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ static void		ocp_set(t_list *tokens, unsigned char *bytecode)
 	{
 		if (((t_token*)traverse->content)->type == e_reg)
 			ocp |= 1 << (6 - index);
-		else if (((t_token*)traverse->content)->type == e_dir ||
-				((t_token*)traverse->content)->type == e_dirlab)
+		else if (((t_token*)traverse->content)->type == e_dir
+		|| ((t_token*)traverse->content)->type == e_dirlab)
 			ocp |= 2 << (6 - index);
-		else if (((t_token*)traverse->content)->type == e_indir ||
-					((t_token*)traverse->content)->type == e_indirlab)
+		else if (((t_token*)traverse->content)->type == e_indir
+		|| ((t_token*)traverse->content)->type == e_indirlab)
 			ocp |= 3 << (6 - index);
 		traverse = traverse->next;
 		index += 2;
@@ -117,8 +117,8 @@ int				file_conversion(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (((t_line*)traverse->content)->type == e_asmcode &&
-			((t_line*)traverse->content)->tokens)
+		if (((t_line*)traverse->content)->type == e_asmcode
+		&& ((t_line*)traverse->content)->tokens)
 		{
 			if (conversion(file, ((t_line*)traverse->content)) < 0)
 				return (e_file_conversion_fail);
