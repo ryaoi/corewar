@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 11:32:16 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 19:23:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 21:20:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		(*const g_syntax_check[8])(char*, t_corewar_input*) = {
 	is_verbosity
 };
 
-void		check_flags_conflicts(t_corewar_input *cw_input)
+void	check_flags_conflicts(t_corewar_input *cw_input)
 {
 	if (cw_input->exec_flags & FLAG_VISUALIZER)
 	{
@@ -96,9 +96,9 @@ void	init_corewar_input(t_corewar_input *cw_input)
 
 int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input)
 {
-	int				flags;
-	int				index;
-	int				ret;
+	int	flags;
+	int	index;
+	int	ret;
 
 	flags = PARSE_FLAG_MEMDUMP | PARSE_FLAG_VISUALIZER | PARSE_FLAG_VERBOSITY
 							| PARSE_FLAG_CHAMP_NBR | PARSE_CHAMP_NAME;
