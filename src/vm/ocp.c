@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ocp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:15:38 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/23 17:15:23 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 17:28:06 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,23 @@ static void	parse_argument(t_instr *instr, t_ocp ocp, int arg_index)
 	{
 		if (!(g_op_tab[instr->opcode].arg_types[arg_index] & T_REG))
 			instr->invalid = 1;
-		ARG_TYPE(instr, arg_index) = e_register;
+		*(arg_type(instr, arg_index)) = e_register;
 	}
 	else if (ocp.fields[arg_index] == e_index)
 	{
 		if (!(g_op_tab[instr->opcode].arg_types[arg_index] & T_IND))
 			instr->invalid = 1;
-		ARG_TYPE(instr, arg_index) = e_index;
+		*(arg_type(instr, arg_index)) = e_index;
 	}
 	else if (ocp.fields[arg_index] == e_direct)
 	{
 		if (!(g_op_tab[instr->opcode].arg_types[arg_index] & T_DIR))
 			instr->invalid = 1;
-		ARG_TYPE(instr, arg_index) = e_direct;
+		*(arg_type(instr, arg_index)) = e_direct;
 	}
 	else
 	{
-		ARG_TYPE(instr, arg_index) = e_absent;
+		*(arg_type(instr, arg_index)) = e_absent;
 		instr->invalid = 1;
 	}
 }
@@ -83,11 +83,11 @@ void		arg_types_non_ocp(t_instr *instr)
 	while (arg_index < g_op_tab[instr->opcode].arg_num)
 	{
 		if (g_op_tab[instr->opcode].arg_types[arg_index] & T_REG)
-			ARG_TYPE(instr, arg_index) = e_register;
+			*(arg_type(instr, arg_index)) = e_register;
 		else if (g_op_tab[instr->opcode].arg_types[arg_index] & T_IND)
-			ARG_TYPE(instr, arg_index) = e_index;
+			*(arg_type(instr, arg_index)) = e_index;
 		else
-			ARG_TYPE(instr, arg_index) = e_direct;
+			*(arg_type(instr, arg_index)) = e_direct;
 		arg_index++;
 	}
 }

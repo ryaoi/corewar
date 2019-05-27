@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:09:20 by alex              #+#    #+#             */
-/*   Updated: 2019/04/06 19:40:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 17:58:15 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	impl_fork(t_vm_state *state, size_t p_index, t_instr *instr)
 	int32_t	offset;
 
 	offset = byte_order_swap(
-		ARG_DIR(instr, 0).content).buffer;
-	offset = PROCESS(state, p_index).program_counter
+		(arg_dir(instr, 0)->content)).buffer;
+	offset = process_get(state, p_index)->program_counter
 		+ (offset % IDX_MOD);
-	vm_clone_process(state, offset, &PROCESS(state, p_index));
+	vm_clone_process(state, offset, process_get(state, p_index));
 	log_level(&state->log_info, e_log_fork,
 		"Process %zu creates %zu at offset %zu",
-		PROCESS(state, p_index).id,
+		process_get(state, p_index)->id,
 		ARRAY_PTR(state->processes, t_process)[state->processes.length - 1].id,
 		offset % MEM_SIZE);
 }

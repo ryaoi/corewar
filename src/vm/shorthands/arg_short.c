@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer_is_zero.c                                   :+:      :+:    :+:   */
+/*   arg_short.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/16 15:18:37 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:22:26 by aamadori         ###   ########.fr       */
+/*   Created: 2019/05/27 17:19:56 by aamadori          #+#    #+#             */
+/*   Updated: 2019/05/27 18:21:33 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int		buffer_is_zero(t_bigend_buffer buffer)
+uint8_t		*arg_reg(t_instr *instr, size_t id)
 {
-	size_t	index;
+	return (&(instr->instr_args[id].arg.reg_index));
+}
 
-	index = 0;
-	while (index < sizeof(buffer.buffer))
-	{
-		if (*(buff_index(&buffer, index)))
-			return (0);
-		index++;
-	}
-	return (1);
+t_index		*arg_ind(t_instr *instr, size_t id)
+{
+	return (&(instr->instr_args[id].arg.index));
+}
+
+t_direct	*arg_dir(t_instr *instr, size_t id)
+{
+	return (&(instr->instr_args[id].arg.direct));
+}
+
+t_arg_type	*arg_type(t_instr *instr, size_t id)
+{
+	return (&(instr->instr_args[id].arg_type));
 }

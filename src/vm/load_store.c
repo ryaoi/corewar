@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/20 14:58:54 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:23:17 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size)
 		index++;
 	}
 	index = 0;
-	while ((INDEX_BUFF(ret, msb) & 0x80) && index < msb)
+	while ((*(buff_index(&ret, msb)) & 0x80) && index < msb)
 	{
-		INDEX_BUFF(ret, index) = 0xff;
+		*(buff_index(&ret, index)) = 0xff;
 		index++;
 	}
 	return (ret);

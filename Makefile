@@ -6,13 +6,17 @@
 #    By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 16:33:31 by aamadori         ###   ########.fr        #
+#    Updated: 2019/05/27 18:18:44 by aamadori         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CORELIB_SRCS = logging.c \
 	logging_save.c \
 	optable.c \
+	vm/shorthands/arg_short.c \
+	vm/shorthands/array_short.c \
+	vm/shorthands/buffer_short.c \
+	vm/shorthands/register_short.c \
 	vm/vm.c \
 	vm/vm_memory.c \
 	vm/ocp.c \
@@ -125,6 +129,7 @@ obj:
 	mkdir -p obj/vm/instr_impl
 	mkdir -p obj/vm/visualizer
 	mkdir -p obj/vm/prepare_game
+	mkdir -p obj/vm/shorthands
 
 obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<

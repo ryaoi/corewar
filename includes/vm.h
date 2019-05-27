@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/27 12:15:28 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:23:08 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,15 @@
 # define ERR_CHAMP_READ -4
 # define ERR_HEADER_MAGIC -5
 
-# define L_BUFF_SIZE sizeof(t_bigend_buffer)
-# define REGISTER(proc, id) ((proc)->registers[id])
-# define ARG_REG(instr, id) ((instr)->instr_args[id].arg.reg_index)
-# define ARG_IND(instr, id) ((instr)->instr_args[id].arg.index)
-# define ARG_DIR(instr, id) ((instr)->instr_args[id].arg.direct)
-# define ARG_TYPE(instr, id) ((instr)->instr_args[id].arg_type)
-# define INDEX_BUFF(buff_name, id) (((uint8_t*)&(buff_name).buffer)[id])
-# define PROCESS(state, id) (ARRAY_PTR((state)->processes, t_process)[id])
-
-enum	e_instr_arg_type
+typedef enum	e_arg_type
 {
 	e_register = 0,
 	e_index,
 	e_direct,
 	e_absent
-};
+}				t_arg_type;
 
+/* TODO typedef and substitute ? */
 enum	e_instr
 {
 	e_live = 0,
@@ -148,13 +140,8 @@ typedef union		u_arg_union
 
 typedef struct		s_instr_arg
 {
-	enum e_instr_arg_type	arg_type;
-	union
-	{
-		uint8_t		reg_index;
-		t_index		index;
-		t_direct	direct;
-	}						arg;
+	t_arg_type		arg_type;
+	t_arg_union		arg;
 }					t_instr_arg;
 
 typedef struct		s_instr
@@ -213,7 +200,7 @@ typedef struct		s_op
 
 typedef struct		s_ocp
 {
-	enum e_instr_arg_type	fields[3];
+	t_arg_type	fields[3];
 }					t_ocp;
 
 typedef void		(*t_instr_impl)(t_vm_state *, size_t, t_instr *);
@@ -250,6 +237,17 @@ void				impl_lfork(t_vm_state *state,
 void				impl_aff(t_vm_state *state,
 						size_t process, t_instr *instr);
 
+/* TODO evaluate and substitute */
+# define L_BUFF_SIZE sizeof(t_bigend_buffer)
+
+t_register			*register_get(t_process *process, size_t id);
+uint8_t				*buff_index(t_bigend_buffer *buffer, size_t id);
+t_process			*process_get(t_vm_state *state, size_t id);
+t_player			*player_get(t_vm_state *state, size_t id);
+uint8_t				*arg_reg(t_instr *instr, size_t id);
+t_index				*arg_ind(t_instr *instr, size_t id);
+t_direct			*arg_dir(t_instr *instr, size_t id);
+t_arg_type			*arg_type(t_instr *instr, size_t id);
 void				arg_types_ocp(t_instr *instr, t_ocp ocp);
 void				arg_types_non_ocp(t_instr *instr);
 t_instr				fetch_arguments(t_vm_state *state, enum e_instr opcode,

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:14:34 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 20:01:16 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:22:57 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ t_bigend_buffer	add_bigend(t_bigend_buffer f, t_bigend_buffer s, uint8_t carry)
 	new_carry = 0;
 	while (index-- > 0)
 	{
-		if (INDEX_BUFF(f, index) > (255 - carry)
-			|| (INDEX_BUFF(f, index) + carry) > (255 - INDEX_BUFF(s, index)))
+		if (*(buff_index(&f, index)) > (255 - carry)
+			|| (*(buff_index(&f, index)) + carry)
+			> (255 - *(buff_index(&s, index))))
 			new_carry = 1;
 		else
 			new_carry = 0;
-		INDEX_BUFF(ret, index) = INDEX_BUFF(f, index)
-			+ INDEX_BUFF(s, index) + carry;
+		*(buff_index(&ret, index)) = *(buff_index(&f, index))
+			+ *(buff_index(&s, index)) + carry;
 		carry = new_carry;
 	}
 	return (ret);
@@ -39,10 +40,10 @@ void			impl_add(t_vm_state *state, size_t p_index, t_instr *instr)
 {
 	t_process	*process;
 
-	process = &PROCESS(state, p_index);
-	REGISTER(process, ARG_REG(instr, 2) - 1).content = add_bigend(
-		REGISTER(process, ARG_REG(instr, 0) - 1).content,
-		REGISTER(process, ARG_REG(instr, 1) - 1).content, 0);
+	process = process_get(state, p_index);
+	(register_get(process, *(arg_reg(instr, 2)) - 1))->content = add_bigend(
+		(register_get(process, *(arg_reg(instr, 0)) - 1))->content,
+		(register_get(process, *(arg_reg(instr, 1)) - 1))->content, 0);
 	process->carry = buffer_is_zero(
-		REGISTER(process, ARG_REG(instr, 2) - 1).content);
+		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
 }

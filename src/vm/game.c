@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/25 17:15:59 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 17:42:48 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ static t_array	measure_lives(t_game_data *game)
 	array_init(&new_array, sizeof(t_process));
 	while (index < game->state.processes.length)
 	{
-		if (PROCESS(&game->state, index).live_executed)
+		if (process_get(&game->state, index)->live_executed)
 		{
-			game->live_since_dec += PROCESS(&game->state, index).live_executed;
-			PROCESS(&game->state, index).live_executed = 0;
-			array_push_back(&new_array, &PROCESS(&game->state, index));
+			game->live_since_dec += process_get(&game->state, index)->live_executed;
+			process_get(&game->state, index)->live_executed = 0;
+			array_push_back(&new_array, process_get(&game->state, index));
 		}
 		else
 			log_level(&game->state.log_info, e_log_deaths,
-				"Process %d smothered!", PROCESS(&game->state, index).id);
+				"Process %d smothered!", process_get(&game->state, index)->id);
 		index++;
 	}
 	return (new_array);
