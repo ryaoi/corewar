@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
+#    By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 16:05:52 by jaelee           ###   ########.fr        #
+#    Updated: 2019/05/27 16:33:31 by aamadori         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,8 +82,7 @@ INCLUDES = libft/includes/libft.h \
 		includes/vm.h \
 		includes/visualizer.h \
 		includes/cmd_line.h \
-		includes/asm.h \
-		includes/op.h
+		includes/asm.h
 CORELIB_OBJS = $(patsubst %.c,obj/%.o,$(CORELIB_SRCS))
 ASM_OBJS = $(patsubst %.c,obj/%.o,$(ASM_SRCS))
 COREWAR_OBJS = $(patsubst %.c,obj/%.o,$(COREWAR_SRCS))
@@ -131,9 +130,9 @@ obj/%.o: src/%.c $(INCLUDES) | obj
 	$(CC) -fpic $(CFLAGS) $(INCLUDE_FOLDERS) -o $@ -c $<
 
 clean:
-	rm -f $(COREWAR_OBJS)
+	rm -f $(CORELIB_OBJS)
 	rm -f $(ASM_OBJS)
-	rm -f $(core_OBJS)
+	rm -f $(COREWAR_OBJS)
 	rm -rf obj
 	rm -f $(LIBFT_OBJS)
 	rm -rf libft/obj
