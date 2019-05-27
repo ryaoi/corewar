@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 19:27:10 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 19:29:46 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:41:44 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,11 @@ void		vm_memory_prepare(t_vm_state *state)
 	{
 		address = (MEM_SIZE / state->players.length) * champion;
 		ft_memcpy(&state->memory[address],
-			ARRAY_PTR(state->players, t_player)[champion].champion_code,
-			ARRAY_PTR(state->players, t_player)[champion].header.prog_size);
+			(player_get(state, champion))->champion_code,
+			(player_get(state, champion))->header.prog_size);
 		color_memory(state,
-			ARRAY_PTR(state->players, t_player)[champion].id,
-			address,
-			ARRAY_PTR(state->players, t_player)[champion].header.prog_size);
+			(player_get(state, champion))->id, address,
+			(player_get(state, champion))->header.prog_size);
 		champion++;
 	}
 }

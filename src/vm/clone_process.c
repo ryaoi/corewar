@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clone_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/05/23 17:15:23 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:32:07 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 		(t_bigend_buffer){(int32_t)player_id});
 	search = 0;
 	while (search < state->players.length
-		&& !(ARRAY_PTR(state->players, t_player)[search].id == player_id))
+		&& !((player_get(state, search))->id == player_id))
 		search++;
 	ASSERT(search < state->players.length,
 		"Tried to init process with player id that does not exist.");
-	new_process.player = &ARRAY_PTR(state->players, t_player)[search];
+	new_process.player = player_get(state, search);
 	new_process.program_counter = address % MEM_SIZE;
 	new_process.has_jumped = 1;
 	new_process.id = vm_new_id(state);
