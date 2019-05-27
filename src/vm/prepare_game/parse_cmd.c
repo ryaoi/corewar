@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 11:32:16 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/07 16:26:26 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 19:23:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@ int		(*const g_syntax_check[8])(char*, t_corewar_input*) = {
 	is_flag_verbosity,
 	is_verbosity
 };
+
+void		check_flags_conflicts(t_corewar_input *cw_input)
+{
+	if (cw_input->exec_flags & FLAG_VISUALIZER)
+	{
+		ft_bzero(cw_input->log_verbosity, e_log_level_max);
+		cw_input->exec_flags &= ~FLAG_MEMDUMP;
+		cw_input->nbr_of_cycles = SIZE_T_MAX;
+	}
+}
 
 int		parse_input(char *input, int index, t_corewar_input *cw_input)
 {
@@ -68,7 +78,7 @@ void	init_corewar_input(t_corewar_input *cw_input)
 	int i;
 
 	cw_input->nbr_of_champions = 0;
-	cw_input->nbr_of_cycles = 0;
+	cw_input->nbr_of_cycles = SIZE_T_MAX;
 	cw_input->exec_flags = 0;
 	cw_input->champ_flags = 0;
 	cw_input->champions[0] = NULL;
@@ -108,7 +118,6 @@ int		parse_cmd(int argc, char **argv, t_corewar_input *cw_input)
 			return (-1);
 		index++;
 	}
-	if (!(cw_input->exec_flags & FLAG_MEMDUMP))
-		cw_input->nbr_of_cycles = SIZE_T_MAX;
+	check_flags_conflicts(cw_input);
 	return (FT_SUCCESS);
 }

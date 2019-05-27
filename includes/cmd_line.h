@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 17:50:01 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:27:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 19:21:54 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define FT_FAIL 0
 
 # define FLAG_MEMDUMP 0b1
-# define FLAG_VISUALIZER 0b100
-# define FLAG_VERBOSITY 0b1000
+# define FLAG_VISUALIZER 0b10
+# define FLAG_VERBOSITY 0b100
 
 # define PARSE_FLAG_MEMDUMP 0b1
 # define PARSE_FLAG_VISUALIZER 0b10
@@ -91,6 +91,7 @@ int					get_champ_nbr(char *input, int index,
 int					get_log_verbosity(char *input, int index,
 						t_corewar_input *cw_input);
 size_t				ft_a_to_sizet(const char *str);
+void				check_flags_conflicts(t_corewar_input *cw_input);
 void				print_usage(void);
 void				free_input(t_corewar_input *cw_input);
 
