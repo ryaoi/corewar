@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 19:40:48 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/19 19:30:47 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:16:18 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	impl_zjmp(t_vm_state *state, size_t p_index, t_instr *instr)
 	int32_t		offset;
 	t_process	*process;
 
-	process = &PROCESS(state, p_index);
-	offset = byte_order_swap(ARG_DIR(instr, 0).content).buffer;
+	process = process_get(state, p_index);
+	offset = byte_order_swap((arg_dir(instr, 0))->content).buffer;
 	if (process->carry)
 	{
 		process->program_counter = (process->program_counter

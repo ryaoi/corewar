@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:18:37 by aamadori          #+#    #+#             */
-/*   Updated: 2019/04/06 19:15:54 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:24:04 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ t_bigend_buffer	buffer_invert_bits(t_bigend_buffer input)
 	size_t			index;
 
 	index = 0;
+	ft_bzero(&output, sizeof(t_bigend_buffer));
 	while (index < sizeof(output.buffer))
 	{
-		INDEX_BUFF(output, index) = ~(INDEX_BUFF(input, index));
+		(*(buff_index(&output, index))) = ~(*(buff_index(&input, index)));
 		index++;
 	}
 	return (output);

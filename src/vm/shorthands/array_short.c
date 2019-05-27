@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer_is_zero.c                                   :+:      :+:    :+:   */
+/*   array_short.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/16 15:18:37 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:22:26 by aamadori         ###   ########.fr       */
+/*   Created: 2019/05/27 17:12:22 by aamadori          #+#    #+#             */
+/*   Updated: 2019/05/27 17:15:29 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int		buffer_is_zero(t_bigend_buffer buffer)
+t_process	*process_get(t_vm_state *state, size_t id)
 {
-	size_t	index;
+	return (&((t_process*)state->processes.ptr)[id]);
+}
 
-	index = 0;
-	while (index < sizeof(buffer.buffer))
-	{
-		if (*(buff_index(&buffer, index)))
-			return (0);
-		index++;
-	}
-	return (1);
+t_player	*player_get(t_vm_state *state, size_t id)
+{
+	return (&((t_player*)state->players.ptr)[id]);
 }

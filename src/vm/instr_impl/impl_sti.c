@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/05/20 15:01:18 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:14:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ static t_bigend_buffer	sti_first_p(t_vm_state *state,
 	size_t			offset;
 
 	first_param.buffer = 0;
-	if (ARG_TYPE(instr, 1) == e_register)
-		first_param = REGISTER(process, ARG_REG(instr, 1) - 1).content;
-	else if (ARG_TYPE(instr, 1) == e_index)
+	if (*(arg_type(instr, 1)) == e_register)
+		first_param = (register_get(process, *(arg_reg(instr, 1)) - 1))->content;
+	else if (*(arg_type(instr, 1)) == e_index)
 	{
 		offset = byte_order_swap(
-			ARG_IND(instr, 1).content).buffer;
+			(arg_ind(instr, 1))->content).buffer;
 		offset = process->program_counter + (offset % IDX_MOD);
 		first_param = mem_load(state, offset, IND_SIZE);
 	}
 	else
-		first_param = ARG_DIR(instr, 1).content;
+		first_param = (arg_dir(instr, 1))->content;
 	return (first_param);
 }
 
@@ -40,10 +40,10 @@ static t_bigend_buffer	sti_second_p(t_vm_state *state,
 
 	(void)state;
 	second_param.buffer = 0;
-	if (ARG_TYPE(instr, 2) == e_register)
-		second_param = REGISTER(process, ARG_REG(instr, 2) - 1).content;
+	if (*(arg_type(instr, 2)) == e_register)
+		second_param = (register_get(process, *(arg_reg(instr, 2)) - 1))->content;
 	else
-		second_param = ARG_DIR(instr, 2).content;
+		second_param = (arg_dir(instr, 2))->content;
 	return (second_param);
 }
 
@@ -55,7 +55,7 @@ void					impl_sti(t_vm_state *state, size_t p_index,
 	t_bigend_buffer	second_param;
 	int32_t			offset;
 
-	process = &PROCESS(state, p_index);
+	process = process_get(state, p_index);
 	first_param = sti_first_p(state, process, instr);
 	second_param = sti_second_p(state, process, instr);
 	offset = (int32_t)byte_order_swap(
@@ -63,9 +63,9 @@ void					impl_sti(t_vm_state *state, size_t p_index,
 	offset = process->program_counter + (offset % IDX_MOD);
 	log_level(&state->log_info, e_log_store,
 		"Storing r%d into %#.8zx, val %#.8zx",
-		ARG_REG(instr, 0) - 1,
+		*(arg_reg(instr, 0)) - 1,
 		offset,
-		REGISTER(process, ARG_REG(instr, 0) - 1).content);
+		(register_get(process, *(arg_reg(instr, 0)) - 1))->content);
 	mem_store(state, offset, REG_SIZE,
-		REGISTER(process, ARG_REG(instr, 0) - 1).content);
+		(register_get(process, *(arg_reg(instr, 0)) - 1))->content);
 }

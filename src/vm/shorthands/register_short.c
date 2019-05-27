@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer_is_zero.c                                   :+:      :+:    :+:   */
+/*   register_short.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/16 15:18:37 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:22:26 by aamadori         ###   ########.fr       */
+/*   Created: 2019/05/27 17:23:23 by aamadori          #+#    #+#             */
+/*   Updated: 2019/05/27 17:24:31 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int		buffer_is_zero(t_bigend_buffer buffer)
+t_register	*register_get(t_process *process, size_t id)
 {
-	size_t	index;
-
-	index = 0;
-	while (index < sizeof(buffer.buffer))
-	{
-		if (*(buff_index(&buffer, index)))
-			return (0);
-		index++;
-	}
-	return (1);
+	return (&(process->registers[id]));
 }
