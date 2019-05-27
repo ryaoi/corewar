@@ -6,22 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/22 19:42:22 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 13:40:29 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-/*
-**	bytecode_len :
-**		register = 1
-**		direct = 2 or 4
-**		indirect = 2
-**	ocp :
-**		01 Register, followed by a byte (the register number)
-**		10 Direct, followed by DIR_SIZE bytes (the direct value)
-**		11 Indirect, followed by IND_SIZE bytes (the value of the indirection)
-*/
 
 int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 								t_op *op)

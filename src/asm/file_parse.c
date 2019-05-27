@@ -6,32 +6,11 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/22 18:35:54 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 13:40:43 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-/*
-**	categorize the line type
-**	.name = T_NAME
-**	.comment = T_CMD_COMMENT
-**
-**	different tokens
-**	- e_label = string + :
-**
-**	- e_instr
-**		- 1 params instructions
-**		- 2 params instructions
-**		- 3 params instructions
-**	- e_comment
-**	- parameters
-**		- T_REGISTRY = r + INTEGER
-**		- e_direct = % + INTEGER
-**		- e_dirlab = % + : + LABEL
-**		- e_indirect = INTEGER error ?
-**		- e_indirlab = : + LABEL
-*/
 
 static int	validate_parameters(t_token *token, t_op opcode,
 											int param_id)
