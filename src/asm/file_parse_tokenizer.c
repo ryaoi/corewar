@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:20:06 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:18:44 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int			add_token(t_line *line, int token_id, char *str)
 		|| token.type == e_indirlab)
 			&& check_label_syntax(token.str) < 0)
 		return (e_token_label_syntax_fail);
-	if (token.type == e_register && check_register(token.str) < 0)
+	if (token.type == e_reg && check_register(token.str) < 0)
 		return (e_token_register_fail);
 	if (token.type == e_unknown)
 		return (e_token_type_unknwon);

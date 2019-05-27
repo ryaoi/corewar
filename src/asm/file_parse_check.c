@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 12:08:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:20:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int		check_token_type(t_token *token, char *str)
 	else if (len > 2 && str[0] == DIRECT_CHAR && str[1] == LABEL_CHAR)
 		token->type = e_dirlab;
 	else if (len > 1 && str[0] == DIRECT_CHAR && is_str_digit(str + 1))
-		token->type = e_direct;
+		token->type = e_dir;
 	else if (len > 1 && str[0] == REGISTER_CHAR && is_str_digit(str + 1))
-		token->type = e_register;
+		token->type = e_reg;
 	else if (str[0] == LABEL_CHAR)
 		token->type = e_indirlab;
 	else if (is_str_digit(str))
-		token->type = e_indirect;
+		token->type = e_indir;
 	else
 		return (e_token_type_fail);
 	return (FT_SUCCESS);

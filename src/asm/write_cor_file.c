@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 19:41:20 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:59:25 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:26:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void				write_header_comment(int fd, t_file *file)
 	write(fd, file->header.prog_name, PROG_NAME_LENGTH);
 	write(fd, buf4, 4);
 	write(fd, prog_size, 4);
-	write(fd, file->header.how, COMMENT_LENGTH);
+	write(fd, file->header.comment, COMMENT_LENGTH);
 	free(prog_size);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:52:39 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:22:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define ASM_H
 # include "libft.h"
 # include "list.h"
-# include "op.h"
+# include "vm.h"
 # include "ft_printf.h"
 
 # define FT_SUCCESS 1
@@ -41,9 +41,9 @@ typedef enum e_token_types
 	e_label,
 	e_asmcode,
 	e_instr,
-	e_register = 11,
-	e_direct = 12,
-	e_indirect = 14,
+	e_reg = 11,
+	e_dir = 12,
+	e_indir = 14,
 	e_dirlab,
 	e_indirlab,
 	e_unknown

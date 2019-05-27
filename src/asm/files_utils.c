@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 12:12:52 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:42:24 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:26:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	file_init(t_file *file)
 	file->fd_cor = -1;
 	file->prework_flag = 0;
 	ft_bzero(&(file->header.prog_name[0]), PROG_NAME_LENGTH + 1);
-	ft_bzero(&(file->header.how[0]), COMMENT_LENGTH + 1);
+	ft_bzero(&(file->header.comment[0]), COMMENT_LENGTH + 1);
 }
 
 int		file_name_check(const char *filename, t_file *file)

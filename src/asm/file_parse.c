@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:52:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:27:39 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	validate_parameters(t_token *token, t_op opcode,
 		converted_type = token->type - 10;
 	if (converted_type == e_indirlab - 10)
 		converted_type = T_IND;
-	if ((converted_type & ~opcode.param_types[param_id]) > 0)
+	if ((converted_type & ~opcode.arg_types[param_id]) > 0)
 		return (FT_FAIL);
 	return (FT_SUCCESS);
 }
@@ -38,12 +38,12 @@ int			opcode_cmp(t_line *line)
 	if (!(traverse = line->tokens))
 		return (e_param_op_not_exist);
 	instr = ((t_token*)traverse->content)->op->opcode - 1;
-	if (g_op_tab[instr].nbr_params != line->nbr_params)
+	if (g_op_tab[instr].arg_num != line->nbr_params)
 		return (e_param_nbr_fail);
 	if (!(traverse = traverse->next))
 		return (e_param_not_exist);
 	param_id = 0;
-	while (traverse || param_id < g_op_tab[instr].nbr_params)
+	while (traverse || param_id < g_op_tab[instr].arg_num)
 	{
 		if (validate_parameters(((t_token*)traverse->content),
 				g_op_tab[instr], param_id))

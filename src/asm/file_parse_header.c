@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:44:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:26:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	set_how(t_file *file, t_line *line)
 		set_header_index(tmp, &start, &end);
 		if (end > start + 1 && line->str[end] == '"')
 		{
-			ft_memcpy(file->header.how, line->str + start, end - start);
+			ft_memcpy(file->header.comment, line->str + start, end - start);
 			file->prework_flag |= 1;
 		}
 		line->type = e_comment_cmd;

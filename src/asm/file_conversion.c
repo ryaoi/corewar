@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:59:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:28:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 			return (e_label_not_exist);
 		value = ((t_token*)traverse->content)->value;
 		type = ((t_token*)traverse->content)->type;
-		if (type == e_indirect || type == e_indirlab)
-			param_trans(&bc[1 + op->ocp + i], INDIR_SIZE, &i, value);
-		else if (type == e_dirlab || type == e_direct)
-			param_trans(&bc[1 + op->ocp + i],
+		if (type == e_indir || type == e_indirlab)
+			param_trans(&bc[1 + op->has_ocp + i], INDIR_SIZE, &i, value);
+		else if (type == e_dirlab || type == e_dir)
+			param_trans(&bc[1 + op->has_ocp + i],
 				op->relative ? DIR_D2_SIZE : DIR_D4_SIZE, &i, value);
-		else if (type == e_register)
-			param_trans(&bc[1 + op->ocp + i], REG_INDEX_SIZE, &i, value);
+		else if (type == e_reg)
+			param_trans(&bc[1 + op->has_ocp + i], REG_INDEX_SIZE, &i, value);
 
 		traverse = traverse->next;
 	}
@@ -53,12 +53,12 @@ static void		ocp_set(t_list *tokens, unsigned char *bytecode)
 	traverse = tokens;
 	while (traverse)
 	{
-		if (((t_token*)traverse->content)->type == e_register)
+		if (((t_token*)traverse->content)->type == e_reg)
 			ocp |= 1 << (6 - index);
-		else if (((t_token*)traverse->content)->type == e_direct ||
+		else if (((t_token*)traverse->content)->type == e_dir ||
 				((t_token*)traverse->content)->type == e_dirlab)
 			ocp |= 2 << (6 - index);
-		else if (((t_token*)traverse->content)->type == e_indirect ||
+		else if (((t_token*)traverse->content)->type == e_indir ||
 					((t_token*)traverse->content)->type == e_indirlab)
 			ocp |= 3 << (6 - index);
 		traverse = traverse->next;
@@ -80,7 +80,7 @@ t_op			*operation_set(t_line *line)
 	if (token->op)
 	{
 		line->bytecode[0] = token->op->opcode;
-		if (token->op->ocp)
+		if (token->op->has_ocp)
 			ocp_set(line->tokens->next, line->bytecode);
 		return (((t_token*)line->tokens->content)->op);
 	}

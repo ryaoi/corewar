@@ -6,7 +6,7 @@
 #    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 13:33:45 by jaelee           ###   ########.fr        #
+#    Updated: 2019/05/27 15:21:08 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ CORELIB_SRCS = logging.c \
 	vm/instr_impl/impl_lldi.c \
 	vm/instr_impl/impl_lfork.c \
 	vm/instr_impl/op_impl_table.c
-ASM_SRCS = asm/optable_asm.c \
+ASM_SRCS = optable.c \
 	asm/main.c \
 	asm/files_utils.c \
 	asm/file_parse.c \

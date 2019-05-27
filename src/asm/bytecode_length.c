@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 14:22:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 15:28:48 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static unsigned int	token_type_valid(int token_type)
 
 static unsigned int	param_size(int type, int relative)
 {
-	if (type == e_register)
+	if (type == e_reg)
 		return (REG_INDEX_SIZE);
-	else if (type == e_dirlab || type == e_direct)
+	else if (type == e_dirlab || type == e_dir)
 		return (relative ? DIR_D2_SIZE : DIR_D4_SIZE);
-	else if (type == e_indirect || type == e_indirlab)
+	else if (type == e_indir || type == e_indirlab)
 		return (INDIR_SIZE);
 	return (0);
 }
@@ -43,7 +43,7 @@ void				get_bytecode_len(t_line *line)
 	if (!token_type_valid(((t_token*)traverse->content)->type))
 		return ;
 	line->bytecode_len = 1;
-	if (((t_token*)traverse->content)->op->ocp == 1)
+	if (((t_token*)traverse->content)->op->has_ocp == 1)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
