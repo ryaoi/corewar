@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:11:33 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:21:11 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	label_value(t_line *curr_line, t_line *label_line,
 		while (traverse && ((t_line*)traverse->content) != curr_line)
 		{
 			traverse = traverse->next;
-			if (((t_line*)traverse->content)  == curr_line)
+			if (((t_line*)traverse->content) == curr_line)
 				break ;
 			value -= ((t_line*)traverse->content)->bytecode_len;
 		}

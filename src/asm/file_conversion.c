@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:11:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:21:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 				op->relative ? DIR_D2_SIZE : DIR_D4_SIZE, &i, value);
 		else if (type == e_reg)
 			param_trans(&bc[1 + op->has_ocp + i], REG_INDEX_SIZE, &i, value);
-
 		traverse = traverse->next;
 	}
 	return (FT_SUCCESS);

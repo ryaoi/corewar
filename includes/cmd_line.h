@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 17:50:01 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:25:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:27:50 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define MALLOC_FAIL -8
 # define TOO_MANY_PLAYERS -9
 
-typedef struct	s_corewar_input
+typedef struct		s_corewar_input
 {
 	char	*champions[MAX_CHAMP_NBR];
 	int		nbr_of_champions;
@@ -62,7 +62,7 @@ typedef struct	s_corewar_input
 	int		champ_flags;
 	uint8_t	log_verbosity[e_log_level_max];
 	int		champ_id;
-}				t_corewar_input;
+}					t_corewar_input;
 
 extern const int	g_flags_match[8];
 extern const char	*g_log_level_tab[9];
