@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 17:42:48 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:34:52 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			prepare_game(t_game_data *game, t_array *players,
 	while (index < (int)players->length)
 	{
 		array_push_back(&game->state.players,
-			&ARRAY_PTR(*players, t_player)[index]);
+			&((t_player*)players->ptr)[index]);
 		index++;
 	}
 	vm_memory_prepare(&game->state);
@@ -101,15 +101,15 @@ static void		log_game_over(t_game_data *game)
 	index = 1;
 	while (index < game->state.players.length)
 	{
-		if (ARRAY_PTR(game->state.players, t_player)[index].live >
-			ARRAY_PTR(game->state.players, t_player)[winner].live)
+		if ((player_get(&game->state, index))->live >
+			(player_get(&game->state, winner))->live)
 			winner = index;
 		index++;
 	}
 	log_level(&game->state.log_info, e_log_game,
 		"Winner: %s, of id %d",
-		ARRAY_PTR(game->state.players, t_player)[winner].header.prog_name,
-		ARRAY_PTR(game->state.players, t_player)[winner].id);
+		(player_get(&game->state, winner))->header.prog_name,
+		(player_get(&game->state, winner))->id);
 }
 
 int				advance_cycle(t_game_data *game)

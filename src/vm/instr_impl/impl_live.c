@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:14:07 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:07:03 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:39:51 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ void	impl_live(t_vm_state *state, size_t p_index, t_instr *instr)
 		parameter, process->live_executed);
 	while (index < state->players.length)
 	{
-		if (ARRAY_PTR(state->players, t_player)[index].id == parameter)
+		if ((player_get(state, index))->id == parameter)
 		{
-			ARRAY_PTR(state->players,
-				t_player)[index].last_live_cycle = state->cycle_count;
-			ARRAY_PTR(state->players, t_player)[index].live++;
+			(player_get(state, index))->last_live_cycle = state->cycle_count;
+			(player_get(state, index))->live++;
 			break ;
 		}
 		index++;

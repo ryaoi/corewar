@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:09:20 by alex              #+#    #+#             */
-/*   Updated: 2019/05/27 17:58:15 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/27 18:38:14 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	impl_fork(t_vm_state *state, size_t p_index, t_instr *instr)
 	log_level(&state->log_info, e_log_fork,
 		"Process %zu creates %zu at offset %zu",
 		process_get(state, p_index)->id,
-		ARRAY_PTR(state->processes, t_process)[state->processes.length - 1].id,
+		(process_get(state, state->processes.length - 1))->id,
 		offset % MEM_SIZE);
 }
