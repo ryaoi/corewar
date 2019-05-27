@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 23:57:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:10:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:19:12 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <pthread.h>
-# include "ncurses.h"
+# include <ncurses.h>
 # include "libft.h"
 # include "vm.h"
 # include "game.h"
@@ -96,11 +96,12 @@ void				close_ncurses(t_visualizer_state *vis_state);
 void				*input_loop_wrapper(void *arg);
 void				*input_loop(t_visualizer_state *vis_state);
 void				get_colors(void);
-void				create_memory_dump(t_vm_state *vm, t_visualizer_state *vis_state);
+void				create_memory_dump(t_vm_state *vm,
+						t_visualizer_state *vis_state);
 void				create_info(t_vm_state *vm, t_game_data *game,
-						t_input_info *input_info, t_visualizer_state *vis_state);
+						t_input_info *input_info,
+							t_visualizer_state *vis_state);
 int					visualizer(t_game_data *game, t_corewar_input *cw_input,
 						t_input_info *info_copy, t_visualizer_state *vis_state);
 size_t				get_winner(t_vm_state *state);
-
 #endif

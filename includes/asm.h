@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 15:22:08 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:18:46 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,27 +61,21 @@ typedef enum	e_err_types
 	e_cmd_line_error,
 	e_dot_s_error,
 	e_open_file_error,
-/* main error */
 	e_file_parse_fail,
 	e_file_conversion_fail,
-/* file read error */
 	e_content_empty,
 	e_line_create_fail,
-/* file parse error */
 	e_header_not_found,
-/* token error */
 	e_token_too_many,
 	e_token_type_fail,
 	e_token_label_syntax_fail,
 	e_token_register_fail,
 	e_token_type_unknwon,
 	e_token_instr_invalid,
-/* opcode compare error */
 	e_param_op_not_exist,
 	e_param_nbr_fail,
 	e_param_not_exist,
 	e_param_not_valid,
-/* file_conversion error */
 	e_operation_not_exist,
 	e_conv_params_not_exist,
 	e_label_not_exist,
