@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:47:18 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 14:22:58 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ void				get_bytecode_len(t_line *line)
 	t_op	*op;
 
 	traverse = line->tokens;
-	op = LST_CONT(traverse, t_token).op;
+	op = ((t_token*)traverse->content)->op;
 	if (!line->tokens || !op)
 		return ;
-	if (!token_type_valid(LST_CONT(traverse, t_token).type))
+	if (!token_type_valid(((t_token*)traverse->content)->type))
 		return ;
 	line->bytecode_len = 1;
-	if (LST_CONT(traverse, t_token).op->ocp == 1)
+	if (((t_token*)traverse->content)->op->ocp == 1)
 		line->bytecode_len += 1;
 	while (traverse)
 	{
-		line->bytecode_len += param_size(LST_CONT(traverse, t_token).type,
-											op->relative);
+		line->bytecode_len += param_size(((t_token*)traverse->content)->type,
+								op->relative);
 		traverse = traverse->next;
 	}
 }

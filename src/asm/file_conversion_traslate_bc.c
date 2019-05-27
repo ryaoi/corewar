@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/22 19:42:14 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 14:46:47 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,20 @@ static int	label_value(t_line *curr_line, t_line *label_line,
 	value = 0;
 	if (curr_line->id > label_line->id)
 	{
-		while (traverse && &LST_CONT(traverse, t_line) != curr_line)
+		while (traverse && ((t_line*)traverse->content) != curr_line)
 		{
 			traverse = traverse->next;
-			if (&LST_CONT(traverse, t_line) == curr_line)
+			if (((t_line*)traverse->content)  == curr_line)
 				break ;
-			value -= LST_CONT(traverse, t_line).bytecode_len;
+			value -= ((t_line*)traverse->content)->bytecode_len;
 		}
 	}
 	else if (curr_line->id < label_line->id)
 	{
 		value += curr_line->bytecode_len;
-		while (traverse && (&LST_CONT(traverse, t_line) != curr_line))
+		while (traverse && (((t_line*)traverse->content) != curr_line))
 		{
-			value += LST_CONT(traverse, t_line).bytecode_len;
+			value += ((t_line*)traverse->content)->bytecode_len;
 			traverse = traverse->prev;
 		}
 	}
@@ -55,10 +55,10 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 		traverse = lines;
 		while (traverse)
 		{
-			if (LST_CONT(traverse, t_line).type == e_label &&
-				!ft_strcmp(label, LST_CONT(traverse, t_line).str))
+			if (((t_line*)traverse->content)->type == e_label &&
+				!ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
-				token->value = label_value(line, &LST_CONT(traverse, t_line),
+				token->value = label_value(line, ((t_line*)traverse->content),
 											traverse);
 				return (FT_SUCCESS);
 			}

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 13:37:37 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 14:52:39 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef enum e_token_types
 
 typedef enum	e_err_types
 {
-	e_strdup_fail = -30,
+	e_strdup_fail = -29,
 	e_strndup_fail,
 	e_strjoin_fail,
 	e_strtrim_fail,
@@ -165,7 +165,6 @@ int		validate_opcode_params(t_line *line);
 ** file_parse_utils.c
 */
 int		is_str_digit(char *str);
-int		is_comment(t_line *line);
 void	init_token(t_token *token);
 void	remove_label_char(char *str);
 

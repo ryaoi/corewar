@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 13:40:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 14:52:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int			opcode_cmp(t_line *line)
 
 	if (!(traverse = line->tokens))
 		return (e_param_op_not_exist);
-	instr = LST_CONT(traverse, t_token).op->opcode - 1;
+	instr = ((t_token*)traverse->content)->op->opcode - 1;
 	if (g_op_tab[instr].nbr_params != line->nbr_params)
 		return (e_param_nbr_fail);
 	if (!(traverse = traverse->next))
@@ -45,7 +45,7 @@ int			opcode_cmp(t_line *line)
 	param_id = 0;
 	while (traverse || param_id < g_op_tab[instr].nbr_params)
 	{
-		if (validate_parameters(&LST_CONT(traverse, t_token),
+		if (validate_parameters(((t_token*)traverse->content),
 				g_op_tab[instr], param_id))
 		{
 			traverse = traverse->next;
@@ -84,18 +84,15 @@ int			file_parse(t_file *file)
 	traverse = file->lines;
 	while (traverse)
 	{
-		if (!(is_comment(&LST_CONT(traverse, t_line)))) /*TODO maybe useless */
-		{
-			if (file->prework_flag != PREWORK_FLAG_ON)
-				set_header(file, &LST_CONT(traverse, t_line));
-			else if (LST_CONT(traverse, t_line).type == e_unknown)
-				LST_CONT(traverse, t_line).type = e_asmcode;
-			if (LST_CONT(traverse, t_line).type == e_asmcode &&
-					(tokenizer(&(LST_CONT(traverse, t_line))) < 0))
-				return (e_file_parse_fail);
-			if (LST_CONT(traverse, t_line).type == e_label)
-				remove_label_char(LST_CONT(traverse, t_line).str);
-		}
+		if (file->prework_flag != PREWORK_FLAG_ON)
+			set_header(file, (t_line*)traverse->content);
+		else if (((t_line*)traverse->content)->type == e_unknown)
+			((t_line*)traverse->content)->type = e_asmcode;
+		if (((t_line*)traverse->content)->type == e_asmcode &&
+			(tokenizer(((t_line*)traverse->content)) < 0))
+			return (e_file_parse_fail);
+		if (((t_line*)traverse->content)->type == e_label)
+			remove_label_char(((t_line*)traverse->content)->str);
 		traverse = traverse->next;
 	}
 	if (file->prework_flag != PREWORK_FLAG_ON)
