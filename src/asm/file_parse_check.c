@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:11:46 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:05:50 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:11:49 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int		check_label_syntax(char *str)
 	while (str[index])
 	{
 		if (!ft_strchr(LABEL_CHARS, str[index])
-		&& !(index == 0 && str[index] == DIRECT_CHAR)
-		&& !((index == 0 || index == 1) && str[index] == LABEL_CHAR))
+			&& !(index == 0 && str[index] == DIRECT_CHAR)
+				&& !((index == 0 || index == 1) && str[index] == LABEL_CHAR))
 			return (e_token_label_syntax_fail);
 		index++;
 	}

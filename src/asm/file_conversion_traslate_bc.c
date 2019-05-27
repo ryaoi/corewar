@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:02:21 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:11:33 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 		while (traverse)
 		{
 			if (((t_line*)traverse->content)->type == e_label
-			&& !ft_strcmp(label, ((t_line*)traverse->content)->str))
+				&& !ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
 				token->value = label_value(line, ((t_line*)traverse->content),
 											traverse);

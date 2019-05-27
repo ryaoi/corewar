@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:06:27 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:12:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		set_header_index(char *tmp, int *start, int *end)
 {
 	while (tmp && tmp[*start] && tmp[*start] != '"'
-			&& tmp[*start] != COMMENT_CHAR)
+		&& tmp[*start] != COMMENT_CHAR)
 		(*start)++;
 	if (tmp[*start] == COMMENT_CHAR)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 15:28:48 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:11:16 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static unsigned int	token_type_valid(int token_type)
 {
-	if (token_type == e_name_cmd || token_type == e_comment_cmd ||
-		token_type == e_comment)
+	if (token_type == e_name_cmd || token_type == e_comment_cmd
+		|| token_type == e_comment)
 		return (0);
 	return (1);
 }

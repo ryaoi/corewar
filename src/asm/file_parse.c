@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 18:10:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:07:43 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:12:24 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int			file_parse(t_file *file)
 		else if (((t_line*)traverse->content)->type == e_unknown)
 			((t_line*)traverse->content)->type = e_asmcode;
 		if (((t_line*)traverse->content)->type == e_asmcode
-		&& (tokenizer(((t_line*)traverse->content)) < 0))
+			&& (tokenizer(((t_line*)traverse->content)) < 0))
 			return (e_file_parse_fail);
 		if (((t_line*)traverse->content)->type == e_label)
 			remove_label_char(((t_line*)traverse->content)->str);

@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:03:23 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/27 18:11:42 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int				file_conversion(t_file *file)
 	while (traverse)
 	{
 		if (((t_line*)traverse->content)->type == e_asmcode
-		&& ((t_line*)traverse->content)->tokens)
+			&& ((t_line*)traverse->content)->tokens)
 		{
 			if (conversion(file, ((t_line*)traverse->content)) < 0)
 				return (e_file_conversion_fail);
