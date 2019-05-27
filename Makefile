@@ -6,7 +6,7 @@
 #    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 15:21:08 by jaelee           ###   ########.fr        #
+#    Updated: 2019/05/27 16:05:52 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -146,8 +146,6 @@ fclean: clean
 	rm -f $(COREWAR_NAME)
 	rm -f $(CORELIB_NAME)
 	rm -f $(ASM_NAME)
-	rm -f $(VISUALIZER_NAME)
-	rm -rf $(VISUALIZER_NAME).dSYM/
 
 re: fclean
 	$(MAKE) all
