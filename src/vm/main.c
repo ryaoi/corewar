@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/28 18:32:29 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/28 21:20:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ int			main(int argc, char **argv)
 		if (load_champions(&corewar_input, &players))
 		{
 			initialize_logging(&info, &corewar_input);
+			game = malloc(sizeof(t_game_data));
+			/* TODO call this everytime you malloc */
+			ft_malloc_assert(game);
 			prepare_game(game, &players, &info);
 			print_prelude(&game->state);
 			start_game(game, &corewar_input);
