@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 22:17:00 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 23:43:35 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/28 18:17:08 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	handle_comment(char *line)
 	while (line[index] && ft_isspace(line[index]))
 		index++;
 	tmp = line + index;
-	if (ft_strncmp(NAME_CMD_STRING, tmp, ft_strlen(NAME_CMD_STRING))
-		|| ft_strncmp(COMMENT_CMD_STRING, tmp, ft_strlen(COMMENT_CMD_STRING)))
+	if (!ft_strncmp(NAME_CMD_STRING, tmp, ft_strlen(NAME_CMD_STRING))
+		|| !ft_strncmp(COMMENT_CMD_STRING, tmp, ft_strlen(COMMENT_CMD_STRING)))
 		return ;
 	else
 	{
