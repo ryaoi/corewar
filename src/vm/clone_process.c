@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:13:31 by alex              #+#    #+#             */
-/*   Updated: 2019/05/27 18:32:07 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/28 17:36:28 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	vm_init_process(t_vm_state *state, int player_id, size_t address)
 	while (search < state->players.length
 		&& !((player_get(state, search))->id == player_id))
 		search++;
-	ASSERT(search < state->players.length,
+	ft_assert(search < state->players.length,
 		"Tried to init process with player id that does not exist.");
 	new_process.player = player_get(state, search);
 	new_process.program_counter = address % MEM_SIZE;

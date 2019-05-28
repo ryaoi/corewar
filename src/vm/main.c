@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 19:55:19 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/23 16:56:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/05/28 17:43:06 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int			main(int argc, char **argv)
 			initialize_logging(&info, &corewar_input);
 			game = malloc(sizeof(t_game_data));
 			/* TODO call this everytime you malloc */
-			MALLOC_ASSERT(game);
+			ft_malloc_assert(game);
 			prepare_game(game, &players, &info);
 			print_prelude(&game->state);
 			start_game(game, &corewar_input);
