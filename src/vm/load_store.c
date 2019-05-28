@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:19:53 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:23:17 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/05/28 17:36:38 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_bigend_buffer	mem_load(t_vm_state *state, int64_t address, size_t size)
 	size_t			msb;
 	size_t			index;
 
-	ASSERT(size <= REG_SIZE, "Tried to load size larger than REG_SIZE");
+	ft_assert(size <= REG_SIZE, "Tried to load size larger than REG_SIZE");
 	index = 0;
 	ret.buffer = 0;
 	msb = sizeof(ret.buffer) - size;
@@ -47,7 +47,7 @@ void			mem_store(t_vm_state *state, int64_t address, size_t size,
 	size_t			msb;
 	int				player_id;
 
-	ASSERT(size <= REG_SIZE, "Tried to store size larger than REG_SIZE");
+	ft_assert(size <= REG_SIZE, "Tried to store size larger than REG_SIZE");
 	index = 0;
 	msb = sizeof(store.buffer) - size;
 	while (index < size)
