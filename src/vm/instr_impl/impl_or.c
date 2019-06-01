@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   impl_or.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:41:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:12:25 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/01 19:54:18 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void					impl_or(t_vm_state *state, size_t p_index,
 	process = process_get(state, p_index);
 	first_operand = handle_argument(state, process, instr, 0);
 	second_operand = handle_argument(state, process, instr, 1);
-		(register_get(process,
-		*(arg_reg(instr, 2)) - 1))->content = bitwise_or(
+	(register_get(process, *(arg_reg(instr, 2)) - 1))->content = bitwise_or(
 		first_operand, second_operand);
 	process->carry = buffer_is_zero(
 		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
