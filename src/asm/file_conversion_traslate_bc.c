@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:21:11 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/01 18:29:03 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 		token->value = ft_atoi(token->str);
 	else if (token->type == e_dirlab || token->type == e_indirlab)
 	{
-		label = token->type == e_dirlab ? token->str + 2 : token->str + 1;
+		label = (token->type == e_dirlab) ? token->str + 2 : token->str + 1;
 		traverse = lines;
 		while (traverse)
 		{
@@ -59,7 +59,7 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 				&& !ft_strcmp(label, ((t_line*)traverse->content)->str))
 			{
 				token->value = label_value(line, ((t_line*)traverse->content),
-											traverse);
+						traverse);
 				return (FT_SUCCESS);
 			}
 			traverse = traverse->next;
@@ -69,8 +69,8 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 	return (FT_SUCCESS);
 }
 
-void		param_trans(unsigned char *bytecode, int size,
-							int *bc_index, int value)
+void		param_trans(unsigned char *bytecode, int size, int *bc_index,
+				int value)
 {
 	if (size == 1)
 		bytecode[0] = ((unsigned int)value) % 0x100;

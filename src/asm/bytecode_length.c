@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:17:44 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:11:16 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/01 16:09:00 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void				get_bytecode_len(t_line *line)
 	while (traverse)
 	{
 		line->bytecode_len += param_size(((t_token*)traverse->content)->type,
-								op->relative);
+			op->relative);
 		traverse = traverse->next;
 	}
 }
