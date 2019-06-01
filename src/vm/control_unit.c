@@ -3,41 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   control_unit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:16:51 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:22:47 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/01 18:34:31 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
 static size_t	parse_argument(t_vm_state *state, t_instr *instr,
-					size_t argument, size_t address)
+					size_t arg, size_t address)
 {
 	t_bigend_buffer	load_arg;
 
 	load_arg.buffer = 0;
-	if (*(arg_type(instr, argument)) == e_register)
+	if (*(arg_type(instr, arg)) == e_register)
 	{
 		load_arg = mem_load(state, address + instr->size, 1);
-		*(arg_reg(instr, argument)) = *(buff_index(&load_arg, L_BUFF_SIZE - 1));
-		if (!(*(arg_reg(instr, argument)))
-			|| *(arg_reg(instr, argument)) > REG_NUMBER)
+		*(arg_reg(instr, arg)) = *(buff_index(&load_arg, L_BUFF_SIZE - 1));
+		if (!(*(arg_reg(instr, arg))) || *(arg_reg(instr, arg)) > REG_NUMBER)
 			instr->invalid = 1;
 		return (1);
 	}
-	else if (*(arg_type(instr, argument)) == e_index)
+	else if (*(arg_type(instr, arg)) == e_index)
 	{
 		load_arg = mem_load(state, address + instr->size, IND_SIZE);
-		(arg_ind(instr, argument))->content = load_arg;
+		(arg_ind(instr, arg))->content = load_arg;
 		return (2);
 	}
-	else if (*(arg_type(instr, argument)) == e_direct)
+	else if (*(arg_type(instr, arg)) == e_direct)
 	{
 		load_arg = mem_load(state, address + instr->size,
 			g_op_tab[instr->opcode].relative ? IND_SIZE : DIR_SIZE);
-		(arg_dir(instr, argument))->content = load_arg;
+		(arg_dir(instr, arg))->content = load_arg;
 		return (g_op_tab[instr->opcode].relative ? 2 : 4);
 	}
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   champion_load.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/28 17:43:06 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/01 18:50:13 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int					vm_champion_load_file(t_player *player,
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_dprintf(2, "Error opening file %s: %s\n",
-			filename, strerror(errno));
+		ft_dprintf(2, "Error opening file %s: %s\n", filename, strerror(errno));
 		return (ERR_FILE);
 	}
 	ret = vm_champion_load(player, fd, id);
@@ -60,17 +59,17 @@ int					vm_champion_load(t_player *player, int fd, int id)
 	if (ret < (long)sizeof(t_header))
 		return (ERR_HEADER_READ);
 	player->header.magic = byte_order_swap(
-		(t_bigend_buffer){player->header.magic}).buffer;
+			(t_bigend_buffer){player->header.magic}).buffer;
 	if (player->header.magic != COREWAR_EXEC_MAGIC)
 		return (ERR_HEADER_MAGIC);
 	player->header.prog_size = byte_order_swap(
-		(t_bigend_buffer){player->header.prog_size}).buffer;
+			(t_bigend_buffer){player->header.prog_size}).buffer;
 	if (player->header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_CHAMP_TOO_LARGE);
 	player->champion_code = malloc(player->header.prog_size);
 	ft_malloc_assert(player->champion_code);
 	ret = read_whole(fd, (char*)player->champion_code,
-		player->header.prog_size);
+			player->header.prog_size);
 	if (ret < (int32_t)player->header.prog_size)
 		return (ERR_CHAMP_READ);
 	player->live = 0;

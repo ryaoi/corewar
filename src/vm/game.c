@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:34:52 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/01 18:47:38 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static t_array	measure_lives(t_game_data *game)
 	{
 		if (process_get(&game->state, index)->live_executed)
 		{
-			game->live_since_dec += process_get(&game->state, index)->live_executed;
+			game->live_since_dec += process_get(
+					&game->state, index)->live_executed;
 			process_get(&game->state, index)->live_executed = 0;
 			array_push_back(&new_array, process_get(&game->state, index));
 		}
@@ -77,8 +78,7 @@ static void		kill_lazy_processes(t_game_data *game)
 	{
 		game->cycles_to_die = ft_max(game->cycles_to_die - CYCLE_DELTA, 0);
 		log_level(&game->state.log_info, e_log_game,
-			"cycles_to_die is now %d",
-			game->cycles_to_die);
+			"cycles_to_die is now %d", game->cycles_to_die);
 		game->checks_since_dec = 0;
 		game->live_since_dec = 0;
 	}
@@ -106,8 +106,7 @@ static void		log_game_over(t_game_data *game)
 			winner = index;
 		index++;
 	}
-	log_level(&game->state.log_info, e_log_game,
-		"Winner: %s, of id %d",
+	log_level(&game->state.log_info, e_log_game, "Winner: %s, of id %d",
 		(player_get(&game->state, winner))->header.prog_name,
 		(player_get(&game->state, winner))->id);
 }
