@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/04 14:55:58 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/04 16:23:33 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void		do_load(t_vm_state *state, t_process *process,
 	(register_get(process, *(arg_reg(instr, 2)) - 1))->content = mem_load(state,
 		offset, REG_SIZE);
 	process->carry = buffer_is_zero(
-		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
+			(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
 	log_level(&state->log_info, e_log_load,
 		"Loading [%#.8zx] into r%d, val %#.8zx",
 		offset % MEM_SIZE,
@@ -52,6 +52,6 @@ void			impl_lldi(t_vm_state *state, size_t p_index, t_instr *instr)
 	else
 		second_p = (arg_dir(instr, 1))->content;
 	offset = (int32_t)byte_order_swap(
-		add_bigend(first_p, second_p, 0)).buffer;
+			add_bigend(first_p, second_p, 0)).buffer;
 	do_load(state, process, instr, offset);
 }

@@ -2,23 +2,8 @@
 20 25 39 41 ./src/vm/instr_impl/impl_lld.c
 201 ./includes/asm.h
 27 57 60 ./src/asm/file_conversion.c
-./libft/tree/tree_recolor.c
-./libft/ft_putendl_fd.c
-./src/vm/instr_impl/impl_lldi.c
-./includes/instr.h
-./libft/ft_strlen.c
-./libft/ft_assert.c
-./src/asm/file_conversion_traslate_bc.c
-./src/vm/instr_impl/impl_st.c
-./libft/array/array_push_back.c
-./libft/ft_witomb.c
-./src/vm/byte_order.c
-./libft/ft_isalpha.c
-./ft_printf/src/bigint/bigint_util.c
-./ft_printf/includes/handler_float.h
-./src/asm/file_read.c
-./libft/array/array_shrink.c
-./libft/tree/tree_pre_traverse.c
+21 54 ./src/vm/instr_impl/impl_lldi.c
+18 ./src/vm/instr_impl/impl_st.c
 ./libft/ft_memcmp.c
 ./libft/list/list_map.c
 ./libft/ft_islower.c
