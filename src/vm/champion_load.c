@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   champion_load.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/01 18:50:13 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 12:41:21 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int					vm_champion_load(t_player *player, int fd, int id)
 			player->header.prog_size);
 	if (ret < (int32_t)player->header.prog_size)
 		return (ERR_CHAMP_READ);
+	/* TODO check for garbage after end of program */
 	player->live = 0;
 	player->last_live_cycle = 0;
 	player->id = id;
