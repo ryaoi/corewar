@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:09:39 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/04 14:55:54 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	load_index(t_vm_state *state, t_process *process, t_instr *instr)
 	(register_get(process,
 		*(arg_reg(instr, 1)) - 1))->content = load_buffer;
 	log_level(&state->log_info, e_log_load,
-		"Storing [%#.8zx] into r%d, val %#.8zx",
+		"Loading [%#.8zx] into r%d, val %#.8zx",
 		offset % MEM_SIZE,
 		*(arg_reg(instr, 1)) - 1,
 		(register_get(process, *(arg_reg(instr, 1)) - 1))->content);
@@ -41,7 +41,7 @@ static void	load_direct(t_vm_state *state, t_process *process, t_instr *instr)
 	(register_get(process,
 		*(arg_reg(instr, 1)) - 1))->content = (arg_dir(instr, 0))->content;
 	log_level(&state->log_info, e_log_load,
-		"Storing direct into r%d, val %#.8zx",
+		"Loading direct into r%d, val %#.8zx",
 		*(arg_reg(instr, 1)) - 1,
 		(register_get(process, *(arg_reg(instr, 1)) - 1))->content);
 }

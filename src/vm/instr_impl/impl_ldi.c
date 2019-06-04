@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   impl_ldi.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/01 19:58:42 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 14:55:47 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		do_load(t_vm_state *state, t_process *process,
 	process->carry = buffer_is_zero(
 		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
 	log_level(&state->log_info, e_log_load,
-		"Storing [%#.8zx] into r%d, val %#.8zx",
+		"Loading [%#.8zx] into r%d, val %#.8zx",
 		offset % MEM_SIZE,
 		*(arg_reg(instr, 2)) - 1,
 		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
