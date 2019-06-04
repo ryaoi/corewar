@@ -1,12 +1,7 @@
 58 66 ./ft_printf/src/handler_s_dec.c
-./src/vm/buffer_invert_bits.c
-./includes/game.h
-./libft/includes/queue.h
-./src/vm/instr_impl/impl_lld.c
-./includes/asm.h
-./libft/ft_isalnum.c
-./libft/array/array_reserve.c
-./src/asm/file_conversion.c
+20 25 39 41 ./src/vm/instr_impl/impl_lld.c
+201 ./includes/asm.h
+27 57 60 ./src/asm/file_conversion.c
 ./libft/tree/tree_recolor.c
 ./libft/ft_putendl_fd.c
 ./src/vm/instr_impl/impl_lldi.c

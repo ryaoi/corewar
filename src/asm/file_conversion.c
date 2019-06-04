@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 12:35:50 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:21:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 16:04:13 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 	while (traverse)
 	{
 		if (param_getvalue(file->lines, line,
-			((t_token*)traverse->content)) < 0)
+				((t_token*)traverse->content)) < 0)
 			return (e_label_not_exist);
 		value = ((t_token*)traverse->content)->value;
 		type = ((t_token*)traverse->content)->type;
@@ -55,10 +55,10 @@ static void		ocp_set(t_list *tokens, unsigned char *bytecode)
 		if (((t_token*)traverse->content)->type == e_reg)
 			ocp |= 1 << (6 - index);
 		else if (((t_token*)traverse->content)->type == e_dir
-		|| ((t_token*)traverse->content)->type == e_dirlab)
+			|| ((t_token*)traverse->content)->type == e_dirlab)
 			ocp |= 2 << (6 - index);
 		else if (((t_token*)traverse->content)->type == e_indir
-		|| ((t_token*)traverse->content)->type == e_indirlab)
+			|| ((t_token*)traverse->content)->type == e_indirlab)
 			ocp |= 3 << (6 - index);
 		traverse = traverse->next;
 		index += 2;

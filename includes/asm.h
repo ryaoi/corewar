@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 11:17:09 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:24:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 15:45:47 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,9 +198,8 @@ int				bc_translation(t_file *file, t_line *line, t_list *traverse,
 ** bytecode_translation.c
 */
 void			param_trans(unsigned char *bytecode, int size, int *bc_index,
-						int value);
+					int value);
 int				param_getvalue(t_list *lines, t_line *line, t_token *token);
-
 int				write_cor_file(t_file *file);
 
 /*
