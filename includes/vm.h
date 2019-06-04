@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/27 19:23:25 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 13:01:13 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,8 +237,7 @@ void				impl_lfork(t_vm_state *state,
 void				impl_aff(t_vm_state *state,
 						size_t process, t_instr *instr);
 
-/* TODO evaluate and substitute */
-# define L_BUFF_SIZE sizeof(t_bigend_buffer)
+# define L_BUFF_SIZE 4
 
 t_register			*register_get(t_process *process, size_t id);
 uint8_t				*buff_index(t_bigend_buffer *buffer, size_t id);
