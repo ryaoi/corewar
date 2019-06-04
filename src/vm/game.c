@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:45:28 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/01 18:47:38 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/04 15:25:23 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void			prepare_game(t_game_data *game, t_array *players,
 	index = 0;
 	while (index < (int)players->length)
 	{
-		vm_init_process(&game->state, -1 - index,
+		vm_init_process(&game->state, ((t_player*)players->ptr)[index].id,
 			(MEM_SIZE / players->length) * index);
 		index++;
 	}
