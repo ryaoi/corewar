@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:57:29 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/04 12:41:21 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/04 14:47:16 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static const char	*champload_strerror(int error)
 		return ("unexpected eof before end of bytecode");
 	else if (error == ERR_HEADER_MAGIC)
 		return ("magic number not matching");
+	else if (error == ERR_CHAMP_GARBAGE)
+		return ("garbage after end of champion code");
 	else
 		return ("error code invalid");
 }
@@ -72,7 +74,8 @@ int					vm_champion_load(t_player *player, int fd, int id)
 			player->header.prog_size);
 	if (ret < (int32_t)player->header.prog_size)
 		return (ERR_CHAMP_READ);
-	/* TODO check for garbage after end of program */
+	if (read_whole(fd, (char*)player->champion_code, 1) != 0)
+		return (ERR_CHAMP_GARBAGE);
 	player->live = 0;
 	player->last_live_cycle = 0;
 	player->id = id;

@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/06/04 13:01:13 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/04 14:37:52 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 # define ERR_CHAMP_TOO_LARGE -3
 # define ERR_CHAMP_READ -4
 # define ERR_HEADER_MAGIC -5
+# define ERR_CHAMP_GARBAGE -6
 
 typedef enum	e_arg_type
 {
@@ -72,7 +73,6 @@ typedef enum	e_arg_type
 	e_absent
 }				t_arg_type;
 
-/* TODO typedef and substitute ? */
 enum	e_instr
 {
 	e_live = 0,
