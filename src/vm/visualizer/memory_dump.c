@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:26 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 19:07:46 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/05 14:02:41 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	get_champion_color(t_byte_info info, size_t cycle_count)
 	else
 		color = GREY_BLACK;
 	if (cycle_count - info.written_cycle < HIGHLIGHT_CYCLE
-			&& info.written_cycle > 1)
+		&& info.written_cycle > 1)
 		color += HIGHLIGHT;
 	if (info.pc_mark == 1)
 		color += PROGRAM_COUNTER_MARK;
@@ -51,7 +51,7 @@ static void	output_memory_dump(t_vm_state *vm, t_visualizer_state *vis_state)
 		color = get_champion_color(vm->memory_info[index], vm->cycle_count);
 		wattron(win.mem_dump, COLOR_PAIR(color));
 		mvwprintw(win.mem_dump, (2 + row), 3 + (col * 3),
-					"%02X", vm->memory[index]);
+			"%02X", vm->memory[index]);
 		col++;
 		index++;
 		if (col == 64)

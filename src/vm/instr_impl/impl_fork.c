@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 19:09:20 by alex              #+#    #+#             */
-/*   Updated: 2019/05/27 18:38:14 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/05 14:00:38 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	impl_fork(t_vm_state *state, size_t p_index, t_instr *instr)
 	int32_t	offset;
 
 	offset = byte_order_swap(
-		(arg_dir(instr, 0)->content)).buffer;
+			(arg_dir(instr, 0)->content)).buffer;
 	offset = process_get(state, p_index)->program_counter
 		+ (offset % IDX_MOD);
 	vm_clone_process(state, offset, process_get(state, p_index));

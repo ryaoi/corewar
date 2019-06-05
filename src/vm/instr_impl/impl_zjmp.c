@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 19:40:48 by aamadori          #+#    #+#             */
-/*   Updated: 2019/05/27 18:16:18 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/05 14:05:34 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	impl_zjmp(t_vm_state *state, size_t p_index, t_instr *instr)
 	if (process->carry)
 	{
 		process->program_counter = (process->program_counter
-			+ (offset % IDX_MOD)) % MEM_SIZE;
+				+ (offset % IDX_MOD)) % MEM_SIZE;
 		process->has_jumped = 1;
 		log_level(&state->log_info, e_log_jump,
 			"Process %zu zjmp to %zu, TRUE",

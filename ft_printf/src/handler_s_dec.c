@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 19:49:36 by aamadori          #+#    #+#             */
-/*   Updated: 2018/12/13 14:53:33 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/05 13:54:24 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,15 @@ t_string		*h_s_dec(const t_conv *conv, va_list *ap)
 	min_digits = conv->precision >= 0 ? conv->precision : 1;
 	ret->buff = s_base_conv(conv, arg, g_dec_base, min_digits);
 	while (ret->buff && conv->precision < 0
-			&& conv->flags.padding == PADDING_ZERO
-			&& ft_strlen(ret->buff)
-				+ ((arg < 0 || conv->flags.sign) ? 1 : 0) < conv->field_width)
+		&& conv->flags.padding == PADDING_ZERO
+		&& ft_strlen(ret->buff)
+		+ ((arg < 0 || conv->flags.sign) ? 1 : 0) < conv->field_width)
 		ret->buff = string_add("0", ret->buff);
 	if (ret->buff && arg < 0)
 		ret->buff = string_add("-", ret->buff);
 	else if (ret->buff && conv->flags.sign)
-		ret->buff =
-			string_add(conv->flags.sign == SIGN_PLUS ? "+" : " ", ret->buff);
+		ret->buff =	string_add(
+				conv->flags.sign == SIGN_PLUS ? "+" : " ", ret->buff);
 	ret->size = -1;
 	if (ret->buff && (ret->buff = padding(ret->buff, conv)))
 		ret->size = ft_strlen(ret->buff);

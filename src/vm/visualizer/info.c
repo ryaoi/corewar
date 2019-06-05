@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/18 12:03:39 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/21 18:15:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/05 14:05:13 by pmorgan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ size_t		get_winner(t_vm_state *state)
 	winner = 0;
 	while (index < state->players.length)
 	{
-		if (((t_player*)state->players.ptr)[index].live >
-			((t_player*)state->players.ptr)[winner].live)
+		if (((t_player*)state->players.ptr)[index].live
+			> ((t_player*)state->players.ptr)[winner].live)
 			winner = index;
 		index++;
 	}
@@ -61,7 +61,7 @@ static void	draw_end(t_game_data *game, t_visualizer_state *vis_state)
 	win = vis_state->win;
 	winner = get_winner(&game->state);
 	champ_len = ft_strlen(((t_player*)game->state.players.ptr)\
-					[winner].header.prog_name);
+			[winner].header.prog_name);
 	mvwprintw(win.info, 32, 3, "THE WINNER IS : ");
 	wattron(win.info, COLOR_PAIR(3 + winner));
 	mvwprintw(win.info, 32, 19, "%s",
