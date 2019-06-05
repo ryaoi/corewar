@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+         #
+#    By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 18:18:44 by aamadori         ###   ########.fr        #
+#    Updated: 2019/06/05 16:44:30 by jaelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ ASM_SRCS = optable.c \
 	asm/file_conversion_traslate_bc.c \
 	asm/print_errors.c \
 	asm/write_cor_file.c \
+	asm/ft_atoi_overflow.c \
 	asm/free_asm.c
 COREWAR_SRCS = 	vm/visualizer/visualizer.c \
 	vm/visualizer/memory_dump.c \

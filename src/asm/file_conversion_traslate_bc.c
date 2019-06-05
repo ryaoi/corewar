@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:44:54 by jaelee            #+#    #+#             */
-/*   Updated: 2019/06/05 16:16:58 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/05 16:42:03 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ int			param_getvalue(t_list *lines, t_line *line, t_token *token)
 	t_list	*traverse;
 
 	if (token->type == e_dir || token->type == e_reg)
-		token->value = ft_atoi(token->str + 1);
+		token->value = ft_atoi_overflow(token->str + 1);
 	else if (token->type == e_indir)
-		token->value = ft_atoi(token->str);
+		token->value = ft_atoi_overflow(token->str);
 	else if (token->type == e_dirlab || token->type == e_indirlab)
 	{
 		label = (token->type == e_dirlab) ? token->str + 2 : token->str + 1;
