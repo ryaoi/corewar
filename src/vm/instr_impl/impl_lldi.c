@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 19:55:16 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/05 13:59:01 by pmorgan-         ###   ########.fr       */
+/*   Updated: 2019/06/05 17:43:49 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void		do_load(t_vm_state *state, t_process *process,
 	log_level(&state->log_info, e_log_load,
 		"Loading [%#.8zx] into r%d, val %#.8zx",
 		offset % MEM_SIZE,
-		*(arg_reg(instr, 2)) - 1,
+		*(arg_reg(instr, 2)),
 		(register_get(process, *(arg_reg(instr, 2)) - 1))->content);
 }
 
