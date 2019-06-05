@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   impl_sti.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 18:37:25 by alex              #+#    #+#             */
-/*   Updated: 2019/06/01 19:59:48 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/05 17:46:31 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void					impl_sti(t_vm_state *state, size_t p_index,
 	offset = process->program_counter + (offset % IDX_MOD);
 	log_level(&state->log_info, e_log_store,
 		"Storing r%d into %#.8zx, val %#.8zx",
-		*(arg_reg(instr, 0)) - 1,
+		*(arg_reg(instr, 0)),
 		offset,
 		(register_get(process, *(arg_reg(instr, 0)) - 1))->content);
 	mem_store(state, offset, REG_SIZE,

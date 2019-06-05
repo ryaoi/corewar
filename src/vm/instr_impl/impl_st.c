@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 15:05:32 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/05 14:00:16 by pmorgan-         ###   ########.fr       */
+/*   Updated: 2019/06/05 17:45:37 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	st_register(t_vm_state *state, t_process *process, t_instr *instr)
 				*(arg_reg(instr, 0)) - 1))->content;
 	log_level(&state->log_info, e_log_store,
 		"Storing r%d into r%d, val %#.8zx",
-		*(arg_reg(instr, 0)) - 1, *(arg_reg(instr, 1)) - 1,
+		*(arg_reg(instr, 0)), *(arg_reg(instr, 1)),
 		(register_get(process, *(arg_reg(instr, 0)) - 1))->content);
 }
 
