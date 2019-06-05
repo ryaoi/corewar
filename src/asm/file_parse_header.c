@@ -6,7 +6,7 @@
 /*   By: jaelee <jaelee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:56 by jaelee            #+#    #+#             */
-/*   Updated: 2019/05/27 18:12:00 by jaelee           ###   ########.fr       */
+/*   Updated: 2019/06/05 16:14:28 by jaelee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static void	set_progname(t_file *file, t_line *line)
 	{
 		start = ft_strlen(NAME_CMD_STRING);
 		set_header_index(tmp, &start, &end);
-		if (end > start + 1 && line->str[end] == '"')
+		if (end > start && line->str[end] == '"'
+			&& (end - start) < PROG_NAME_LENGTH)
 		{
 			ft_memcpy(file->header.prog_name, line->str + start, end - start);
 			file->prework_flag |= 2;
@@ -65,7 +66,8 @@ static void	set_how(t_file *file, t_line *line)
 	{
 		start = ft_strlen(COMMENT_CMD_STRING);
 		set_header_index(tmp, &start, &end);
-		if ((end > start + 1) && line->str[end] == '"')
+		if (end > start && line->str[end] == '"'
+			&& (end - start) < COMMENT_LENGTH)
 		{
 			ft_memcpy(file->header.comment, line->str + start, end - start);
 			file->prework_flag |= 1;
