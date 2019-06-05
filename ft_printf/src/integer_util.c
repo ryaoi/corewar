@@ -6,7 +6,7 @@
 /*   By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 15:43:27 by aamadori          #+#    #+#             */
-/*   Updated: 2019/06/04 15:05:11 by aamadori         ###   ########.fr       */
+/*   Updated: 2019/06/05 12:56:49 by aamadori         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ char			*s_base_conv(const t_conv *conv,
 					intmax_t n, const char *base, size_t min_dig)
 {
 	ssize_t		b_size;
-	size_t		dig_index;
-	size_t		str_index;
+	size_t		dig_it;
+	size_t		str_it;
 	size_t		len;
 	char		*string;
 
@@ -51,18 +51,18 @@ char			*s_base_conv(const t_conv *conv,
 		min_dig += ((min_dig - 1) / 3);
 	len = s_digits(n, b_size, conv->flags.thousand_grouping, min_dig);
 	string = ft_strnew(len);
-	dig_index = 0;
-	str_index = 0;
+	dig_it = 0;
+	str_it = 0;
 	if (n < 0)
-		string[str_index++] = '-';
-	while (dig_index < min_dig || ft_abs(n) > 0 || ft_abs(n / b_size) > 0)
+		string[str_it++] = '-';
+	while (dig_it < min_dig || ft_abs(n) > 0 || ft_abs(n / b_size) > 0)
 	{
 		if (conv->flags.thousand_grouping
-			&& b_size == 10 && dig_index > 0 && (dig_index % 3) == 0)
-			string[len - 1 - (str_index++)] = ',';
-		string[len - 1 - (str_index++)] = base[ft_abs(n - (n / b_size) * b_size)];
+			&& b_size == 10 && dig_it > 0 && (dig_it % 3) == 0)
+			string[len - 1 - (str_it++)] = ',';
+		string[len - 1 - (str_it++)] = base[ft_abs(n - (n / b_size) * b_size)];
 		n = n / b_size;
-		dig_index++;
+		dig_it++;
 	}
 	return (string);
 }
@@ -87,8 +87,8 @@ char			*u_base_conv(const t_conv *conv,
 					uintmax_t n, const char *base, size_t min_dig)
 {
 	size_t		b_size;
-	size_t		dig_index;
-	size_t		str_index;
+	size_t		dig_it;
+	size_t		str_it;
 	size_t		len;
 	char		*string;
 
@@ -97,16 +97,16 @@ char			*u_base_conv(const t_conv *conv,
 		min_dig += ((min_dig - 1) / 3);
 	len = u_digits(n, b_size, conv->flags.thousand_grouping, min_dig);
 	string = ft_strnew(len);
-	dig_index = 0;
-	str_index = 0;
-	while (dig_index < min_dig || n > 0 || n / b_size > 0)
+	dig_it = 0;
+	str_it = 0;
+	while (dig_it < min_dig || n > 0 || n / b_size > 0)
 	{
 		if (conv->flags.thousand_grouping
-			&& b_size == 10 && dig_index > 0 && (dig_index % 3) == 0)
-			string[len - 1 - (str_index++)] = ',';
-		string[len - 1 - (str_index++)] = base[n - (n / b_size) * b_size];
+			&& b_size == 10 && dig_it > 0 && (dig_it % 3) == 0)
+			string[len - 1 - (str_it++)] = ',';
+		string[len - 1 - (str_it++)] = base[n - (n / b_size) * b_size];
 		n = n / b_size;
-		dig_index++;
+		dig_it++;
 	}
 	return (string);
 }

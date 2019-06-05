@@ -6,7 +6,7 @@
 #    By: aamadori <aamadori@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/27 13:33:43 by jaelee            #+#    #+#              #
-#    Updated: 2019/05/27 18:18:44 by aamadori         ###   ########.fr        #
+#    Updated: 2019/06/04 17:45:09 by aamadori         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,8 +147,11 @@ clean:
 fclean: clean
 	rm -f $(LIBFT_NAME)
 	rm -f $(FTPRINTF_NAME)
+	rm -rf $(COREWAR_NAME).dSYM
 	rm -f $(COREWAR_NAME)
+	rm -rf $(CORELIB_NAME).dSYM
 	rm -f $(CORELIB_NAME)
+	rm -rf $(ASM_NAME).dSYM
 	rm -f $(ASM_NAME)
 
 re: fclean
